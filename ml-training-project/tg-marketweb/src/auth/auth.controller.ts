@@ -51,4 +51,8 @@ export class AuthController {
   async verifyResetCode(@Body() verifyCodeDto: VerifyCodeDto) {
     return await this.usersService.verifyResetCode(verifyCodeDto);
   }
+  @Post('logout')
+  async logout(@Body() userId: number) {
+    return await this.authService.logout(userId);
+  }
 }
