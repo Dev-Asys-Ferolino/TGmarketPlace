@@ -2,7 +2,7 @@ import React, { PropsWithChildren } from "react";
 import Image from "next/image";
 import { logimImage } from "@/images";
 import Link from "next/link";
-export default function DashboardLayout({ children }: PropsWithChildren) {
+export default function SellerDashboardLayout({ children }: PropsWithChildren) {
   return (
     <main className="grid-rows-[auto_1fr]">
       <div className="navbar bg-base-400 border-red-500 border-b-2">
@@ -72,12 +72,12 @@ export default function DashboardLayout({ children }: PropsWithChildren) {
                 </a>
               </li>
               <li>
-                <Link href="/sellerform" legacyBehavior>
-                  <a>Be a Seller</a>
+                <Link href="/dashboard" legacyBehavior>
+                  <a>Be a Customer</a>
                 </Link>
               </li>
               <li>
-                <Link href="/" legacyBehavior>
+                <Link href="/signin" legacyBehavior>
                   <a>Logout</a>
                 </Link>
               </li>
