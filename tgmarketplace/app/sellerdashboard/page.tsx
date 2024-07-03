@@ -2,7 +2,7 @@ import React from "react";
 import Image from "next/image";
 import Link from "next/link";
 
-export default function DashboardPage() {
+export default function SellerDashboardPage() {
   return (
     <div>
       <div className="hero-content text-neutral-content text-center">
@@ -14,14 +14,14 @@ export default function DashboardPage() {
             Your One-Stop Shop for Snacks and Food
           </p>
           {/* <button className="btn btn-primary">See Products</button> */}
-          <Link href="/dashboard/products" legacyBehavior>
+          <Link href="/sellerdashboard/addproducts" legacyBehavior>
             <a className="btn btn-outline btn-error flex-1 w-[8rem]">
-              See Products
+              Put On Sale
             </a>
           </Link>
         </div>
       </div>
-      <div className="rounded-[20px] mx-auto max-w-[1440px] w-full overflow-hidden flex gap-4 flex-wrap">
+      <div className="rounded-[20px] mx-auto max-w-[1440px] w-full overflow-hidden flex gap-4 flex-wrap mt-10">
         <div className="flex flex-col max-w-sm flex-1 border-red-400 border-2">
           <div className="w-full">
             <Image
@@ -32,12 +32,8 @@ export default function DashboardPage() {
               className="W-full"
             />
           </div>
-          <div className="card-body text-center">
+          <div className="card-body justify-center">
             <h2 className="card-title justify-center">Biscuits</h2>
-            <p className="text-red-500 mt-2">PHP 30.00</p>
-            <div className="card-actions justify-center">
-              <button className="btn btn-primary">Add To Cart</button>
-            </div>
           </div>
         </div>
         <div className="flex flex-col max-w-sm flex-1 border-red-400 border-2">
@@ -50,12 +46,8 @@ export default function DashboardPage() {
               className="W-full"
             />
           </div>
-          <div className="card-body text-center">
+          <div className="card-body justify-center">
             <h2 className="card-title justify-center">Biscuits</h2>
-            <p className="text-red-500 mt-2">PHP 30.00</p>
-            <div className="card-actions justify-center">
-              <button className="btn btn-primary">Add To Cart</button>
-            </div>
           </div>
         </div>
         <div className="flex flex-col max-w-sm flex-1 border-red-400 border-2">
@@ -68,12 +60,8 @@ export default function DashboardPage() {
               className="W-full"
             />
           </div>
-          <div className="card-body text-center">
+          <div className="card-body justify-center">
             <h2 className="card-title justify-center">Biscuits</h2>
-            <p className="text-red-500 mt-2">PHP 30.00</p>
-            <div className="card-actions justify-center">
-              <button className="btn btn-primary">Add To Cart</button>
-            </div>
           </div>
         </div>
         <div className="flex flex-col max-w-sm flex-1 border-red-400 border-2">
@@ -86,12 +74,8 @@ export default function DashboardPage() {
               className="W-full"
             />
           </div>
-          <div className="card-body text-center">
+          <div className="card-body justify-center">
             <h2 className="card-title justify-center">Biscuits</h2>
-            <p className="text-red-500 mt-2">PHP 30.00</p>
-            <div className="card-actions justify-center">
-              <button className="btn btn-primary">Add To Cart</button>
-            </div>
           </div>
         </div>
       </div>
