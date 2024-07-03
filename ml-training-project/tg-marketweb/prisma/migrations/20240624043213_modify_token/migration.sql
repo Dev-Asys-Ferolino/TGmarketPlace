@@ -1,0 +1,3 @@
+-- AlterTable
+ALTER TABLE "User" ALTER COLUMN "hashtoken" SET DATA TYPE TEXT,
+ALTER COLUMN "refresh" SET DATA TYPE TEXT;

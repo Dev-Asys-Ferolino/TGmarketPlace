@@ -8,18 +8,20 @@ export default function SellerDashboardPage() {
       <div className="hero-content text-neutral-content text-center">
         <div className="w-[900px] h-[250px] rounded-[20px] border-red-500 border-2 mt-10 ml-[600px]">
           <h1 className="mb-5 text-5xl font-bold mt-10 text-black">
-            What's New
+            What is New
           </h1>
           <p className="mb-5 text-black">
             Your One-Stop Shop for Snacks and Food
           </p>
           {/* <button className="btn btn-primary">See Products</button> */}
-          <Link href="/dashboard/products" legacyBehavior>
-            <a className="btn btn-outline btn-error flex-1 w-[8rem]">Orders</a>
+          <Link href="/sellerdashboard/addproducts" legacyBehavior>
+            <a className="btn btn-outline btn-error flex-1 w-[8rem]">
+              Put On Sale
+            </a>
           </Link>
         </div>
       </div>
-      <div className="rounded-[20px] mx-auto max-w-[1440px] w-full overflow-hidden flex gap-4 flex-wrap">
+      <div className="rounded-[20px] mx-auto max-w-[1440px] w-full overflow-hidden flex gap-4 flex-wrap mt-10">
         <div className="flex flex-col max-w-sm flex-1 border-red-400 border-2">
           <div className="w-full">
             <Image
@@ -30,12 +32,8 @@ export default function SellerDashboardPage() {
               className="W-full"
             />
           </div>
-          <div className="card-body">
-            <h2 className="card-title">Biscuits</h2>
-            <p>If a dog chews shoes whose shoes does he choose?</p>
-            <div className="card-actions justify-end">
-              <button className="btn btn-primary">Add To Cart</button>
-            </div>
+          <div className="card-body justify-center">
+            <h2 className="card-title justify-center">Biscuits</h2>
           </div>
         </div>
         <div className="flex flex-col max-w-sm flex-1 border-red-400 border-2">
@@ -48,12 +46,8 @@ export default function SellerDashboardPage() {
               className="W-full"
             />
           </div>
-          <div className="card-body">
-            <h2 className="card-title">Biscuits</h2>
-            <p>If a dog chews shoes whose shoes does he choose?</p>
-            <div className="card-actions justify-end">
-              <button className="btn btn-primary">Add To Cart</button>
-            </div>
+          <div className="card-body justify-center">
+            <h2 className="card-title justify-center">Biscuits</h2>
           </div>
         </div>
         <div className="flex flex-col max-w-sm flex-1 border-red-400 border-2">
@@ -66,12 +60,8 @@ export default function SellerDashboardPage() {
               className="W-full"
             />
           </div>
-          <div className="card-body">
-            <h2 className="card-title">Biscuits</h2>
-            <p>If a dog chews shoes whose shoes does he choose?</p>
-            <div className="card-actions justify-end">
-              <button className="btn btn-primary">Add To Cart</button>
-            </div>
+          <div className="card-body justify-center">
+            <h2 className="card-title justify-center">Biscuits</h2>
           </div>
         </div>
         <div className="flex flex-col max-w-sm flex-1 border-red-400 border-2">
@@ -84,12 +74,8 @@ export default function SellerDashboardPage() {
               className="W-full"
             />
           </div>
-          <div className="card-body">
-            <h2 className="card-title">Biscuits</h2>
-            <p>If a dog chews shoes whose shoes does he choose?</p>
-            <div className="card-actions justify-end">
-              <button className="btn btn-primary">Add To Cart</button>
-            </div>
+          <div className="card-body justify-center">
+            <h2 className="card-title justify-center">Biscuits</h2>
           </div>
         </div>
       </div>

@@ -11,16 +11,16 @@ export default function SellerDashboardLayout({ children }: PropsWithChildren) {
             <Image alt="image" width={800} height={800} src={logimImage} />
           </div>
         </div>
-        <div className="space-x-[80px] mr-[400px]">
+        <div className="space-x-[80px] mr-[600px]">
           <div>
-            <Link href="/dashboard" legacyBehavior>
+            <Link href="/sellerdashboard" legacyBehavior>
               <a className="btn btn-outline btn-error flex-1 w-[8rem]">Home</a>
             </Link>
           </div>
           <div>
-            <Link href="/dashboard/products" legacyBehavior>
+            <Link href="/sellerdashboard/addproducts" legacyBehavior>
               <a className="btn btn-outline btn-error flex-1 w-[8rem]">
-                Products
+                Add Products
               </a>
             </Link>
           </div>
@@ -28,13 +28,6 @@ export default function SellerDashboardLayout({ children }: PropsWithChildren) {
             <Link href="/dashboard/orders" legacyBehavior>
               <a className="btn btn-outline btn-error flex-1 w-[8rem]">
                 Orders
-              </a>
-            </Link>
-          </div>
-          <div>
-            <Link href="/dashboard/credits" legacyBehavior>
-              <a className="btn btn-outline btn-error flex-1 w-[8rem]">
-                Credits
               </a>
             </Link>
           </div>
@@ -55,8 +48,10 @@ export default function SellerDashboardLayout({ children }: PropsWithChildren) {
               className="btn btn-ghost btn-circle avatar"
             >
               <div className="w-10 rounded-full">
-                <img
+                <Image
                   alt="Tailwind CSS Navbar component"
+                  width={800}
+                  height={800}
                   src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.jpg"
                 />
               </div>

@@ -1,9 +1,138 @@
 import Link from "next/link";
-import React from "react";
+import React, { ChangeEvent, useState } from "react";
 import Image from "next/image";
 import { logimImage } from "@/images";
+import api from "@/lib/api/api";
+import { useRouter } from "next/navigation";
+
+interface SignIn {
+  email: string;
+  password: string;
+}
 
 export default function SignIn() {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [resetCode, setResetCode] = useState("");
+  const router = useRouter();
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [verificationSent, setVerificationSent] = useState(false);
+  const [isVerificationModalOpen, setIsVerificationModalOpen] = useState(false);
+  const [isResetPasswordModalOpen, setIsResetPasswordModalOpen] =
+    useState(false);
+  const [newPassword, setNewPassword] = useState("");
+  const [confirmNewPassword, setConfirmNewPassword] = useState("");
+
+  // Handlers for input changes
+  const handleChangeEmail = (e: ChangeEvent<HTMLInputElement>) => {
+    setEmail(e.target.value);
+  };
+
+  const handleChangePassword = (e: ChangeEvent<HTMLInputElement>) => {
+    setPassword(e.target.value);
+  };
+
+  const handleChangeCode = (e: ChangeEvent<HTMLInputElement>) => {
+    setResetCode(e.target.value);
+  };
+
+  const handleNewPasswordChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setNewPassword(e.target.value);
+  };
+
+  const handleConfirmNewPasswordChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setConfirmNewPassword(e.target.value);
+  };
+
+  // Form submit handler
+  const handleSubmit = async (e: any) => {
+    e.preventDefault();
+    await signInUser();
+  };
+
+  // Function to handle sign-in
+  const signInUser = async () => {
+    try {
+      const response = await api.post("/auth/login", {
+        email,
+        password,
+      });
+      router.push("/dashboard");
+      if (response.status === 401) {
+        setErrorMessage("Invalid email or password");
+      }
+      return response;
+      console.log(response);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  // Handler to open/close modals
+  const handleForgotPasswordClick = () => {
+    setIsModalOpen(true);
+  };
+
+  const handleInputVerificationClick = () => {
+    setIsModalOpen(false);
+    setIsVerificationModalOpen(true);
+  };
+
+  // Function to send the verification code
+  const handleSendVerificationCode = async () => {
+    try {
+      const response = await api.post("/auth/forgot-password", {
+        email,
+      });
+      if (response.status === 200) {
+        setVerificationSent(true);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  // Function to verify the code
+  const handleVerifyCode = async () => {
+    try {
+      const response = await api.post("/auth/verify-reset-code", {
+        email,
+        resetCode,
+      });
+      console.log(response.status);
+      if (response.status === 201) {
+        setIsResetPasswordModalOpen(true);
+      } else {
+        window.alert("Invalid verification code");
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  // Function to reset the password
+  const handleResetPassword = async () => {
+    if (newPassword !== confirmNewPassword) {
+      console.log("Passwords do not match");
+      return;
+    }
+    try {
+      const response = await api.post("/auth/reset-password", {
+        email,
+        password: newPassword,
+      });
+      if (response.status === 201) {
+        setIsResetPasswordModalOpen(false);
+        setIsVerificationModalOpen(false);
+        router.push("/");
+      } else {
+        console.log("Error resetting password");
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <div className="flex h-screen ">
       <div className="w-1/2 bg-white-500 flex flex-col items-center justify-center">
@@ -32,6 +161,8 @@ export default function SignIn() {
               type="email"
               id="email"
               className="bg-gray-50 border border-black  rounded-lg  block w-[400px] p-2.5 mb-7"
+              value={email}
+              onChange={handleChangeEmail}
             />
           </div>
           <div className="mb-5">
@@ -41,21 +172,28 @@ export default function SignIn() {
             <input
               type="password"
               id="password"
-              className="bg-gray-50 border border-black  rounded-lg  block w-[400px] p-2.5 mb-10"
+              className="bg-gray-50 border border-black  rounded-lg  block w-[400px] p-2.5 "
+              value={password}
+              onChange={handleChangePassword}
             />
+            <label className="label-white">
+              <a
+                href="#"
+                className="label-text-alt link hover-white text-white"
+                onClick={handleForgotPasswordClick}
+              >
+                Forgot password?
+              </a>
+            </label>
           </div>
           <div>
-            <Link href="/dashboard" legacyBehavior>
-              <a className="text-black btn btn-success font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center ml-5">
-                SIGN IN
-              </a>
-            </Link>
-            {/* <button
+            <button
               type="submit"
-              className="text-black btn btn-warning font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center ml-5"
+              className="text-black btn btn-success font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center ml-5"
+              onClick={handleSubmit}
             >
-              REGISTER
-            </button> */}
+              SIGN IN
+            </button>
             <Link href="/register" legacyBehavior>
               <a className="text-black btn btn-warning font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center ml-5">
                 REGISTER
@@ -64,6 +202,113 @@ export default function SignIn() {
           </div>
         </form>
       </div>
+      {isModalOpen && (
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+          <div className="bg-white p-8 rounded shadow-lg">
+            <h2 className="text-xl font-semibold mb-4">Forgot Password !!</h2>
+            <input
+              type="email"
+              placeholder="Enter your email"
+              className="bg-gray-50 border border-black rounded-lg block w-full p-2.5 mb-4"
+              value={email}
+              onChange={handleChangeEmail}
+            />
+            <button
+              className="bg-black text-white px-4 py-2 rounded"
+              onClick={handleSendVerificationCode}
+            >
+              Send Verification Code
+            </button>
+            <button
+              className="bg-yellow-500 text-white px-4 py-2 rounded ml-4"
+              onClick={handleInputVerificationClick}
+            >
+              Input Verification Code
+            </button>
+            {verificationSent && (
+              <p className="text-green-500 mt-2">Verification code sent!</p>
+            )}
+            <button
+              className="bg-red-400 text-white px-4 py-2 rounded ml-4"
+              onClick={() => setIsModalOpen(false)}
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      )}
+
+      {isVerificationModalOpen && (
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+          <div className="bg-white p-8 rounded shadow-lg">
+            <h2 className="text-xl font-semibold mb-4">
+              Enter Verification Code
+            </h2>
+            <input
+              type="text"
+              placeholder="Enter the 6-digit code"
+              className="bg-gray-50 border border-black rounded-lg block w-full p-2.5 mb-4"
+              value={resetCode}
+              onChange={handleChangeCode}
+            />
+            <button
+              className="bg-black text-white px-4 py-2 rounded"
+              onClick={handleVerifyCode}
+            >
+              Verify Code
+            </button>
+            <button
+              className="bg-red-400 text-white px-4 py-2 rounded ml-4"
+              onClick={() => setIsVerificationModalOpen(false)}
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      )}
+      {isResetPasswordModalOpen && (
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+          <div className="bg-white p-8 rounded shadow-lg">
+            <h2 className="text-xl font-semibold mb-4">Reset Password</h2>
+            <input
+              type="email"
+              className="bg-gray-50 border border-black rounded-lg block w-full p-2.5 mb-4"
+              value={email}
+              disabled
+            />
+            <input
+              type="password"
+              placeholder="Enter new password"
+              className="bg-gray-50 border border-black rounded-lg block w-full p-2.5 mb-4"
+              value={newPassword}
+              onChange={handleNewPasswordChange}
+            />
+            <input
+              type="password"
+              placeholder="Confirm new password"
+              className="bg-gray-50 border border-black rounded-lg block w-full p-2.5 mb-4"
+              value={confirmNewPassword}
+              onChange={handleConfirmNewPasswordChange}
+            />
+            <button
+              className="bg-black text-white px-4 py-2 rounded"
+              onClick={handleResetPassword}
+            >
+              Update Password
+            </button>
+            <button
+              className="bg-red-400 text-white px-4 py-2 rounded ml-4"
+              onClick={() => setIsResetPasswordModalOpen(false)}
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
+}
+
+function setErrorMessage(arg0: string) {
+  throw new Error("Function not implemented.");
 }

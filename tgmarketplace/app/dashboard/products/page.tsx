@@ -15,10 +15,10 @@ export default function ProductsPage() {
               className="W-full"
             />
           </div>
-          <div className="card-body">
-            <h2 className="card-title">Biscuits</h2>
-            <p>If a dog chews shoes whose shoes does he choose?</p>
-            <div className="card-actions justify-end">
+          <div className="card-body text-center">
+            <h2 className="card-title justify-center">Biscuits</h2>
+            <p className="text-red-500 mt-2">PHP 30.00</p>
+            <div className="card-actions justify-center">
               <button className="btn btn-primary">Add To Cart</button>
             </div>
           </div>
@@ -33,10 +33,10 @@ export default function ProductsPage() {
               className="W-full"
             />
           </div>
-          <div className="card-body">
-            <h2 className="card-title">Biscuits</h2>
-            <p>If a dog chews shoes whose shoes does he choose?</p>
-            <div className="card-actions justify-end">
+          <div className="card-body text-center">
+            <h2 className="card-title justify-center">Biscuits</h2>
+            <p className="text-red-500 mt-2">PHP 30.00</p>
+            <div className="card-actions justify-center">
               <button className="btn btn-primary">Add To Cart</button>
             </div>
           </div>
@@ -51,10 +51,10 @@ export default function ProductsPage() {
               className="W-full"
             />
           </div>
-          <div className="card-body">
-            <h2 className="card-title">Biscuits</h2>
-            <p>If a dog chews shoes whose shoes does he choose?</p>
-            <div className="card-actions justify-end">
+          <div className="card-body text-center">
+            <h2 className="card-title justify-center">Biscuits</h2>
+            <p className="text-red-500 mt-2">PHP 30.00</p>
+            <div className="card-actions justify-center">
               <button className="btn btn-primary">Add To Cart</button>
             </div>
           </div>
@@ -69,10 +69,10 @@ export default function ProductsPage() {
               className="W-full"
             />
           </div>
-          <div className="card-body">
-            <h2 className="card-title">Biscuits</h2>
-            <p>If a dog chews shoes whose shoes does he choose?</p>
-            <div className="card-actions justify-end">
+          <div className="card-body text-center">
+            <h2 className="card-title justify-center">Biscuits</h2>
+            <p className="text-red-500 mt-2">PHP 30.00</p>
+            <div className="card-actions justify-center">
               <button className="btn btn-primary">Add To Cart</button>
             </div>
           </div>
@@ -89,10 +89,10 @@ export default function ProductsPage() {
               className="W-full"
             />
           </div>
-          <div className="card-body">
-            <h2 className="card-title">Biscuits</h2>
-            <p>If a dog chews shoes whose shoes does he choose?</p>
-            <div className="card-actions justify-end">
+          <div className="card-body text-center">
+            <h2 className="card-title justify-center">Biscuits</h2>
+            <p className="text-red-500 mt-2">PHP 30.00</p>
+            <div className="card-actions justify-center">
               <button className="btn btn-primary">Add To Cart</button>
             </div>
           </div>
@@ -107,10 +107,10 @@ export default function ProductsPage() {
               className="W-full"
             />
           </div>
-          <div className="card-body">
-            <h2 className="card-title">Biscuits</h2>
-            <p>If a dog chews shoes whose shoes does he choose?</p>
-            <div className="card-actions justify-end">
+          <div className="card-body text-center">
+            <h2 className="card-title justify-center">Biscuits</h2>
+            <p className="text-red-500 mt-2">PHP 30.00</p>
+            <div className="card-actions justify-center">
               <button className="btn btn-primary">Add To Cart</button>
             </div>
           </div>
@@ -125,10 +125,10 @@ export default function ProductsPage() {
               className="W-full"
             />
           </div>
-          <div className="card-body">
-            <h2 className="card-title">Biscuits</h2>
-            <p>If a dog chews shoes whose shoes does he choose?</p>
-            <div className="card-actions justify-end">
+          <div className="card-body text-center">
+            <h2 className="card-title justify-center">Biscuits</h2>
+            <p className="text-red-500 mt-2">PHP 30.00</p>
+            <div className="card-actions justify-center">
               <button className="btn btn-primary">Add To Cart</button>
             </div>
           </div>
@@ -143,10 +143,10 @@ export default function ProductsPage() {
               className="W-full"
             />
           </div>
-          <div className="card-body">
-            <h2 className="card-title">Biscuits</h2>
-            <p>If a dog chews shoes whose shoes does he choose?</p>
-            <div className="card-actions justify-end">
+          <div className="card-body text-center">
+            <h2 className="card-title justify-center">Biscuits</h2>
+            <p className="text-red-500 mt-2">PHP 30.00</p>
+            <div className="card-actions justify-center">
               <button className="btn btn-primary">Add To Cart</button>
             </div>
           </div>

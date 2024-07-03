@@ -1,9 +1,9 @@
 import React from "react";
-import SellerForm from "@/components/Sellerform";
+import SellerForm from "@/components/sellerform";
 
 export default function SellerFormPage() {
   return (
-    <div className="w-full h-screen flex justify-center items-center">
+    <div className="flex h-screen align-middle justify-center mt-10">
       <SellerForm></SellerForm>
     </div>
   );
