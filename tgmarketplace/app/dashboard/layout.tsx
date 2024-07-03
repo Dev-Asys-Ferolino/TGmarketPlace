@@ -11,7 +11,7 @@ export default function DashboardLayout({ children }: PropsWithChildren) {
             <Image alt="image" width={800} height={800} src={logimImage} />
           </div>
         </div>
-        <div className="space-x-[80px] mr-[400px]">
+        <div className="space-x-[80px] mr-[600px]">
           <div>
             <Link href="/dashboard" legacyBehavior>
               <a className="btn btn-outline btn-error flex-1 w-[8rem]">Home</a>
@@ -28,13 +28,6 @@ export default function DashboardLayout({ children }: PropsWithChildren) {
             <Link href="/dashboard/orders" legacyBehavior>
               <a className="btn btn-outline btn-error flex-1 w-[8rem]">
                 Orders
-              </a>
-            </Link>
-          </div>
-          <div>
-            <Link href="/dashboard/Credits" legacyBehavior>
-              <a className="btn btn-outline btn-error flex-1 w-[8rem]">
-                Credits
               </a>
             </Link>
           </div>
