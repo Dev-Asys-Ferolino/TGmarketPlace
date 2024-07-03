@@ -2,7 +2,7 @@ import React, { PropsWithChildren } from "react";
 import Image from "next/image";
 import { logimImage } from "@/images";
 import Link from "next/link";
-export default function DashboardLayout({ children }: PropsWithChildren) {
+export default function SellerDashboardLayout({ children }: PropsWithChildren) {
   return (
     <main className="grid-rows-[auto_1fr]">
       <div className="navbar bg-base-400 border-red-500 border-b-2">
@@ -11,16 +11,16 @@ export default function DashboardLayout({ children }: PropsWithChildren) {
             <Image alt="image" width={800} height={800} src={logimImage} />
           </div>
         </div>
-        <div className="space-x-[80px] mr-[400px]">
+        <div className="space-x-[80px] mr-[600px]">
           <div>
-            <Link href="/dashboard" legacyBehavior>
+            <Link href="/sellerdashboard" legacyBehavior>
               <a className="btn btn-outline btn-error flex-1 w-[8rem]">Home</a>
             </Link>
           </div>
           <div>
-            <Link href="/dashboard/products" legacyBehavior>
+            <Link href="/sellerdashboard/addproducts" legacyBehavior>
               <a className="btn btn-outline btn-error flex-1 w-[8rem]">
-                Products
+                Add Products
               </a>
             </Link>
           </div>
@@ -28,13 +28,6 @@ export default function DashboardLayout({ children }: PropsWithChildren) {
             <Link href="/dashboard/orders" legacyBehavior>
               <a className="btn btn-outline btn-error flex-1 w-[8rem]">
                 Orders
-              </a>
-            </Link>
-          </div>
-          <div>
-            <Link href="/dashboard/Credits" legacyBehavior>
-              <a className="btn btn-outline btn-error flex-1 w-[8rem]">
-                Credits
               </a>
             </Link>
           </div>
@@ -74,12 +67,12 @@ export default function DashboardLayout({ children }: PropsWithChildren) {
                 </a>
               </li>
               <li>
-                <Link href="/sellerform" legacyBehavior>
-                  <a>Be a Seller</a>
+                <Link href="/dashboard" legacyBehavior>
+                  <a>Be a Customer</a>
                 </Link>
               </li>
               <li>
-                <Link href="/" legacyBehavior>
+                <Link href="/signin" legacyBehavior>
                   <a>Logout</a>
                 </Link>
               </li>
