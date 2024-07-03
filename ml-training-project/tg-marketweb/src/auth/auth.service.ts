@@ -13,7 +13,7 @@ export class AuthService {
     private prisma: PrismaClient,
   ) {}
 
-  async login(LoginDto: LoginDto) {
+  async login(LoginDto: LoginDto): Promise<any> {
     const user = await this.validateuser(LoginDto);
     console.log(user);
     if (!user) {
