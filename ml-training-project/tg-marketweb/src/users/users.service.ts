@@ -193,9 +193,9 @@ export class UsersService {
         resetPasswordDto.password,
         user.password,
       );
-      if (!isPasswordMatch) {
-        throw new Error('Password does not match');
-      }
+      // if (!isPasswordMatch) {
+      //   throw new Error('Password does not match');
+      // }
       const newUser = await this.prisma.user.update({
         where: {
           email: resetPasswordDto.email,
