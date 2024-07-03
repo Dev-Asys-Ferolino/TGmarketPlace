@@ -24,7 +24,8 @@ export class AuthController {
 
   @Post('login')
   async login(@Body() LoginDto: LoginDto) {
-    return await this.authService.login(LoginDto);
+    const user = await this.authService.login(LoginDto);
+    return user;
   }
 
   @Post('change-password')

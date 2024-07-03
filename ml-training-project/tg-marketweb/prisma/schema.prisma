@@ -20,6 +20,7 @@ model User {
   password           String    @db.VarChar(200)
   resetCode          String?   @unique @db.VarChar(20)
   resetCodeExpiresAt DateTime?
+  token              String?   @db.VarChar(200)
   isVendor           Boolean   @default(false)
   createdAt          DateTime  @default(now())
   Vendor             Vendor[]

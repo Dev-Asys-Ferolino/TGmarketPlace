@@ -20,7 +20,15 @@ export class AuthService {
       throw new UnauthorizedException('User not found');
     }
     const token = await this.usersService.getToken(user.id, user.email);
-    return token;
+    await this.prisma.user.update({
+      where: {
+        email: user.email,
+      },
+      data: {
+        token: token.access_token,
+      },
+    });
+    return user;
   }
 
   async logout(userId: number) {

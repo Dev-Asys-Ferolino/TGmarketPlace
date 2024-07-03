@@ -1,8 +1,24 @@
-import React, { PropsWithChildren } from "react";
+"use client";
+import React, { PropsWithChildren, useEffect, useState } from "react";
 import Image from "next/image";
 import { logimImage } from "@/images";
 import Link from "next/link";
+import api from "@/lib/api/api";
+import { useRouter } from "next/navigation";
 export default function DashboardLayout({ children }: PropsWithChildren) {
+  const [id, setId] = useState("");
+  useEffect(() => {
+    // Access localStorage only on the client-side
+    if (typeof window !== "undefined") {
+      const userId = localStorage.getItem("id");
+      setId(userId ? userId : "");
+    }
+  }, []);
+  const router = useRouter();
+  const handleLogout = async () => {
+    await api.post("/auth/logout", { id: id });
+    router.push("/");
+  };
   return (
     <main className="grid-rows-[auto_1fr]">
       <div className="navbar bg-base-400 border-red-500 border-b-2">
@@ -65,7 +81,7 @@ export default function DashboardLayout({ children }: PropsWithChildren) {
                 </a>
               </li>
               <li>
-                <a>Logout</a>
+                <a onClick={handleLogout}>Logout</a>
               </li>
             </ul>
           </div>

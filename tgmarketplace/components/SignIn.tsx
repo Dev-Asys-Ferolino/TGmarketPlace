@@ -37,8 +37,9 @@ export default function SignIn() {
       if (response.status === 401) {
         setErrorMessage("Invalid email or password");
       }
+      localStorage.setItem("id", response.data.id);
+      console.log(response.data.id);
       return response;
-      console.log(response);
     } catch (error) {
       console.log(error);
     }

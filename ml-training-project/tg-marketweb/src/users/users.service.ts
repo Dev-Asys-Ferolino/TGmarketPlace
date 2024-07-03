@@ -193,8 +193,8 @@ export class UsersService {
         resetPasswordDto.password,
         user.password,
       );
-      if (!isPasswordMatch) {
-        throw new Error('Password does not match');
+      if (isPasswordMatch) {
+        throw new Error('Password should not match old password');
       }
       const newUser = await this.prisma.user.update({
         where: {
