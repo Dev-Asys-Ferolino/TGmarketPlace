@@ -4,6 +4,8 @@ import Image from "next/image";
 import { logimImage } from "@/images";
 import api from "@/lib/api/api";
 import { useRouter } from "next/navigation";
+import ErrorModal from "@/components/errormodal";
+import { error } from "console";
 
 interface SignIn {
   email: string;
@@ -22,6 +24,8 @@ export default function SignIn() {
     useState(false);
   const [newPassword, setNewPassword] = useState("");
   const [confirmNewPassword, setConfirmNewPassword] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
+  const [isErrorModalOpen, setIsErrorModalOpen] = useState(false);
 
   // Handlers for input changes
   const handleChangeEmail = (e: ChangeEvent<HTMLInputElement>) => {
@@ -57,9 +61,11 @@ export default function SignIn() {
         email,
         password,
       });
-      router.push("/dashboard");
-      if (response.status === 401) {
-        setErrorMessage("Invalid email or password");
+      if (response.status === 201) {
+        router.push("/dashboard");
+      } else {
+        setErrorMessage("Invalid Email or Password");
+        setIsErrorModalOpen(true);
       }
       localStorage.setItem("id", response.data.id);
       localStorage.setItem("email", response.data.email);
@@ -67,7 +73,8 @@ export default function SignIn() {
       console.log(response.data.id);
       return response;
     } catch (error) {
-      console.log(error);
+      setErrorMessage("Invalid Email or Password");
+      setIsErrorModalOpen(true);
     }
   };
 
@@ -106,7 +113,7 @@ export default function SignIn() {
       if (response.status === 201) {
         setIsResetPasswordModalOpen(true);
       } else {
-        window.alert("Invalid verification code");
+        window.alert("Invalid Verification Code");
       }
     } catch (error) {
       console.log(error);
@@ -307,6 +314,12 @@ export default function SignIn() {
             </button>
           </div>
         </div>
+      )}
+      {isErrorModalOpen && (
+        <ErrorModal
+          message={errorMessage}
+          onClose={() => setIsErrorModalOpen(false)}
+        />
       )}
     </div>
   );
