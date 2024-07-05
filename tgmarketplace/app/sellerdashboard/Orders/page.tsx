@@ -12,13 +12,14 @@ export default function OrdersPage() {
   return (
     <div>
       <div className="flex w-full flex-col lg:flex-row mt-10 justify-center">
-        <div className="card h-auto border-2 border-red-400 rounded-box w-[60%]">
+        <div className="card h-auto border-2 border-red-400 rounded-box w-[75%]">
           <div className="overflow-x-auto">
             <table className="table">
               {/* head */}
               <thead>
                 <tr>
                   <th></th>
+                  <th>Name</th>
                   <th>Order/Product</th>
                   <th>Price</th>
                   <th>Quantity</th>
@@ -30,6 +31,7 @@ export default function OrdersPage() {
                 {/* row 1 */}
                 <tr>
                   <td>1</td>
+                  <td>F Jay E. Ferolino</td>
                   <td>
                     <div className="flex items-center gap-3">
                       <div className="avatar">
@@ -66,6 +68,7 @@ export default function OrdersPage() {
                 {/* row 2 */}
                 <tr>
                   <td>2</td>
+                  <td>Michael Desucatan</td>
                   <td>
                     <div className="flex items-center gap-3">
                       <div className="avatar">
@@ -102,6 +105,7 @@ export default function OrdersPage() {
                 {/* row 2 */}
                 <tr>
                   <td>2</td>
+                  <td>Sheldon Bacalso</td>
                   <td>
                     <div className="flex items-center gap-3">
                       <div className="avatar">
@@ -138,6 +142,7 @@ export default function OrdersPage() {
               </tbody>
               <tfoot>
                 <tr>
+                  <th></th>
                   <td></td>
                   <td></td>
                   <td></td>
