@@ -3,6 +3,8 @@ import { CustomerService } from './customer.service';
 import { AddToCartDto } from './dto/add-to-cart.dto';
 import { RemoveFromCartDto } from './dto/remove-to-cart.dto';
 import { CheckOutOrderDto } from './dto/check-out-order.dto';
+import { User } from '@prisma/client';
+import { UserIdDto } from 'src/users/dto/userid-dto';
 
 @Controller('customer')
 export class CustomerController {
@@ -36,7 +38,7 @@ export class CustomerController {
     return await this.customerService.checkoutOrder(checkoutOrderDto);
   }
   @Post('view-order')
-  async viewOrder(@Body() id: number) {
+  async viewOrder(@Body() id: UserIdDto) {
     return await this.customerService.viewOrder(id);
   }
 }

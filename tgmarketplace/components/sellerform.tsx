@@ -1,17 +1,33 @@
 "use client";
 import Link from "next/link";
-import React from "react";
+import React, { use } from "react";
 import { useState, useEffect } from "react";
 import api from "@/lib/api/api";
 import { useRouter } from "next/navigation";
 
-const Sellerform = () => {
+export default function SellerForm() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
   const [description, setDescription] = useState("");
   const [department, setDepartment] = useState("");
   const router = useRouter();
+
+  const [id, setId] = useState("");
+  const [localName, setLocalName] = useState("");
+  const [localEmail, setLocalEmail] = useState("");
+  useEffect(() => {
+    // Access localStorage only on the client-side
+    if (typeof window !== "undefined") {
+      const userId = localStorage.getItem("id");
+      const userName = localStorage.getItem("name");
+      const userEmail = localStorage.getItem("email");
+      setLocalName(userName ? userName : "");
+      setLocalEmail(userEmail ? userEmail : "");
+      setId(userId ? userId : "");
+    }
+  }, []);
+
   const handleChange = (e: any) => {
     setName(e.target.value);
   };
@@ -44,8 +60,8 @@ const Sellerform = () => {
   const sellerUser = async () => {
     try {
       const response = await api.post("/users/register-vendor", {
-        name,
-        email,
+        name: localName,
+        email: localEmail,
         phone,
         description,
         department,
@@ -78,7 +94,8 @@ const Sellerform = () => {
               type="name"
               className="input input-bordered border-red-300 border-[1px]"
               required
-              value={name}
+              value={localName}
+              disabled
               onChange={handleChange}
             />
           </div>
@@ -90,7 +107,8 @@ const Sellerform = () => {
               type="email"
               className="input input-bordered border-red-300 border-[1px]"
               required
-              value={email}
+              value={localEmail}
+              disabled
               onChange={handleChangeEmail}
             />
           </div>
@@ -148,4 +166,4 @@ const Sellerform = () => {
       </div>
     </div>
   );
-};
+}

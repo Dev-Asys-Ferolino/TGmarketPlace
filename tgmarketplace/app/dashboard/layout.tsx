@@ -1,24 +1,48 @@
 "use client";
-import React, { PropsWithChildren, useEffect, useState } from "react";
+import React, { PropsWithChildren, use, useEffect, useState } from "react";
 import Image from "next/image";
 import { captureImage, logimImage, logoutImage, trolleyImage } from "@/images";
 import Link from "next/link";
 import api from "@/lib/api/api";
 import { useRouter } from "next/navigation";
+
 export default function DashboardLayout({ children }: PropsWithChildren) {
   const [id, setId] = useState("");
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [isSeller, setIsSeller] = useState(false);
+
   useEffect(() => {
     // Access localStorage only on the client-side
     if (typeof window !== "undefined") {
       const userId = localStorage.getItem("id");
+      const userName = localStorage.getItem("name");
+      const userEmail = localStorage.getItem("email");
       setId(userId ? userId : "");
+      setName(userName ? userName : "");
+      setEmail(userEmail ? userEmail : "");
     }
   }, []);
+
   const router = useRouter();
   const handleLogout = async () => {
     await api.post("/auth/logout", { id: id });
+    console.log("logout" + id);
     router.push("/");
   };
+  const fetchSellers = async () => {
+    try {
+      console.log("This is the id" + id);
+      const response = await api.get(`/users/check-vendor/${id}`);
+      if (response.status === 200) {
+        setIsSeller(true);
+      }
+      console.log(setIsSeller);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <main className="grid-rows-[auto_1fr]">
       <div className="navbar bg-red-400 border-red-500 border-b-2">
@@ -73,7 +97,7 @@ export default function DashboardLayout({ children }: PropsWithChildren) {
               className="input input-bordered w-24 md:w-auto input-error"
             />
           </div>
-          <div className="dropdown dropdown-end">
+          <div className="dropdown dropdown-end" onClick={fetchSellers}>
             <div
               tabIndex={0}
               role="button"
@@ -96,22 +120,32 @@ export default function DashboardLayout({ children }: PropsWithChildren) {
                 <div className="dashboardskeleton">
                   <div>
                     <b className="border-black border-b-[1px] text-[20px]">
-                      FJAY E.FEROLINO
+                      {name}
                     </b>
                     <br />
                     <span className="text-[13px]">Customer</span>
-                    <div className="mt-2">fjay.ferolino@mlhuillier.com</div>
+                    <div className="mt-2">{email}</div>
                   </div>
                 </div>
               </li>
               <div className="flex flex-col justify-center items-center gap-1">
-                <li>
-                  <button className="btn bg-red-400 flex-1 w-[6rem] mt-7">
-                    <Link href="/sellerform" legacyBehavior>
-                      <a className="text-[13px] text-white">Be a Seller</a>
-                    </Link>
-                  </button>
-                </li>
+                {isSeller ? (
+                  <li>
+                    <button className="btn bg-red-400 flex-1 w-[6rem] mt-7">
+                      <Link href="/sellerdashboard" legacyBehavior>
+                        <a className="text-[13px] text-white">My Products</a>
+                      </Link>
+                    </button>
+                  </li>
+                ) : (
+                  <li>
+                    <button className="btn bg-red-400 flex-1 w-[6rem] mt-7">
+                      <Link href="/sellerform" legacyBehavior>
+                        <a className="text-[13px] text-white">Be a Seller</a>
+                      </Link>
+                    </button>
+                  </li>
+                )}
                 <li>
                   <button className="btn bg-red-400 flex-1 w-[6rem]">
                     <Link href="/sellerform" legacyBehavior>
@@ -127,7 +161,7 @@ export default function DashboardLayout({ children }: PropsWithChildren) {
             role="button"
             className="btn btn-ghost btn-circle avatar mr-2"
           >
-            <Link href="/" legacyBehavior>
+            <a onClick={handleLogout}>
               <div className="w-10 rounded-full">
                 <Image
                   width={800}
@@ -136,7 +170,7 @@ export default function DashboardLayout({ children }: PropsWithChildren) {
                   src={logoutImage}
                 />
               </div>
-            </Link>
+            </a>
           </div>
         </div>
       </div>

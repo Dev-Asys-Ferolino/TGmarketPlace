@@ -4,6 +4,7 @@ import { AddToCartDto } from './dto/add-to-cart.dto';
 import { RemoveFromCartDto } from './dto/remove-to-cart.dto';
 import { Cart, Order, Product } from '@prisma/client';
 import { CheckOutOrderDto } from './dto/check-out-order.dto';
+import { UserIdDto } from 'src/users/dto/userid-dto';
 
 @Injectable()
 export class CustomerService {
@@ -186,11 +187,11 @@ export class CustomerService {
     }
   }
 
-  async viewOrder(id: number): Promise<Order> {
+  async viewOrder(useridDto: UserIdDto): Promise<Order> {
     try {
       const order = await this.prisma.order.findUnique({
         where: {
-          id: id,
+          id: useridDto.id,
         },
         include: {
           OrderItem: true,

@@ -55,6 +55,19 @@ export class VendorService {
     }
   }
 
+  async checkVendor(id: number): Promise<Vendor> {
+    try {
+      const vendor = await this.prisma.vendor.findUnique({
+        where: {
+          id: id,
+        },
+      });
+      return vendor;
+    } catch (error) {
+      throw new Error(error);
+    }
+  }
+
   async addProduct(addProductDto: AddProductDto) {
     try {
       console.log(addProductDto);
