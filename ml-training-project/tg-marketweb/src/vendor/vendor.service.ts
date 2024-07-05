@@ -45,6 +45,7 @@ export class VendorService {
           email: email,
         },
       });
+      console.log(user.isVendor);
       if (user.isVendor) {
         return user;
       }
@@ -165,6 +166,28 @@ export class VendorService {
         },
       });
       return product;
+    } catch (error) {
+      throw new Error(error);
+    }
+  }
+
+  async updateOrders(email: string, orderId: number) {
+    try {
+      const vendor = await this.getVendorDetails(email);
+      if (!vendor) {
+        throw new Error('User is not a vendor');
+      }
+      const order = await this.prisma.order.update({
+        where: {
+          id: orderId,
+        },
+        data: {
+          vendor_id: vendor.id,
+          status: 'Delivered',
+          payment_status: 'paid',
+        },
+      });
+      return order;
     } catch (error) {
       throw new Error(error);
     }

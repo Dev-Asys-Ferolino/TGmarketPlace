@@ -88,9 +88,7 @@ export default function DashboardLayout({ children }: PropsWithChildren) {
                 </Link>
               </li>
               <li>
-                <Link href="/" legacyBehavior>
-                  <a>Logout</a>
-                </Link>
+                <a onClick={handleLogout}>Logout</a>
               </li>
             </ul>
           </div>

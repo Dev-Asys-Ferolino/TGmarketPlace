@@ -36,6 +36,7 @@ export class UsersController {
 
   @Post('register-vendor')
   async registerVendor(@Body() CreateVendorDto: CreateVendorDto) {
-    return await this.vendorService.createVendor(CreateVendorDto);
+    const vendor = await this.vendorService.createVendor(CreateVendorDto);
+    return vendor;
   }
 }
