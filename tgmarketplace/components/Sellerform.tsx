@@ -149,5 +149,3 @@ const Sellerform = () => {
     </div>
   );
 };
-
-export default Sellerform;
