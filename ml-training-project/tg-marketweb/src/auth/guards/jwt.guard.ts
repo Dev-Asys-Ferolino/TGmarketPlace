@@ -33,7 +33,7 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
   }
 
   private extractTokenFromHeader(request: Request) {
-    const [type, token] = request.headers.authorization.split(' ') ?? [];
+    const [type, token] = request.headers.authorization.split('') ?? [];
     return type === 'Bearer' ? token : null;
   }
 }

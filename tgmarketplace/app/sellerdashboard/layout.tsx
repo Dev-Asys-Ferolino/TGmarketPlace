@@ -113,7 +113,7 @@ export default function DashboardLayout({ children }: PropsWithChildren) {
       </nav>
       {children}
 
-      <footer className="dashboardfooter sticky bg-base-200 text-base-content border-base-300 border-t px-10 py-4 flex flex-row justify-between mt-10">
+      {/* <footer className="dashboardfooter sticky bg-base-200 text-base-content border-base-300 border-t px-10 py-4 flex flex-row justify-between mt-10">
         <aside className="grid-flow-row items-center">
           <svg
             width="24"
@@ -169,7 +169,7 @@ export default function DashboardLayout({ children }: PropsWithChildren) {
             </a>
           </div>
         </nav>
-      </footer>
+      </footer> */}
     </main>
   );
 }

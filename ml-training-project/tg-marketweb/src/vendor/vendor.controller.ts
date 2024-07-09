@@ -26,7 +26,7 @@ export class VendorController {
     FileInterceptor('image', {
       storage: diskStorage({
         destination:
-          'C://Users//desu19017174//Documents//GitHub//TGmarketPlace//tgmarketplace//public/uploads/images',
+          'C://Users//FERO20248225//Documents//GitHub//TGmarketPlace//tgmarketplace/public/uploads/images',
         filename: (req, file, callback) => {
           const ext = file.mimetype.split('/')[1];
           const filename = `${file.originalname}`;
@@ -46,7 +46,7 @@ export class VendorController {
   async removeProduct(@Body() removeProductDto: RemoveProductDto) {
     console.log(removeProductDto);
     return await this.vendorService.removeProduct(removeProductDto);
-  }
+  } 
 
   @Put('edit-product/:id')
   async editProduct(
