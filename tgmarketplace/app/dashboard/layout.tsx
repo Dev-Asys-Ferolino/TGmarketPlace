@@ -209,7 +209,7 @@ export default function DashboardLayout({ children }: PropsWithChildren) {
           <a className="dashboardlink dashboardlink-hover">Cookie policy</a>
         </nav>
       </footer> */}
-      <footer className="dashboardfooter sticky bg-base-200 text-base-content border-base-300 border-t px-10 py-4 flex flex-row justify-between mt-10 max-w-screen">
+      {/* <footer className="dashboardfooter sticky bg-base-200 text-base-content border-base-300 border-t px-10 py-4 flex flex-row justify-between mt-10 max-w-screen">
         <aside className="grid-flow-row items-center">
           <svg
             width="24"
@@ -265,7 +265,7 @@ export default function DashboardLayout({ children }: PropsWithChildren) {
             </a>
           </div>
         </nav>
-      </footer>
+      </footer> */}
     </main>
   );
 }
