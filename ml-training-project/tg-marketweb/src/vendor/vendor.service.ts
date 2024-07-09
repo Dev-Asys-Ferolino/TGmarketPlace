@@ -5,7 +5,8 @@ import { CreateVendorDto } from './dto/create-vendor.dto';
 import { AddProductDto } from './dto/add-product.dto';
 import { RemoveProductDto } from './dto/remove-product.dto';
 import { EditProductDto } from './dto/edit-product.dto';
-
+import { join } from 'path';
+import fs from 'fs/promises';
 @Injectable()
 export class VendorService {
   constructor(private prisma: PrismaClient) {}
@@ -55,20 +56,7 @@ export class VendorService {
     }
   }
 
-  async checkVendor(id: number): Promise<Vendor> {
-    try {
-      const vendor = await this.prisma.vendor.findUnique({
-        where: {
-          id: id,
-        },
-      });
-      return vendor;
-    } catch (error) {
-      throw new Error(error);
-    }
-  }
-
-  async addProduct(addProductDto: AddProductDto) {
+  async addProduct(addProductDto: AddProductDto, image: Express.Multer.File) {
     try {
       console.log(addProductDto);
       const vendor = await this.getVendorDetails(addProductDto.email);
@@ -76,19 +64,21 @@ export class VendorService {
       if (!vendor) {
         throw new Error('User is not a vendor');
       }
+      const imageUrl = (await image)
+        ? join('//public/uploads/images', image.filename)
+        : '';
+
       const product = await this.prisma.product.create({
         data: {
-          price: addProductDto.price,
+          price: +addProductDto.price,
           name: addProductDto.name,
           description: addProductDto.description,
-          stock: addProductDto.stock,
+          stock: +addProductDto.stock,
           vendor_id: vendor.id,
           ProductImage: {
-            create: addProductDto.images.map((image) => ({
-              image_url: image.image_url,
-              width: image.width,
-              height: image.height,
-            })),
+            create: {
+              image_url: imageUrl,
+            },
           },
         },
       });
@@ -137,6 +127,7 @@ export class VendorService {
   async getVendorProducts(email: string): Promise<Product[]> {
     try {
       const vendor = await this.getVendorDetails(email);
+      console.log(vendor);
       if (!vendor) {
         throw new Error('User is not a vendor');
       }
@@ -145,7 +136,11 @@ export class VendorService {
           vendor_id: vendor.id,
         },
         include: {
-          ProductImage: true,
+          ProductImage: {
+            select: {
+              image_url: true,
+            },
+          },
         },
       });
       return products;

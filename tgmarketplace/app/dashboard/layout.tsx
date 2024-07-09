@@ -24,23 +24,27 @@ export default function DashboardLayout({ children }: PropsWithChildren) {
     }
   }, []);
 
+  useEffect(() => {
+    const fetchSellers = async () => {
+      try {
+        console.log("This is the id" + id);
+        const response = await api.get(`/users/check-vendor/${id}`);
+        if (response.status === 200) {
+          setIsSeller(true);
+        }
+        console.log(setIsSeller);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    fetchSellers();
+  }, [id]);
+
   const router = useRouter();
   const handleLogout = async () => {
     await api.post("/auth/logout", { id: id });
     console.log("logout" + id);
     router.push("/");
-  };
-  const fetchSellers = async () => {
-    try {
-      console.log("This is the id" + id);
-      const response = await api.get(`/users/check-vendor/${id}`);
-      if (response.status === 200) {
-        setIsSeller(true);
-      }
-      console.log(setIsSeller);
-    } catch (error) {
-      console.log(error);
-    }
   };
 
   return (
@@ -97,7 +101,7 @@ export default function DashboardLayout({ children }: PropsWithChildren) {
               className="input input-bordered w-24 md:w-auto input-error"
             />
           </div>
-          <div className="dropdown dropdown-end" onClick={fetchSellers}>
+          <div className="dropdown dropdown-end">
             <div
               tabIndex={0}
               role="button"
