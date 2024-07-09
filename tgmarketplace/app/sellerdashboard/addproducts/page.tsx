@@ -3,8 +3,11 @@ import React, { use, useEffect, useState } from "react";
 import Image from "next/image";
 import { sampleImage } from "@/images";
 import api from "@/lib/api/api";
+import { useRouter } from "next/navigation";
+import { revalidatePath } from "next/cache";
 
 interface Product {
+  id: number;
   name: string;
   price: number;
   stock: number;
@@ -16,12 +19,12 @@ interface ProductImage {
 }
 
 export default function AddProductsPage() {
-  const [file, setFile] = useState<File | null>(null);
   const [uploading, setUploading] = useState(false);
   const [selectedImage, setSelectedImage] = useState("");
   const [selectedFile, setSelectedFile] = useState<File>();
   const [localEmail, setLocalEmail] = useState("");
   const [products, setProducts] = useState<Product[]>([]);
+  const router = useRouter();
   const price = 100;
 
   useEffect(() => {
@@ -31,12 +34,6 @@ export default function AddProductsPage() {
       setLocalEmail(userEmail ? userEmail : "");
     }
   }, []);
-  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    if (event.target.files && event.target.files.length > 0) {
-      setFile(event.target.files[0]);
-    }
-  };
-
   useEffect(() => {
     const fetchProducts = async () => {
       try {
@@ -45,8 +42,8 @@ export default function AddProductsPage() {
         );
         console.log("this is email", localEmail);
         console.log(response.data);
+        console.log(response.data[0].ProductImage[0].image_url);
         setProducts(response.data);
-        console.log(setProducts);
       } catch (error) {
         console.error("Error fetching products:", error);
       }
@@ -65,6 +62,10 @@ export default function AddProductsPage() {
       formData.append("stock", "100");
       formData.append("name", "Shabu");
       const data = await api.post("/vendor/add-product", formData);
+      setSelectedImage("");
+      setSelectedFile(undefined);
+      setUploading(false);
+      router.push("/sellerdashboard/addproducts");
       console.log(data);
     } catch (error) {
       console.error("Error uploading image:", error);
@@ -79,15 +80,21 @@ export default function AddProductsPage() {
             <div className=" flex flex-row place-items-center gap-4">
               {products.map((product) => (
                 <div
-                  className="dashboardcard bg-base-100 w-96 shadow-xl border-2 border-red-400 rounded-box"
-                  key={product.name}
+                  className="dashboardcard bg-base-100 w-96 shadow-xl border-2 border-red-400 rounded-box height-auto width-auto"
+                  key={
+                    product.name +
+                    product.price +
+                    product.stock +
+                    product.description
+                  }
                 >
                   <figure className="px-10 pt-10">
                     {product.ProductImage.map((image) => (
                       <Image
                         width={200}
                         height={300}
-                        src={image.image_url.replaceAll("\\", "/")}
+                        src={image.image_url}
+                        // src={"/uploads/images/Screenshot 2024-05-11 085513.png"}
                         // src={sampleImage}
                         alt={product.name}
                         className="rounded-xl"

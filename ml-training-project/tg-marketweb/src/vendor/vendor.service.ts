@@ -65,7 +65,7 @@ export class VendorService {
         throw new Error('User is not a vendor');
       }
       const imageUrl = (await image)
-        ? join('//public/uploads/images', image.filename)
+        ? join('/uploads/images', image.filename)
         : '';
 
       const product = await this.prisma.product.create({
@@ -77,7 +77,7 @@ export class VendorService {
           vendor_id: vendor.id,
           ProductImage: {
             create: {
-              image_url: imageUrl,
+              image_url: imageUrl.replaceAll('\\', '/'),
             },
           },
         },
@@ -108,14 +108,14 @@ export class VendorService {
       if (!vendor) {
         throw new Error('User is not a vendor');
       }
-      const product = await this.prisma.product.delete({
-        where: {
-          id: removeProductDto.id,
-        },
-      });
-      await this.prisma.productImage.deleteMany({
+      const product = await this.prisma.productImage.deleteMany({
         where: {
           product_id: removeProductDto.id,
+        },
+      });
+      await this.prisma.product.delete({
+        where: {
+          id: removeProductDto.id,
         },
       });
       return product;

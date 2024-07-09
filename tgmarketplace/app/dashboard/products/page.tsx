@@ -1,155 +1,88 @@
-import React from "react";
+"use client";
+import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import { sampleImage } from "@/images";
+import api from "@/lib/api/api";
+
+interface Product {
+  name: string;
+  price: number;
+  stock: number;
+  description: string;
+  ProductImage: ProductImage[];
+}
+interface ProductImage {
+  image_url: string;
+}
 
 export default function ProductsPage() {
+  const [id, setId] = useState("");
+  const [products, setProducts] = useState<Product[]>([]);
+  const price = 100;
+
+  useEffect(() => {
+    // Access localStorage only on the client-side
+    if (typeof window !== "undefined") {
+      const userId = localStorage.getItem("id");
+      setId(userId ? userId : "");
+    }
+  }, []);
+
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        const response = await api.get<Product[]>(
+          `/users/get-all-products/${id}`
+        );
+        console.log("this is i", id);
+        console.log(response.data);
+        console.log(response.data[0].ProductImage[0].image_url);
+        setProducts(response.data);
+        console.log(setProducts);
+      } catch (error) {
+        console.error("Error fetching products:", error);
+      }
+    };
+    fetchProducts();
+  }, [id]);
+
   return (
     <div className="flex flex-col mt-10 ">
       <div className="rounded-[20px] mx-auto max-w-[1600px] w-full overflow-hidden flex gap-4 flex-wrap">
-        <div className="dashboardcard bg-base-100 w-96 shadow-xl border-2 border-red-400 rounded-box flex flex-col gap-4 text-center ml-1">
-          <figure className="px-10 pt-10 ml-[60px]">
-            <Image
-              width={200}
-              height={300}
-              src={sampleImage}
-              alt="Sampleproducts"
-              className="rounded-xl"
-            />
-          </figure>
-          <div className="card-body text-center">
-            <h2 className="card-title justify-center">Sample Products</h2>
-            <p className="text-red-500 mt-1">PHP 30.00</p>
-            <div className="card-actions justify-center">
-              <button className="btn btn-primary">Add To Cart</button>
+        {products.map((product) => (
+          <div
+            className="dashboardcard bg-base-100 w-96 shadow-xl border-2 border-red-400 rounded-box"
+            key={product.name}
+          >
+            <figure className="px-10 pt-10">
+              {product.ProductImage.map((image) => (
+                <Image
+                  width={200}
+                  height={300}
+                  src={image.image_url}
+                  // src={"/uploads/images/Screenshot 2024-05-11 085513.png"}
+                  // src={sampleImage}
+                  alt={product.name}
+                  className="rounded-xl"
+                />
+              ))}
+            </figure>
+            <div className="dashboardcard-body items-center text-center">
+              <h2 className="dashboardcard-title mt-4">
+                <b>{product.name}</b>
+              </h2>
+              <p className="text-red-500 mt-2">{product.price}</p>
+              <div className="dashboardcard-actions">
+                <button className="btn btn-outline bg-white flex-1 w-[8rem] mb-2 mt-4">
+                  Edit
+                </button>
+                <button className="btn btn-outline bg-red-400 flex-1 w-[8rem] mb-2 mt-4 ml-2">
+                  Delete
+                </button>
+              </div>
             </div>
           </div>
-        </div>
-        <div className="dashboardcard bg-base-100 w-96 shadow-xl border-2 border-red-400 rounded-box flex flex-col gap-4 text-center">
-          <figure className="px-10 pt-10 ml-[60px]">
-            <Image
-              width={200}
-              height={300}
-              src={sampleImage}
-              alt="Sampleproducts"
-              className="rounded-xl"
-            />
-          </figure>
-          <div className="card-body text-center">
-            <h2 className="card-title justify-center">Sample Products</h2>
-            <p className="text-red-500 mt-1">PHP 30.00</p>
-            <div className="card-actions justify-center">
-              <button className="btn btn-primary">Add To Cart</button>
-            </div>
-          </div>
-        </div>
-        <div className="dashboardcard bg-base-100 w-96 shadow-xl border-2 border-red-400 rounded-box flex flex-col gap-4 text-center">
-          <figure className="px-10 pt-10 ml-[60px]">
-            <Image
-              width={200}
-              height={300}
-              src={sampleImage}
-              alt="Sampleproducts"
-              className="rounded-xl"
-            />
-          </figure>
-          <div className="card-body text-center">
-            <h2 className="card-title justify-center">Sample Products</h2>
-            <p className="text-red-500 mt-1">PHP 30.00</p>
-            <div className="card-actions justify-center">
-              <button className="btn btn-primary">Add To Cart</button>
-            </div>
-          </div>
-        </div>
-        <div className="dashboardcard bg-base-100 w-96 shadow-xl border-2 border-red-400 rounded-box flex flex-col gap-4 text-center">
-          <figure className="px-10 pt-10 ml-[60px]">
-            <Image
-              width={200}
-              height={300}
-              src={sampleImage}
-              alt="Sampleproducts"
-              className="rounded-xl"
-            />
-          </figure>
-          <div className="card-body text-center">
-            <h2 className="card-title justify-center">Sample Products</h2>
-            <p className="text-red-500 mt-1">PHP 30.00</p>
-            <div className="card-actions justify-center">
-              <button className="btn btn-primary">Add To Cart</button>
-            </div>
-          </div>
-        </div>
-        <div className="dashboardcard bg-base-100 w-96 shadow-xl border-2 border-red-400 rounded-box flex flex-col gap-4 text-center ml-1">
-          <figure className="px-10 pt-10 ml-[60px]">
-            <Image
-              width={200}
-              height={300}
-              src={sampleImage}
-              alt="Sampleproducts"
-              className="rounded-xl"
-            />
-          </figure>
-          <div className="card-body text-center">
-            <h2 className="card-title justify-center">Sample Products</h2>
-            <p className="text-red-500 mt-1">PHP 30.00</p>
-            <div className="card-actions justify-center">
-              <button className="btn btn-primary">Add To Cart</button>
-            </div>
-          </div>
-        </div>
-        <div className="dashboardcard bg-base-100 w-96 shadow-xl border-2 border-red-400 rounded-box flex flex-col gap-4 text-center">
-          <figure className="px-10 pt-10 ml-[60px]">
-            <Image
-              width={200}
-              height={300}
-              src={sampleImage}
-              alt="Sampleproducts"
-              className="rounded-xl"
-            />
-          </figure>
-          <div className="card-body text-center">
-            <h2 className="card-title justify-center">Sample Products</h2>
-            <p className="text-red-500 mt-1">PHP 30.00</p>
-            <div className="card-actions justify-center">
-              <button className="btn btn-primary">Add To Cart</button>
-            </div>
-          </div>
-        </div>
-        <div className="dashboardcard bg-base-100 w-96 shadow-xl border-2 border-red-400 rounded-box flex flex-col gap-4 text-center">
-          <figure className="px-10 pt-10 ml-[60px]">
-            <Image
-              width={200}
-              height={300}
-              src={sampleImage}
-              alt="Sampleproducts"
-              className="rounded-xl"
-            />
-          </figure>
-          <div className="card-body text-center">
-            <h2 className="card-title justify-center">Sample Products</h2>
-            <p className="text-red-500 mt-1">PHP 30.00</p>
-            <div className="card-actions justify-center">
-              <button className="btn btn-primary">Add To Cart</button>
-            </div>
-          </div>
-        </div>
-        <div className="dashboardcard bg-base-100 w-96 shadow-xl border-2 border-red-400 rounded-box flex flex-col gap-4 text-center">
-          <figure className="px-10 pt-10 ml-[60px]">
-            <Image
-              width={200}
-              height={300}
-              src={sampleImage}
-              alt="Sampleproducts"
-              className="rounded-xl"
-            />
-          </figure>
-          <div className="card-body text-center">
-            <h2 className="card-title justify-center">Sample Products</h2>
-            <p className="text-red-500 mt-1">PHP 30.00</p>
-            <div className="card-actions justify-center">
-              <button className="btn btn-primary">Add To Cart</button>
-            </div>
-          </div>
-        </div>
+        ))}
       </div>
     </div>
   );
