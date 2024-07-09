@@ -67,6 +67,11 @@ export default function SignIn() {
         setErrorMessage("Invalid Email or Password");
         setIsErrorModalOpen(true);
       }
+      localStorage.setItem("id", response.data.id);
+      localStorage.setItem("email", response.data.email);
+      localStorage.setItem("name", response.data.name);
+      console.log(response.data.id);
+      return response;
     } catch (error) {
       setErrorMessage("Invalid Email or Password");
       setIsErrorModalOpen(true);

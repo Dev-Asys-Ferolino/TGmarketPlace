@@ -14,6 +14,7 @@ import { generateResetCode } from './utils/token.utils';
 import { VerifyCodeDto } from './dto/verify-code.dto';
 
 import { text } from 'stream/consumers';
+import { UserIdDto } from './dto/userid-dto';
 
 @Injectable()
 export class UsersService {
@@ -193,6 +194,9 @@ export class UsersService {
         resetPasswordDto.password,
         user.password,
       );
+      if (isPasswordMatch) {
+        throw new Error('Password should not match old password');
+      }
       // if (!isPasswordMatch) {
       //   throw new Error('Password does not match');
       // }
@@ -241,5 +245,24 @@ export class UsersService {
       ),
     ]);
     return { access_token: at };
+  }
+
+  async getUserifVendor(id: number): Promise<User> {
+    try {
+      const user = await this.prisma.user.findUnique({
+        where: {
+          id: id,
+        },
+      });
+      if (!user) {
+        throw new Error('User not found');
+      }
+      if (!user.isVendor) {
+        throw new Error('User is not a vendor');
+      }
+      return user;
+    } catch (error) {
+      throw new Error(error);
+    }
   }
 }

@@ -12,4 +12,7 @@ export class CreateVendorDto {
 
   @IsString()
   description: string;
+
+  @IsString()
+  department: string;
 }

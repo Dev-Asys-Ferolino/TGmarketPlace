@@ -20,6 +20,7 @@ import { Token } from './types/token';
 import { JwtAuthGuard } from 'src/auth/guards/jwt.guard';
 import { VendorService } from 'src/vendor/vendor.service';
 import { CreateVendorDto } from 'src/vendor/dto/create-vendor.dto';
+import { UserIdDto } from './dto/userid-dto';
 
 @Controller('users')
 export class UsersController {
@@ -36,6 +37,13 @@ export class UsersController {
 
   @Post('register-vendor')
   async registerVendor(@Body() CreateVendorDto: CreateVendorDto) {
-    return await this.vendorService.createVendor(CreateVendorDto);
+    const vendor = await this.vendorService.createVendor(CreateVendorDto);
+    return vendor;
+  }
+
+  @Get('check-vendor/:id')
+  async checkVendor(@Param('id') id: number) {
+    const user = await this.usersService.getUserifVendor(id);
+    return user;
   }
 }

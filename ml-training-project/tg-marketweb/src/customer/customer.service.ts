@@ -4,6 +4,7 @@ import { AddToCartDto } from './dto/add-to-cart.dto';
 import { RemoveFromCartDto } from './dto/remove-to-cart.dto';
 import { Cart, Order, Product } from '@prisma/client';
 import { CheckOutOrderDto } from './dto/check-out-order.dto';
+import { UserIdDto } from 'src/users/dto/userid-dto';
 
 @Injectable()
 export class CustomerService {
@@ -112,6 +113,14 @@ export class CustomerService {
         where: {
           id: id,
         },
+        include: {
+          product: {
+            include: {
+              ProductImage: true,
+            },
+          },
+          vendor: true,
+        },
       });
       return cart;
     } catch (error) {
@@ -178,17 +187,56 @@ export class CustomerService {
     }
   }
 
-  async viewOrder(id: number): Promise<Order> {
+  async viewOrder(useridDto: UserIdDto): Promise<Order> {
     try {
       const order = await this.prisma.order.findUnique({
         where: {
-          id: id,
+          id: useridDto.id,
         },
         include: {
           OrderItem: true,
         },
       });
       return order;
+    } catch (error) {
+      throw new Error(error);
+    }
+  }
+
+  async getAllProducts(): Promise<Product[]> {
+    try {
+      const products = await this.prisma.product.findMany({
+        where: {
+          stock: { not: 0 },
+        },
+        include: {
+          ProductImage: true,
+        },
+        orderBy: {
+          createdAt: 'desc',
+        },
+      });
+      return products;
+    } catch (error) {
+      throw new Error(error);
+    }
+  }
+
+  async getTotalUnpaidOrders(id: number): Promise<Order[]> {
+    try {
+      const user = await this.prisma.user.findUnique({
+        where: {
+          id: id,
+        },
+      });
+      const orders = await this.prisma.order.findMany({
+        where: {
+          user_id: user.id,
+          status: 'pending',
+          payment_status: 'pending',
+        },
+      });
+      return orders;
     } catch (error) {
       throw new Error(error);
     }

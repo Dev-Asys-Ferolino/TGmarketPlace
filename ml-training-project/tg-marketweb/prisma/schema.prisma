@@ -20,6 +20,7 @@ model User {
   password           String    @db.VarChar(200)
   resetCode          String?   @unique @db.VarChar(20)
   resetCodeExpiresAt DateTime?
+  token              String?   @db.VarChar(200)
   isVendor           Boolean   @default(false)
   createdAt          DateTime  @default(now())
   Vendor             Vendor[]
@@ -33,6 +34,7 @@ model Vendor {
   description String    @db.VarChar(200)
   email       String    @unique
   phone       String?   @db.VarChar(20)
+  department  String?   @db.VarChar(50)
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
   user_id     Int

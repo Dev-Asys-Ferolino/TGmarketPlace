@@ -13,14 +13,22 @@ export class AuthService {
     private prisma: PrismaClient,
   ) {}
 
-  async login(LoginDto: LoginDto) {
+  async login(LoginDto: LoginDto): Promise<any> {
     const user = await this.validateuser(LoginDto);
     console.log(user);
     if (!user) {
       throw new UnauthorizedException('User not found');
     }
     const token = await this.usersService.getToken(user.id, user.email);
-    return token;
+    await this.prisma.user.update({
+      where: {
+        email: user.email,
+      },
+      data: {
+        token: token.access_token,
+      },
+    });
+    return user;
   }
 
   async logout(userId: number) {

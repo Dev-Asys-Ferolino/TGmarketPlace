@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, UseGuards } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { UsersService } from 'src/users/users.service';
 import { LoginDto } from './dto/login.dto';
@@ -24,7 +24,8 @@ export class AuthController {
 
   @Post('login')
   async login(@Body() LoginDto: LoginDto) {
-    return await this.authService.login(LoginDto);
+    const user = await this.authService.login(LoginDto);
+    return user;
   }
 
   @Post('change-password')
@@ -49,9 +50,9 @@ export class AuthController {
 
   @Post('verify-reset-code')
   async verifyResetCode(@Body() verifyCodeDto: VerifyCodeDto) {
-    return await this.usersService.verifyResetCode(verifyCodeDto);
+    const status = await this.usersService.verifyResetCode(verifyCodeDto);
+    return status;
   }
-
   @Post('logout')
   async logout(@Body() userId: number) {
     return await this.authService.logout(userId);
