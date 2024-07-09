@@ -4,18 +4,15 @@ export class AddProductDto {
   @IsString()
   name: string;
 
-  @IsNumber()
+  @IsString()
   price: number;
 
   @IsString()
   description: string;
 
-  @IsNumber()
+  @IsString()
   stock: number;
 
   @IsEmail()
   email: string;
-
-  @IsString({ each: true })
-  images: { image_url: string; width: number; height: number }[];
 }

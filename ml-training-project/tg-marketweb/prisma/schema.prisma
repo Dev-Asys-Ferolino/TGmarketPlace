@@ -105,7 +105,5 @@ model ProductImage {
   product_id Int
   image_url  String
   createdAt  DateTime @default(now())
-  width      Int
-  height     Int
   product    Product  @relation(fields: [product_id], references: [id])
 }
