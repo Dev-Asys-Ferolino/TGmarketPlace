@@ -2,7 +2,16 @@ import React from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { sampleImage } from "@/images";
-
+interface Product {
+  name: string;
+  price: number;
+  stock: number;
+  description: string;
+  ProductImage: ProductImage[];
+}
+interface ProductImage {
+  image_url: string;
+}
 export default function DashboardPage() {
   return (
     <div>

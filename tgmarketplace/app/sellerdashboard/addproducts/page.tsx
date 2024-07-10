@@ -23,6 +23,10 @@ export default function AddProductsPage() {
   const [localEmail, setLocalEmail] = useState("");
   const [products, setProducts] = useState<Product[]>([]);
   const [id, setId] = useState("");
+  const [description, setDescription] = useState("");
+  const [price, setPrice] = useState("");
+  const [stock, setStock] = useState("");
+  const [name, setName] = useState("");
   const router = useRouter();
 
   useEffect(() => {
@@ -34,10 +38,28 @@ export default function AddProductsPage() {
     }
   }, []);
 
-  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    if (event.target.files && event.target.files.length > 0) {
-      setFile(event.target.files[0]);
-    }
+  // const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  //   if (event.target.files && event.target.files.length > 0) {
+  //     setFile(event.target.files[0]);
+  //   }
+  // };
+
+  const handleChangeName = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setName(value);
+    console.log(name, value);
+  };
+
+  const handleChangePrice = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setPrice(value);
+    console.log(name, value);
+  };
+
+  const handleChangeStock = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setStock(value);
+    console.log(name, value);
   };
 
   useEffect(() => {
@@ -86,16 +108,17 @@ export default function AddProductsPage() {
       const formData = new FormData();
       formData.append("image", selectedFile);
       formData.append("email", localEmail);
-      formData.append("price", "100");
-      formData.append("description", "Shabu is a great product");
-      formData.append("stock", "100");
-      formData.append("name", "Shabu");
+      formData.append("price", price);
+      formData.append("description", description);
+      formData.append("stock", stock);
+      formData.append("name", name);
       const response = await api.post("/vendor/add-product", formData);
       setSelectedImage("");
       setSelectedFile(undefined);
       setUploading(false);
       router.push("/sellerdashboard/addproducts");
       window.location.reload();
+      console.log(response);
     } catch (error) {
       console.error("Error uploading image:", error);
     }
@@ -188,6 +211,8 @@ export default function AddProductsPage() {
                   type="text"
                   placeholder="Product Name"
                   className="input input-bordered w-full max-w-[13rem] mt-2 border-black"
+                  value={name}
+                  onChange={handleChangeName}
                 />
               </h2>
               {/* <div className="flex flex-row align-middle justify-center">
@@ -215,6 +240,8 @@ export default function AddProductsPage() {
                   type="number"
                   placeholder="Price "
                   className="input input-bordered w-full max-w-[13rem] mt-2 border-black"
+                  value={price}
+                  onChange={handleChangePrice}
                 />
               </h2>
               <h2 className="dashboardcard-title mt-4">
@@ -222,6 +249,8 @@ export default function AddProductsPage() {
                   type="number"
                   placeholder="Stocks Available"
                   className="input input-bordered w-full max-w-[13rem] mt-2 border-black"
+                  value={stock}
+                  onChange={handleChangeStock}
                 />
               </h2>
 
@@ -229,6 +258,8 @@ export default function AddProductsPage() {
                 <textarea
                   className="textarea textarea-bordered w-full max-w-[13rem] border-black"
                   placeholder="Description"
+                  value={description}
+                  onChange={(e) => setDescription(e.target.value)}
                 ></textarea>
               </h2>
               <button
