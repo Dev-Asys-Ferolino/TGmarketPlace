@@ -203,25 +203,6 @@ export class CustomerService {
     }
   }
 
-  async getAllProducts(): Promise<Product[]> {
-    try {
-      const products = await this.prisma.product.findMany({
-        where: {
-          stock: { not: 0 },
-        },
-        include: {
-          ProductImage: true,
-        },
-        orderBy: {
-          createdAt: 'desc',
-        },
-      });
-      return products;
-    } catch (error) {
-      throw new Error(error);
-    }
-  }
-
   async getTotalUnpaidOrders(id: number): Promise<Order[]> {
     try {
       const user = await this.prisma.user.findUnique({

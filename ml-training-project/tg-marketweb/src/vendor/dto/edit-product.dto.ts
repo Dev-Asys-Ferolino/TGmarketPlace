@@ -16,6 +16,6 @@ export class EditProductDto {
   @IsNumber()
   stock: number;
 
-  @IsString({ each: true })
-  images: { image_url: string; width: number; height: number }[];
+  @IsString()
+  image_url: string;
 }

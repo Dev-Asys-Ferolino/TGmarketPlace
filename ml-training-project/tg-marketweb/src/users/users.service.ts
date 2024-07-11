@@ -6,7 +6,7 @@ import { PrismaService } from '../prisma.service';
 import { JwtService } from '@nestjs/jwt';
 import { Token } from './types/token';
 import { ChangePasswordDto } from './dto/change-password.dto';
-import { User } from '@prisma/client';
+import { Product, User } from '@prisma/client';
 import * as nodemailer from 'nodemailer';
 import { ForgotPasswordDto } from './dto/forgot-password.dto';
 import { ResetPasswordDto } from './dto/reset-password.dto';
@@ -241,7 +241,7 @@ export class UsersService {
     const [at] = await Promise.all([
       this.jwtService.signAsync(
         { sub: userId, email },
-        { secret: 'get-token', expiresIn: '1h' },
+        { secret: 'get-token', expiresIn: '7d' },
       ),
     ]);
     return { access_token: at };
@@ -261,6 +261,29 @@ export class UsersService {
         throw new Error('User is not a vendor');
       }
       return user;
+    } catch (error) {
+      throw new Error(error);
+    }
+  }
+
+  async getAllProducts(id: number): Promise<Product[]> {
+    try {
+      const user = await this.findbyid(id);
+      if (!user) {
+        throw new Error('User not found');
+      }
+      const products = await this.prisma.product.findMany({
+        where: {
+          stock: { not: 0 },
+        },
+        include: {
+          ProductImage: true,
+        },
+        orderBy: {
+          createdAt: 'desc',
+        },
+      });
+      return products;
     } catch (error) {
       throw new Error(error);
     }

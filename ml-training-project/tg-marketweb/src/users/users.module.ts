@@ -9,6 +9,7 @@ import { GetTokenStrategy, RefreshTokenStrategy } from './strategies';
 import { PrismaService } from 'src/prisma.service';
 import { VendorService } from 'src/vendor/vendor.service';
 import { PrismaClient } from '@prisma/client';
+import { CustomerService } from 'src/customer/customer.service';
 @Module({
   imports: [JwtModule.register({})],
   providers: [
@@ -19,6 +20,7 @@ import { PrismaClient } from '@prisma/client';
     VendorService,
     PrismaService,
     PrismaClient,
+    CustomerService,
   ],
   controllers: [UsersController],
 })

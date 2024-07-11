@@ -19,14 +19,17 @@ import e from 'express';
 import { Token } from './types/token';
 import { JwtAuthGuard } from 'src/auth/guards/jwt.guard';
 import { VendorService } from 'src/vendor/vendor.service';
+import { CustomerService } from 'src/customer/customer.service';
 import { CreateVendorDto } from 'src/vendor/dto/create-vendor.dto';
 import { UserIdDto } from './dto/userid-dto';
+import { get } from 'http';
 
 @Controller('users')
 export class UsersController {
   constructor(
     private readonly usersService: UsersService,
     private readonly vendorService: VendorService,
+    private readonly customerService: CustomerService,
   ) {}
 
   @UseGuards(JwtAuthGuard)
@@ -45,5 +48,15 @@ export class UsersController {
   async checkVendor(@Param('id') id: number) {
     const user = await this.usersService.getUserifVendor(id);
     return user;
+  }
+
+  @Get('get-all-products/:id')
+  async getAllProducts(@Param('id') id: number) {
+    return await this.usersService.getAllProducts(id);
+  }
+
+  @Get('get-total-unpaid-orders/:id')
+  async getTotalUnpaidOrders(@Param('id') id: number) {
+    return await this.customerService.getTotalUnpaidOrders(id);
   }
 }

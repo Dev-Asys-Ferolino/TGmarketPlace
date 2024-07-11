@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@mui/material": "^5.16.0",
     "@types/formidable": "^3.4.5",
     "axios": "^1.7.2",
     "formidable": "^3.5.1",

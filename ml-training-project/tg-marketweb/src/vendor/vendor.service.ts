@@ -164,13 +164,14 @@ export class VendorService {
           name: editProductDto.name,
           description: editProductDto.description,
           stock: editProductDto.stock,
-          ProductImage: {
-            create: editProductDto.images.map((image) => ({
-              image_url: image.image_url,
-              width: image.width,
-              height: image.height,
-            })),
-          },
+        },
+      });
+      await this.prisma.productImage.updateMany({
+        where: {
+          product_id: id,
+        },
+        data: {
+          image_url: editProductDto.image_url,
         },
       });
       return product;
