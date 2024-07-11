@@ -74,7 +74,7 @@ export default function SellerDashboardPage() {
       <div className="rounded-[20px] mx-auto max-w-[1200px] w-full overflow-hidden flex gap-4 flex-wrap mt-5">
         {products.map((product) => (
           <div key={product.id} className="dashboardcard bg-base-100 w-96 shadow-xl border-2 border-red-200 rounded-box flex flex-col items-center gap-4 p-4 ml-[2px] shadow-2xl">
-            <figure className="w-full h-64 flex items-center justify-center">
+            <figure className="w-full h-64 flex items-center justify-center">     
               {product.ProductImage.map((image) => (
                 <Image
                   key={image.image_url}
