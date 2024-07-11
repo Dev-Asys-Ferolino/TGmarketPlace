@@ -39,19 +39,12 @@ export class CustomerService {
     }
   }
 
-  async removeFromCart(id: number, addToCartDto: RemoveFromCartDto) {
-    const { email, productId } = addToCartDto;
+  async removeFromCart(addToCartDto: RemoveFromCartDto) {
+    const { productId } = addToCartDto;
     try {
-      const user = await this.prisma.user.findUnique({
-        where: {
-          email: email,
-        },
-      });
       const cart = await this.prisma.cart.findUnique({
         where: {
-          id: id,
-          user_id: user.id,
-          product_id: productId,
+          id: productId,
         },
       });
       await this.prisma.cart.delete({
