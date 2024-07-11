@@ -21,6 +21,7 @@ export default function ProductsPage() {
   const [id, setId] = useState("");
   const [products, setProducts] = useState<Product[]>([]);
   const [localEmail, setLocalEmail] = useState("");
+  const [quantities, setQuantities] = useState<{ [key: number]: number }>({});
 
   useEffect(() => {
     if (typeof window !== "undefined") {
@@ -47,19 +48,32 @@ export default function ProductsPage() {
     }
   }, [id]);
 
-  const handleAddtoCart = async (id: number, stock: number, price: number) => {
+  const handleAddtoCart = async (id: number, price: number) => {
     try {
+      const quantity = quantities[id] || 0;
+      console.log(quantity);
       const response = await api.post("/customer/add-to-cart", {
         email: localEmail,
         productId: id,
-        quantity: +stock,
+        quantity: +quantity,
         price: +price,
       });
+
+      console.log(quantities);
+      window.alert("Product Added to Cart");
       console.log(response);
     } catch (error) {
-      console.error("Error fetching products:", error);
+      console.error("Error in adding to cart:", error);
     }
   };
+
+  const handleQuantityChange = (productId: number, value: number) => {
+    setQuantities((prevQuantities) => ({
+      ...prevQuantities,
+      [productId]: value,
+    }));
+  };
+
 
   return (
     <div className="flex flex-col mt-10 ">
@@ -89,13 +103,12 @@ export default function ProductsPage() {
                   onClick={handleAddtoCart.bind(
                     null,
                     product.id,
-                    product.stock,
                     product.price
                   )}
                 >
                   Add To Cart
                 </button>
-                <input type="number" placeholder="Want ?" className="text-center text-red-500 border-black border-[1px] rounded-md w-[100px] h-[47px] ml-2" />
+                <input type="number" placeholder="Want ?" className="text-center text-red-500 border-black border-[1px] rounded-md w-[100px] h-[47px] ml-2" value={quantities[product.id] || 0} onChange={(e) => handleQuantityChange(product.id, parseInt(e.target.value))} />
               </div>
             </div>
           </div>
