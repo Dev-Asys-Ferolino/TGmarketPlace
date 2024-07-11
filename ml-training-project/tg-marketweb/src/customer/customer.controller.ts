@@ -16,10 +16,10 @@ export class CustomerController {
   }
   @Delete('remove-from-cart')
   async removeFromCart(
-    @Body() id: number,
+    @Body()
     removeFromCartDto: RemoveFromCartDto,
   ) {
-    return await this.customerService.removeFromCart(id, removeFromCartDto);
+    return await this.customerService.removeFromCart(removeFromCartDto);
   }
   @Get('get-cart/:id')
   async getCart(@Param('id') id: number) {

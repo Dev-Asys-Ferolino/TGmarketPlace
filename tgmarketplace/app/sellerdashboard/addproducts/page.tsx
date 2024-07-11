@@ -86,17 +86,7 @@ export default function AddProductsPage() {
     }
   };
 
-  // const handleEdit = async (id: number) => {
-  //   try {
-  //     await api.put<Product>("/vendor/edit-product/:id", {
-  //       data: { email: localEmail, id: id },
-  //     });
-  //     console.log("this is edit");
-  //     handleUpload();
-  //   } catch (error) {
-  //     console.error("Error fetching product:", error);
-  //   }
-  // };
+
 
   const handleEdit = (product: Product) => {
     setEditingProduct(product);
@@ -216,11 +206,12 @@ export default function AddProductsPage() {
           <div className="dashboardcard bg-base-100 w-full max-w-[24rem] shadow-xl border-2 border-red-200 rounded-box mt-10 ml-[130px]">
             <div className="max-w-4xl mx-auto p-6 space-y-6">
               <label>
-                <input
+            <input
                   type="file"
                   hidden
+                  disabled={!!editingProduct} // Disable file input when editing
                   onChange={({ target }) => {
-                    if (target.files) {
+                    if (target.files && !editingProduct) { // Prevent file selection when editing
                       const file = target.files[0];
                       setSelectedImage(URL.createObjectURL(file));
                       setSelectedFile(file);
