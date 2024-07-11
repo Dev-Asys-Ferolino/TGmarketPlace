@@ -12,6 +12,7 @@ interface Product {
   description: string;
   ProductImage: ProductImage[];
 }
+
 interface ProductImage {
   image_url: string;
 }
@@ -22,7 +23,6 @@ export default function ProductsPage() {
   const [localEmail, setLocalEmail] = useState("");
 
   useEffect(() => {
-    // Access localStorage only on the client-side
     if (typeof window !== "undefined") {
       const userId = localStorage.getItem("id");
       const userEmail = localStorage.getItem("email");
@@ -37,16 +37,14 @@ export default function ProductsPage() {
         const response = await api.get<Product[]>(
           `/users/get-all-products/${id}`
         );
-        console.log("this is i", id);
-        console.log(response.data);
-        console.log(response.data[0].ProductImage[0].image_url);
         setProducts(response.data);
-        console.log(setProducts);
       } catch (error) {
         console.error("Error fetching products:", error);
       }
     };
-    fetchProducts();
+    if (id) {
+      fetchProducts();
+    }
   }, [id]);
 
   const handleAddtoCart = async (id: number, stock: number, price: number) => {
@@ -65,26 +63,29 @@ export default function ProductsPage() {
 
   return (
     <div className="flex flex-col mt-10 ">
-      <div className="rounded-[20px] mx-auto max-w-[1600px] w-full overflow-hidden flex gap-4 flex-wrap">
+      <div className="rounded-[20px] mx-auto max-w-[1600px] w-full overflow-hidden flex gap-4 flex-wrap ">
         {products.map((product) => (
-          <div className="dashboardcard bg-base-100 w-96 shadow-xl border-2 border-red-400 rounded-box flex flex-col gap-4 text-center ml-1">
-            <figure className="px-10 pt-10 ml-[60px]">
+          <div key={product.id} className="dashboardcard bg-base-100 w-96 shadow-xl border-2 border-red-200 rounded-box flex flex-col items-center gap-4 p-4 ml-[2px] ">
+            <figure className="w-full h-64 flex items-center justify-center">
               {product.ProductImage.map((image) => (
                 <Image
+                  key={image.image_url}
                   width={200}
-                  height={300}
+                  height={200}
                   src={image.image_url}
-                  alt="Sampleproducts"
-                  className="rounded-xl"
+                  alt={product.name}
+                  className="object-cover w-[200px] h-[200px] rounded-xl"
                 />
               ))}
             </figure>
-            <div className="card-body text-center">
-              <h2 className="card-title justify-center">{product.name}</h2>
-              <p className="text-red-500 mt-1">{product.price}</p>
-              <div className="card-actions justify-center">
+            <div className="card-body text-center w-full">
+              <h2 className="card-title justify-center  py-2">{product.name}</h2>
+              <p className="text-red-500 border-black border-[1px] rounded-md py-2 my-2"><span className="text-black">Price :  </span> {product.price}</p>
+              <p className="text-red-500 border-black border-[1px] rounded-md py-2"><span className="text-black">Availability :  </span> {product.stock}</p>
+              <p className="text-red-500 border-black border-[1px] rounded-md py-2"> {product.description}</p>
+              <div className="card-actions justify-center flex flex-row mt-4">
                 <button
-                  className="btn btn-primary"
+                  className="btn btn-outline bg-red-500 text-white"
                   onClick={handleAddtoCart.bind(
                     null,
                     product.id,
@@ -94,6 +95,7 @@ export default function ProductsPage() {
                 >
                   Add To Cart
                 </button>
+                <input type="number" placeholder="Want ?" className="text-center text-red-500 border-black border-[1px] rounded-md w-[100px] h-[47px] ml-2" />
               </div>
             </div>
           </div>

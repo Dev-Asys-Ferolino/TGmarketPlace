@@ -23,11 +23,13 @@ export default function AddProductsPage() {
   const [localEmail, setLocalEmail] = useState("");
   const [products, setProducts] = useState<Product[]>([]);
   const [id, setId] = useState("");
+  const [productId, setProductId] = useState("");
   const [description, setDescription] = useState("");
   const [price, setPrice] = useState("");
   const [stock, setStock] = useState("");
   const [name, setName] = useState("");
   const router = useRouter();
+  const [editingProduct, setEditingProduct] = useState<Product | null>(null);
 
   useEffect(() => {
     if (typeof window !== "undefined") {
@@ -37,12 +39,6 @@ export default function AddProductsPage() {
       setId(userId ? userId : "");
     }
   }, []);
-
-  // const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-  //   if (event.target.files && event.target.files.length > 0) {
-  //     setFile(event.target.files[0]);
-  //   }
-  // };
 
   const handleChangeName = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -90,17 +86,54 @@ export default function AddProductsPage() {
     }
   };
 
-  const handleEdit = async (id: number) => {
-    try {
-      const response = await api.put<Product>("/vendor/edit-product/:id", {
-        data: { email: localEmail, id: id },
-      });
-      handleUpload();
-    } catch (error) {
-      console.error("Error fetching product:", error);
-    }
+  // const handleEdit = async (id: number) => {
+  //   try {
+  //     await api.put<Product>("/vendor/edit-product/:id", {
+  //       data: { email: localEmail, id: id },
+  //     });
+  //     console.log("this is edit");
+  //     handleUpload();
+  //   } catch (error) {
+  //     console.error("Error fetching product:", error);
+  //   }
+  // };
+
+  const handleEdit = (product: Product) => {
+    setEditingProduct(product);
+    setName(product.name);
+    setPrice(product.price.toString());
+    setStock(product.stock.toString());
+    setDescription(product.description);
+    setProductId(product.id.toString());
+    setSelectedImage(product.ProductImage[0]?.image_url || "");
+    
+    console.log("hahahaahahha")
   };
 
+  
+  const handleUpdate = async ( id: number, price: number, stock: number, description: string, name: string, image: string) => {
+    setUploading(true);
+    try {
+      if (!editingProduct) return;
+      const response = await api.put(`/vendor/edit-product/${id}`,{
+          email: localEmail,
+          price: price,
+          stock: stock,
+          description: description,
+          name: name,
+          image_url: image
+      });
+      router.push("/sellerdashboard/addproducts");
+      window.location.reload();
+      console.log(response);
+    } catch (error) {
+      console.error("Error updating product:", error);
+    }
+    setUploading(false);
+  };
+
+
+//handle add products
   const handleUpload = async () => {
     setUploading(true);
     try {
@@ -126,14 +159,14 @@ export default function AddProductsPage() {
   };
 
   return (
-    <div className="container mx-auto mt-10">
+    <div className="container mx-auto mt-1">
       <div className="flex flex-col lg:flex-row">
         <div className="w-full lg:w-2/3">
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 ml-[-150px]">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 ml-[-150px] mt-5">
             {products.map((product) => (
               <div
                 key={product.id}
-                className="dashboardcard bg-base-100 w-full shadow-xl border-2 border-red-400 rounded-box"
+                className="dashboardcard bg-base-900 w-full shadow-xl backdrop-blur-lg border-2 border-red-200 rounded-box"
               >
                 <figure className="px-10 pt-10">
                   {product.ProductImage.map((image) => (
@@ -151,17 +184,19 @@ export default function AddProductsPage() {
                   <h2 className="dashboardcard-title mt-4">
                     <b>{product.name}</b>
                   </h2>
-                  <p className="text-red-500 mt-2">{product.price}</p>
+                  <p className="text-red-500 mt-2"><span className="text-black">Price : </span>{product.price}</p>
+                  <p className="text-red-500 mt-2"><span className="text-black">Availability : </span>{product.stock}</p>
+                  <p className="text-red-500 mt-2"><span className="text-black">Description : </span>{product.description}</p>
                   <div className="dashboardcard-actions">
                     <button
                       className="btn btn-outline bg-white flex-1 w-[8rem] mb-2 mt-4"
-                      onClick={handleEdit.bind(null, product.id)}
+                      onClick={() => handleEdit(product)}
                     >
                       Edit
                     </button>
                     <button
-                      className="btn btn-outline bg-red-400 flex-1 w-[8rem] mb-2 mt-4 ml-2"
-                      onClick={handleDelete.bind(null, product.id)}
+                      className="btn btn-outline bg-red-500 flex-1 w-[8rem] mb-2 mt-4 ml-2 text-white"
+                      onClick={() => handleDelete( product.id)}
                     >
                       Delete
                     </button>
@@ -172,13 +207,13 @@ export default function AddProductsPage() {
           </div>
         </div>
         <div className="divider lg:divider-horizontal"></div>
-        <div className="w-full lg:w-1/3 flex flex-col items-center mr-[-250px]">
+        <div className="w-full lg:w-1/3 flex flex-col items-center mr-[-250px] mt-10">
           <div className="text-red-500 text-[30px] ml-[120px]">
             <b>
-              <i>ADD YOUR PRODUCTS</i>
+               <i>{editingProduct ? "EDIT PRODUCT" : "ADD YOUR PRODUCTS"}</i>
             </b>
           </div>
-          <div className="dashboardcard bg-base-100 w-full max-w-[24rem] shadow-xl border-2 border-red-400 rounded-box mt-10 ml-[130px]">
+          <div className="dashboardcard bg-base-100 w-full max-w-[24rem] shadow-xl border-2 border-red-200 rounded-box mt-10 ml-[130px]">
             <div className="max-w-4xl mx-auto p-6 space-y-6">
               <label>
                 <input
@@ -215,26 +250,6 @@ export default function AddProductsPage() {
                   onChange={handleChangeName}
                 />
               </h2>
-              {/* <div className="flex flex-row align-middle justify-center">
-                <p className="w-full max-w-[6rem] mt-2 pt-2 border-black border-2 text-start">
-                  <b className="ml-10">Price :</b>
-                </p>
-                <input
-                  type="number"
-                  placeholder="Php"
-                  className="input input-bordered w-full max-w-[5rem] mt-2 border-black"
-                />
-              </div>
-              <div className="flex flex-row align-middle justify-center">
-                <p className="w-full max-w-[4rem] mt-2 pt-2 border-black border-2 justify-start">
-                  <b>Stock :</b>
-                </p>
-                <input
-                  type="text"
-                  placeholder="Avail."
-                  className="input input-bordered w-full max-w-[5rem] mt-2 border-black"
-                />
-              </div> */}
               <h2 className="dashboardcard-title mt-4">
                 <input
                   type="number"
@@ -263,12 +278,12 @@ export default function AddProductsPage() {
                 ></textarea>
               </h2>
               <button
-                onClick={handleUpload}
+                onClick={editingProduct ? handleUpdate.bind(null, +productId, +price, +stock, description, name, selectedImage) : handleUpload}
                 disabled={uploading}
                 style={{ opacity: uploading ? 0.5 : 1 }}
-                className="btn btn-outline bg-red-400 flex-1 w-[13rem] mb-2 mt-4"
+                className="btn btn-outline bg-black flex-1 w-[13rem] mb-2 mt-4 text-white"
               >
-                {uploading ? "Uploading..." : "Add Products"}
+                {uploading ? "Uploading..." : editingProduct ? "Update Product" : "Add Product"}
               </button>
             </div>
           </div>
