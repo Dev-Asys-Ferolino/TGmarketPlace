@@ -8,3 +8,7 @@ import captureImage from "./Capture-removebg-preview-Photoroom.png";
 export { captureImage };
 import sampleImage from "./sampleproducts.png";
 export { sampleImage };
+import picImage from "./pic.png";
+export { picImage };
+import hahaImage from "./haha.png";
+export { hahaImage };
