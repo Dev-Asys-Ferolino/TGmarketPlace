@@ -32,11 +32,11 @@ export default function DashboardPage() {
     }
   }, []);
 
-  
+
     useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const response = await api.get<Product[]>(
+        const response = await api.get<Product[]>( 
           `/users/get-all-products/${id}`
         );
         setProducts(response.data.slice(-3));
