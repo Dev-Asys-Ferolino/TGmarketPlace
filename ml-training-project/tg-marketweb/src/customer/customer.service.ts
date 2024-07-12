@@ -162,6 +162,14 @@ export class CustomerService {
         id: item.id,
       },
     });
+    const product = await this.prisma.product.findUnique({
+      where: {
+        id: item.product_id,
+      },
+    });
+    if (product.stock < item.quantity) {
+      throw new Error('Out of stock');
+    }
     await this.prisma.order.create({
       data: {
         user_id: user.id,
