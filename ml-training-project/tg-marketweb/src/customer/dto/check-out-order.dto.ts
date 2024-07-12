@@ -1,6 +1,7 @@
-import { IsEmail } from 'class-validator';
+import { Cart } from '@prisma/client';
+import { IsArray, IsEmail, IsString } from 'class-validator';
 
 export class CheckOutOrderDto {
-  @IsEmail()
-  email: string;
+  @IsArray()
+  selectItems: Cart[];
 }

@@ -10,6 +10,7 @@ interface CartItem {
     price: number;
     ProductImage: { image_url: string }[];
   };
+  vendor_id: number;
   quantity: number;
   total: number;
 }
@@ -17,18 +18,26 @@ interface CartItem {
 export default function CartPage() {
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
   const [localId, setLocalId] = useState("");
+  const [selectedCheckbox, setSelectedCheckbox] = useState<number[]>([]);
+  const [cartItemsChecked, setCartItemsChecked] = useState<boolean>(false);
+  const [selectedItems, setSelectedItems] = useState<CartItem[]>([]);
+  const [localEmail, setLocalEmail] = useState("");
 
   useEffect(() => {
     if (typeof window !== "undefined") {
       const userId = localStorage.getItem("id");
+      const userEmail = localStorage.getItem("email");
       setLocalId(userId ? userId : "");
+      setLocalEmail(userEmail ? userEmail : "");
     }
   }, []);
 
   useEffect(() => {
     const fetchCartItems = async () => {
       try {
-        const response = await api.get<CartItem[]>(`/customer/get-cart/${localId}`);
+        const response = await api.get<CartItem[]>(
+          `/customer/get-cart/${localId}`
+        );
         setCartItems(response.data);
       } catch (error) {
         console.error("Error fetching cart items:", error);
@@ -45,7 +54,7 @@ export default function CartPage() {
   //       itemId,
   //       quantity,
   //     });
-  
+
   //     const response = await api.get<CartItem[]>(`/customer/get-cart/${localId}`);
   //     setCartItems(response.data);
   //   } catch (error) {
@@ -53,25 +62,73 @@ export default function CartPage() {
   //   }
   // };
 
+  const handleCheckboxChange = (itemId: number) => {
+    setSelectedCheckbox((prevSelected) => {
+      if (prevSelected.includes(itemId)) {
+        return prevSelected.filter((id) => id !== itemId);
+      } else {
+        return [...prevSelected, itemId];
+      }
+    });
 
-    const handleDeleteCartItem = async (itemId: number) => {
+    setSelectedItems((prevSelectedItems) => {
+      const selected = cartItems.find((item) => item.id === itemId);
+      if (selected) {
+        if (prevSelectedItems.some((item) => item.id === itemId)) {
+          return prevSelectedItems.filter((item) => item.id !== itemId);
+        } else {
+          return [...prevSelectedItems, selected];
+        }
+      }
+      return prevSelectedItems;
+    });
+  };
+  const handleCheckout = async (selectedItems: CartItem[]) => {
     try {
-      const response =  await api.delete(`/customer/remove-from-cart`, {
+      console.log("Selected Items:", selectedItems);
+      const response = await api.post(`/customer/checkout-order/${localId}`, {
+        selectItems: selectedItems,
+      });
+      console.log(response);
+      window.alert("Order Placed Successfully");
+      window.location.reload();
+    } catch (error) {
+      console.error("Error placing order:", error);
+    }
+  };
+
+  const handleSelectAll = () => {
+    const allItemIds = cartItems.map((item) => item.id);
+    setSelectedCheckbox(allItemIds);
+    setCartItemsChecked(true);
+  };
+
+  const handleDeselectAll = () => {
+    setSelectedCheckbox([]);
+    setCartItemsChecked(false);
+  };
+
+  const handleDeleteCartItem = async (itemId: number) => {
+    try {
+      const response = await api.delete(`/customer/remove-from-cart`, {
         data: {
           productId: +itemId,
-
         },
       });
       console.log(response);
       window.alert("Product Removed from Cart");
       window.location.reload();
-  }
-  catch (error) {
-    console.error("Error deleting cart item:", error);
-  }
-};
+    } catch (error) {
+      console.error("Error deleting cart item:", error);
+    }
+  };
 
-
+  const computeTotal = () => {
+    const selectedItems = cartItems.filter((item) =>
+      selectedCheckbox.includes(item.id)
+    );
+    return selectedItems.reduce((acc, item) => acc + +item.total, 0);
+  };
 
   return (
     <div className="flex h-auto align-middle justify-center mt-10">
@@ -80,18 +137,39 @@ export default function CartPage() {
           <table className="table">
             <thead>
               <tr>
-                <th><input type="checkbox" defaultChecked className="checkbox" /></th>
+                <th>
+                  <input
+                    type="checkbox"
+                    onChange={
+                      cartItemsChecked ? handleDeselectAll : handleSelectAll
+                    }
+                    className="checkbox"
+                  />
+                </th>
                 <th>Product Images</th>
-                <th><span className="ml-10">Product Name</span></th>
+                <th>
+                  <span className="ml-10">Product Name</span>
+                </th>
                 <th>Price</th>
-                <th><span>Quantity</span></th>
-                <th><span className="ml-[-200px]">Total Amount</span></th>
+                <th>
+                  <span>Quantity</span>
+                </th>
+                <th>
+                  <span className="ml-[-200px]">Total Amount</span>
+                </th>
               </tr>
             </thead>
             <tbody>
               {cartItems.map((item) => (
                 <tr key={item.id}>
-                  <td><input type="checkbox" defaultChecked className="checkbox" /></td>
+                  <td>
+                    <input
+                      type="checkbox"
+                      checked={selectedCheckbox.includes(item.id)}
+                      onChange={() => handleCheckboxChange(item.id)}
+                      className="checkbox"
+                    />
+                  </td>
                   <td>
                     <div className="flex items-center gap-3">
                       <div className="avatar">
@@ -110,7 +188,9 @@ export default function CartPage() {
                     <div className="font-bold ml-10">{item.product.name}</div>
                   </td>
                   <td>{item.product.price}</td>
-                  <td><span className="ml-5">{item.quantity}</span></td>
+                  <td>
+                    <span className="ml-5">{item.quantity}</span>
+                  </td>
                   {/* <td>
                     <input
                       className=" w-[90px] h-[30px] text-center"
@@ -119,9 +199,19 @@ export default function CartPage() {
                     />
                   </td> */}
                   <td>
-                    <div className="ml-[-160px]">{item.total}<span><button className="btn btn-m ml-[80px] bg-red-400 text-white w-[5rem]" onClick={() => handleDeleteCartItem(item.id)}>Delete</button></span></div>
+                    <div className="ml-[-160px]">
+                      {item.total}
+                      <span>
+                        <button
+                          className="btn btn-m ml-[80px] bg-red-400 text-white w-[5rem]"
+                          onClick={() => handleDeleteCartItem(item.id)}
+                        >
+                          Delete
+                        </button>
+                      </span>
+                    </div>
                   </td>
-                </tr> 
+                </tr>
               ))}
             </tbody>
             <tfoot className="bg-base-100 border-t-2 border-black">
@@ -132,8 +222,14 @@ export default function CartPage() {
                 <th className="text-black">Overall Total:</th>
                 <th className="text-black">
                   <span className="ml-5">Php: </span>
-                  {cartItems.reduce((acc, item) => acc + +item.total, 0)}
-                  <button className="btn ml-10 bg-red-400 text-white">Checkout <br /><span>({cartItems.length})</span></button>
+                  {computeTotal()}
+                  <button
+                    className="btn ml-10 bg-red-400 text-white"
+                    onClick={() => handleCheckout(selectedItems)}
+                  >
+                    Checkout <br />
+                    <span>({selectedCheckbox.length})</span>
+                  </button>
                 </th>
               </tr>
             </tfoot>
