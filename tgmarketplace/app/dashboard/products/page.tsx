@@ -1,7 +1,7 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import Image from "next/image";
-import { sampleImage } from "@/images";
+// import { sampleImage } from "@/images";
 import api from "@/lib/api/api";
 
 interface Product {
@@ -120,15 +120,7 @@ export default function ProductsPage() {
                 >
                   Add To Cart
                 </button>
-                <input
-                  type="number"
-                  placeholder="Want ?"
-                  className="text-center text-red-500 border-black border-[1px] rounded-md w-[100px] h-[47px] ml-2"
-                  value={quantities[product.id]}
-                  onChange={(e) =>
-                    handleQuantityChange(product.id, parseInt(e.target.value))
-                  }
-                />
+                <input type="number" placeholder="Want ?" className="text-center text-red-500 border-black border-[1px] rounded-md w-[100px] h-[47px] ml-2" value={quantities[product.id]} onChange={(e) => handleQuantityChange(product.id, parseInt(e.target.value))} />
               </div>
             </div>
           </div>
