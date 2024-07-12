@@ -74,12 +74,14 @@ export default function ProductsPage() {
     }));
   };
 
-
   return (
     <div className="flex flex-col mt-10 ">
       <div className="rounded-[20px] mx-auto max-w-[1600px] w-full overflow-hidden flex gap-4 flex-wrap ">
         {products.map((product) => (
-          <div key={product.id} className="dashboardcard bg-base-100 w-96 shadow-xl border-2 border-red-200 rounded-box flex flex-col items-center gap-4 p-4 ml-[2px] ">
+          <div
+            key={product.id}
+            className="dashboardcard bg-base-100 w-96 shadow-xl border-2 border-red-200 rounded-box flex flex-col items-center gap-4 p-4 ml-[2px] "
+          >
             <figure className="w-full h-64 flex items-center justify-center">
               {product.ProductImage.map((image) => (
                 <Image
@@ -93,10 +95,20 @@ export default function ProductsPage() {
               ))}
             </figure>
             <div className="card-body text-center w-full">
-              <h2 className="card-title justify-center  py-2">{product.name}</h2>
-              <p className="text-red-500 border-black border-[1px] rounded-md py-2 my-2"><span className="text-black">Price :  </span> {product.price}</p>
-              <p className="text-red-500 border-black border-[1px] rounded-md py-2"><span className="text-black">Availability :  </span> {product.stock}</p>
-              <p className="text-red-500 border-black border-[1px] rounded-md py-2"> {product.description}</p>
+              <h2 className="card-title justify-center  py-2">
+                {product.name}
+              </h2>
+              <p className="text-red-500 border-black border-[1px] rounded-md py-2 my-2">
+                <span className="text-black">Price : </span> {product.price}
+              </p>
+              <p className="text-red-500 border-black border-[1px] rounded-md py-2">
+                <span className="text-black">Availability : </span>{" "}
+                {product.stock}
+              </p>
+              <p className="text-red-500 border-black border-[1px] rounded-md py-2">
+                {" "}
+                {product.description}
+              </p>
               <div className="card-actions justify-center flex flex-row mt-4">
                 <button
                   className="btn btn-outline bg-red-500 text-white"

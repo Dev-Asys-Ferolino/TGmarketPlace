@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma.service';
 import { AddToCartDto } from './dto/add-to-cart.dto';
 import { RemoveFromCartDto } from './dto/remove-to-cart.dto';
-import { Cart, Order, Product } from '@prisma/client';
+import { Cart, Order, Product, User } from '@prisma/client';
 import { CheckOutOrderDto } from './dto/check-out-order.dto';
 import { UserIdDto } from 'src/users/dto/userid-dto';
 
@@ -120,64 +120,94 @@ export class CustomerService {
       throw new Error(error);
     }
   }
-  async checkoutOrder(checkoutOrderDto: CheckOutOrderDto): Promise<Order> {
+  async checkoutOrder(
+    id: number,
+    checkoutOrder: CheckOutOrderDto,
+  ): Promise<any> {
     try {
       const user = await this.prisma.user.findUnique({
         where: {
-          email: checkoutOrderDto.email,
+          id: id,
         },
       });
-      const carts = await this.prisma.cart.findMany({
-        where: {
-          user_id: user.id,
-        },
-      });
-      if (carts.length === 0) {
-        throw new Error('No carts found');
+      console.log(checkoutOrder.selectItems.length);
+      if (checkoutOrder.selectItems.length === 0) {
+        throw new Error('Please select at least one item');
       }
-      const order = await this.prisma.order.create({
-        data: {
-          user_id: user.id,
-          vendor_id: carts[0].vendor_id,
-          total: carts.reduce((acc, curr) => acc + +curr.total, 0),
-          status: 'pending',
-          delivery_status: 'pending',
-          payment_method: 'cash',
-          payment_status: 'pending',
-          OrderItem: {
-            create: carts.map((cart) => ({
-              product_id: cart.product_id,
-              quantity: cart.quantity,
-              total: cart.total,
-            })),
-          },
-        },
-      });
 
-      await this.prisma.product.updateMany({
-        where: {
-          id: {
-            in: carts.map((cart) => cart.product_id),
+      for (let i = 0; i < checkoutOrder.selectItems.length; i++) {
+        const item = checkoutOrder.selectItems[i];
+        await this.prisma.cart.update({
+          where: {
+            id: item.id,
           },
-        },
-        data: {
-          stock: {
-            decrement: carts.reduce((acc, curr) => acc + +curr.quantity, 0),
+          data: {
+            quantity: item.quantity,
           },
-        },
-      });
-      await this.prisma.cart.deleteMany({
-        where: {
-          user_id: user.id,
-          product_id: {
-            in: carts.map((cart) => cart.product_id),
-          },
-        },
-      });
-      return order;
+        });
+        console.log('this is item', item);
+        await this.createOrderAndModifyProduct(item, user);
+        await this.deleteUserCartItems(item, user);
+      }
+
+      return 'Order placed successfully';
     } catch (error) {
       throw new Error(error);
     }
+  }
+  private async createOrderAndModifyProduct(item: Cart, user: User) {
+    console.log('this is item', item);
+    const vendor = await this.prisma.cart.findUnique({
+      where: {
+        id: item.id,
+      },
+    });
+    await this.prisma.order.create({
+      data: {
+        user_id: user.id,
+        vendor_id: vendor.vendor_id,
+        total: item.total,
+        status: 'pending',
+        delivery_status: 'pending',
+        payment_method: 'cash',
+        payment_status: 'pending',
+        OrderItem: {
+          create: [
+            {
+              product_id: item.product_id,
+              quantity: item.quantity,
+              total: item.total,
+            },
+          ],
+        },
+      },
+    });
+
+    await this.prisma.product.updateMany({
+      where: {
+        id: {
+          in: [item.product_id],
+        },
+      },
+      data: {
+        stock: {
+          decrement: item.quantity,
+        },
+      },
+    });
+  }
+
+  private async deleteUserCartItems(item: Cart, user: User) {
+    const id = item.id;
+    console.log(id);
+    await this.prisma.cart.deleteMany({
+      where: {
+        user_id: user.id,
+        id: {
+          in: [id],
+        },
+      },
+    });
   }
 
   async viewOrder(useridDto: UserIdDto): Promise<Order> {
