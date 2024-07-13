@@ -66,7 +66,7 @@ export default function SellerDashboardPage() {
         <div className="w-[900px] h-[250px] rounded-[20px] border-red-200 border-2 mt-10 ml-[600px] shadow-2xl">
           <h1 className="mb-5 text-5xl font-bold mt-10 text-black">Latest Products</h1>
           <p className="mb-5 text-black">Your One-Stop Shop for Snacks and Food</p>
-          <Link href="/dashboard/products" legacyBehavior>
+          <Link href="/sellerdashboard/addproducts" legacyBehavior>
             <a className="btn btn-outline btn-error flex-1 w-[8rem]">Add Products</a>
           </Link>
         </div>

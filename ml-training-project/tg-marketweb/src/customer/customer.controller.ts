@@ -40,8 +40,8 @@ export class CustomerController {
   ) {
     return await this.customerService.checkoutOrder(id, checkoutOrder);
   }
-  @Post('view-order')
-  async viewOrder(@Body() id: UserIdDto) {
+  @Get('view-order/:id')
+  async viewOrder(@Param('id') id: number) {
     return await this.customerService.viewOrder(id);
   }
 }
