@@ -1,8 +1,21 @@
-import React, { PropsWithChildren } from "react";
+'use client';
+import React, { PropsWithChildren, useEffect, useState } from "react";
 import Image from "next/image";
 import { captureImage, hahaImage, logimImage, logoutImage, trolleyImage } from "@/images";
 import Link from "next/link";
 export default function DashboardLayout({ children }: PropsWithChildren) {
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const userEmail = localStorage.getItem("email");
+      setEmail(userEmail ? userEmail : "");
+      const userName = localStorage.getItem("name");
+      setName(userName ? userName : "");
+    }
+  },
+  []);
   return (
     <main className="grid-rows-[auto_1fr] sticky-navbar sticky">
       <nav className="navbar  bg-red-500">
@@ -67,11 +80,11 @@ export default function DashboardLayout({ children }: PropsWithChildren) {
                 <div className="dashboardskeleton">
                   <div>
                     <b className="border-black border-b-[1px] text-[20px]">
-                      FJAY E.FEROLINO
+                      {name}
                     </b>
                     <br />
                     <span className="text-[13px]">Customer</span>
-                    <div className="mt-2">fjay.ferolino@mlhuillier.com</div>
+                    <div className="mt-2">{email}</div>
                   </div>
                 </div>
               </li>
