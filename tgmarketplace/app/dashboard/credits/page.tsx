@@ -8,7 +8,7 @@ export default function CreditsPage() {
     <div className="flex h-auto align-middle justify-center mt-10">
       <div className="card bg-base-100 w-full max-w-[70%] shrink-0 items-center">
         <form className="card-body">
-          <div className="overflow-x-auto card h-auto border-2 border-red-400 rounded-box w-[1000px]">
+          <div className="overflow-x-auto card h-auto w-[1000px]">
             <table className="table">
               {/* head */}
               <thead>
@@ -27,7 +27,7 @@ export default function CreditsPage() {
                   <td>
                     <div className="flex items-center gap-3">
                       <div className="avatar">
-                        <div className="mask mask-squircle h-20 w-20">
+                        <div className="h-[150px] w-[150px]">
                           <Image
                             width={800}
                             height={800}
@@ -37,124 +37,7 @@ export default function CreditsPage() {
                         </div>
                       </div>
                       <div>
-                        <div className="font-bold">Softdrinks</div>
-                      </div>
-                    </div>
-                  </td>
-                  <td>30.00</td>
-                  <td>3</td>
-                  <td>90.00</td>
-                </tr>
-                {/* row 2 */}
-                <tr>
-                  <th>2</th>
-                  <td>
-                    <div className="flex items-center gap-3">
-                      <div className="avatar">
-                        <div className="mask mask-squircle h-20 w-20">
-                          <Image
-                            width={800}
-                            height={800}
-                            src={sampleImage}
-                            alt="product"
-                          />
-                        </div>
-                      </div>
-                      <div>
-                        <div className="font-bold">Softdrinks</div>
-                      </div>
-                    </div>
-                  </td>
-                  <td>30.00</td>
-                  <td>3</td>
-                  <td>90.00</td>
-                </tr>
-                {/* row 3 */}
-                <tr>
-                  <th>4</th>
-                  <td>
-                    <div className="flex items-center gap-3">
-                      <div className="avatar">
-                        <div className="mask mask-squircle h-20 w-20">
-                          <Image
-                            width={800}
-                            height={800}
-                            src={sampleImage}
-                            alt="product"
-                          />
-                        </div>
-                      </div>
-                      <div>
-                        <div className="font-bold">Softdrinks</div>
-                      </div>
-                    </div>
-                  </td>
-                  <td>30.00</td>
-                  <td>3</td>
-                  <td>90.00</td>
-                </tr>
-                <tr>
-                  <th>3</th>
-                  <td>
-                    <div className="flex items-center gap-3">
-                      <div className="avatar">
-                        <div className="mask mask-squircle h-20 w-20">
-                          <Image
-                            width={800}
-                            height={800}
-                            src={sampleImage}
-                            alt="product"
-                          />
-                        </div>
-                      </div>
-                      <div>
-                        <div className="font-bold">Softdrinks</div>
-                      </div>
-                    </div>
-                  </td>
-                  <td>30.00</td>
-                  <td>3</td>
-                  <td>90.00</td>
-                </tr>
-                <tr>
-                  <th>5</th>
-                  <td>
-                    <div className="flex items-center gap-3">
-                      <div className="avatar">
-                        <div className="mask mask-squircle h-20 w-20">
-                          <Image
-                            width={800}
-                            height={800}
-                            src={sampleImage}
-                            alt="product"
-                          />
-                        </div>
-                      </div>
-                      <div>
-                        <div className="font-bold">Softdrinks</div>
-                      </div>
-                    </div>
-                  </td>
-                  <td>30.00</td>
-                  <td>3</td>
-                  <td>90.00</td>
-                </tr>
-                <tr>
-                  <th>6</th>
-                  <td>
-                    <div className="flex items-center gap-3">
-                      <div className="avatar">
-                        <div className="mask mask-squircle h-20 w-20">
-                          <Image
-                            width={800}
-                            height={800}
-                            src={sampleImage}
-                            alt="product"
-                          />
-                        </div>
-                      </div>
-                      <div>
-                        <div className="font-bold">Softdrinks</div>
+                        <div className="font-bold ml-5">Softdrinks</div>
                       </div>
                     </div>
                   </td>
@@ -163,7 +46,7 @@ export default function CreditsPage() {
                   <td>90.00</td>
                 </tr>
               </tbody>
-              <tfoot>
+              <tfoot className="border-t-2 border-black">
                 <tr>
                   <th></th>
                   <td></td>

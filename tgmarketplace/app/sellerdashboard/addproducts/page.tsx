@@ -1,3 +1,4 @@
+
 "use client";
 import React, { useEffect, useState } from "react";
 import Image from "next/image";
@@ -33,6 +34,7 @@ export default function AddProductsPage() {
   const router = useRouter();
   const [editingProduct, setEditingProduct] = useState<Product | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
+  const [validationErrors, setValidationErrors] = useState<{ [key: string]: string }>({}); // State for validation errors
 
   useEffect(() => {
     if (typeof window !== "undefined") {
@@ -78,11 +80,25 @@ export default function AddProductsPage() {
     setSelectedImage(product.ProductImage[0]?.image_url || "");
   };
 
+  // Function to validate form fields
+  const validateForm = () => {
+    const errors: { [key: string]: string } = {};
+    if (!name) errors.name = "Product name is required";
+    if (!price) errors.price = "Price is required";
+    if (!stock) errors.stock = "Stock is required";
+    if (!description) errors.description = "Description is required";
+    if (!selectedImage) errors.image = "Product image is required";
+    setValidationErrors(errors);
+    return Object.keys(errors).length === 0;
+  };
+
   const handleUpdate = async (id: number, price: number, stock: number, description: string, name: string, image: string) => {
+    // Validate form before updating
+    if (!validateForm()) return;
     setUploading(true);
     try {
       if (!editingProduct) return;
-      const response = await api.put(`/vendor/edit-product/${id}`, {
+      await api.put(`/vendor/edit-product/${id}`, {
         email: localEmail,
         price,
         stock,
@@ -99,6 +115,8 @@ export default function AddProductsPage() {
   };
 
   const handleUpload = async () => {
+    // Validate form before uploading
+    if (!validateForm()) return;
     setUploading(true);
     try {
       if (!selectedFile) return;
@@ -109,7 +127,7 @@ export default function AddProductsPage() {
       formData.append("description", description);
       formData.append("stock", stock);
       formData.append("name", name);
-      const response = await api.post("/vendor/add-product", formData);
+      await api.post("/vendor/add-product", formData);
       setSelectedImage("");
       setSelectedFile(null);
       setUploading(false);
@@ -208,9 +226,9 @@ export default function AddProductsPage() {
                 <input
                   type="file"
                   hidden
-                  disabled={!!editingProduct} // Disable file input when editing
+                  disabled={!!editingProduct} 
                   onChange={({ target }) => {
-                    if (target.files && !editingProduct) { // Prevent file selection when editing
+                    if (target.files && !editingProduct) { 
                       const file = target.files[0];
                       setSelectedImage(URL.createObjectURL(file));
                       setSelectedFile(file);
@@ -229,6 +247,9 @@ export default function AddProductsPage() {
                   )}
                 </div>
               </label>
+              {validationErrors.image && (
+                <p className="text-red-500 mt-2">{validationErrors.image}</p>
+              )}
             </div>
             <div className="dashboardcard-body items-center text-center">
               <h2 className="dashboardcard-title mt-4">
@@ -239,6 +260,9 @@ export default function AddProductsPage() {
                   value={name}
                   onChange={(e) => setName(e.target.value)}
                 />
+                {validationErrors.name && (
+                  <p className="text-red-500 mt-2">{validationErrors.name}</p>
+                )}
               </h2>
               <h2 className="dashboardcard-title mt-4">
                 <input
@@ -248,6 +272,9 @@ export default function AddProductsPage() {
                   value={price}
                   onChange={(e) => setPrice(e.target.value)}
                 />
+                {validationErrors.price && (
+                  <p className="text-red-500 mt-2">{validationErrors.price}</p>
+                )}
               </h2>
               <h2 className="dashboardcard-title mt-4">
                 <input
@@ -257,6 +284,9 @@ export default function AddProductsPage() {
                   value={stock}
                   onChange={(e) => setStock(e.target.value)}
                 />
+                {validationErrors.stock && (
+                  <p className="text-red-500 mt-2">{validationErrors.stock}</p>
+                )}
               </h2>
               <h2 className="dashboardcard-title mt-4">
                 <textarea

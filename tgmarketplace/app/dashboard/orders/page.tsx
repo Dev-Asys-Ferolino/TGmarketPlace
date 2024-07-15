@@ -61,13 +61,15 @@ export default function OrdersPage() {
                   <th>Price</th>
                   <th>Quantity</th>
                   <th>Total</th>
-                  <th>Status</th>
+                  <th><span className="ml-4">Delivery Status</span></th>
+                  <th>Payment Status</th>
                 </tr>
               </thead>
-              {orders.map((order) => (
+              {orders.map((order,index) => (
                 <tbody>
                   {order.OrderItem.map((item) => (
                     <tr key={order.id}>
+                      <td>{index + 1}</td>
                       <td>
                         <div className="flex items-center gap-3">
                           <div className="avatar">
@@ -93,27 +95,21 @@ export default function OrdersPage() {
                       <td>{item.product_price}</td>
                       <td>{item.quantity}</td>
                       <td>{item.product_price * item.quantity}</td>
-                      <td>
-                        <select>
-                          <option>Delivered</option>
-                          <option>Pending</option>
-                        </select>
+                      <td><span className="ml-8">  
+                        {order.delivery_status.toUpperCase()}</span>
                       </td>
+                      <td><span className="ml-5">{order.payment_status.toUpperCase()}</span></td>
                     </tr>
                   ))}
                 </tbody>
               ))}
-              <tfoot>
+              <tfoot className="border-t-2 border-black">
                 <tr>
                   <td></td>
                   <td></td>
+                  <td><b className="text-black">TOTAL :</b></td>
+                  <td><span className="text-black">{orders.reduce((acc, order) => acc + +order.total, 0)}</span></td>
                   <td></td>
-                  <td>
-                    <b>TOTAL :</b>
-                  </td>
-                  <td>
-                    {orders.reduce((acc, order) => acc + +order.total, 0)}
-                  </td>
                   <td></td>
                 </tr>
               </tfoot>
