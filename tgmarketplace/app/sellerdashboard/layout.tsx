@@ -1,8 +1,26 @@
-import React, { PropsWithChildren } from "react";
+"use client";
+import React, { PropsWithChildren, useEffect, useState } from "react";
 import Image from "next/image";
-import { captureImage, hahaImage, logimImage, logoutImage, trolleyImage } from "@/images";
+import {
+  captureImage,
+  hahaImage,
+  logimImage,
+  logoutImage,
+  trolleyImage,
+} from "@/images";
 import Link from "next/link";
 export default function DashboardLayout({ children }: PropsWithChildren) {
+  const [localEmail, setLocalEmail] = useState("");
+  const [name, setName] = useState("");
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const userEmail = localStorage.getItem("email");
+      const userName = localStorage.getItem("name");
+      setName(userName ? userName : "");
+      setLocalEmail(userEmail ? userEmail : "");
+    }
+  }, [localEmail, name]);
   return (
     <main className="grid-rows-[auto_1fr] sticky-navbar sticky">
       <nav className="navbar  bg-red-500">
@@ -14,7 +32,10 @@ export default function DashboardLayout({ children }: PropsWithChildren) {
         <div className="space-x-[50px] mr-[400px]">
           <div>
             <Link href="/sellerdashboard" legacyBehavior>
-              <a className="btn border-red-400 bg-white flex-1 w-[8rem]"> Home </a>
+              <a className="btn border-red-400 bg-white flex-1 w-[8rem]">
+                {" "}
+                Home{" "}
+              </a>
             </Link>
           </div>
           <div>
@@ -26,12 +47,16 @@ export default function DashboardLayout({ children }: PropsWithChildren) {
           </div>
           <div>
             <Link href="/sellerdashboard/Orders" legacyBehavior>
-              <a className="btn border-red-400 bg-white flex-1 w-[8rem]">Orders</a>
+              <a className="btn border-red-400 bg-white flex-1 w-[8rem]">
+                Orders
+              </a>
             </Link>
           </div>
           <div>
             <Link href="/sellerdashboard/credits" legacyBehavior>
-              <a className="btn border-red-400 bg-white flex-1 w-[8rem]">Credits</a>
+              <a className="btn border-red-400 bg-white flex-1 w-[8rem]">
+                Credits
+              </a>
             </Link>
           </div>
         </div>
@@ -67,11 +92,11 @@ export default function DashboardLayout({ children }: PropsWithChildren) {
                 <div className="dashboardskeleton">
                   <div>
                     <b className="border-black border-b-[1px] text-[20px]">
-                      FJAY E.FEROLINO
+                      {name}
                     </b>
                     <br />
                     <span className="text-[13px]">Customer</span>
-                    <div className="mt-2">fjay.ferolino@mlhuillier.com</div>
+                    <div className="mt-2">{localEmail}</div>
                   </div>
                 </div>
               </li>

@@ -218,14 +218,15 @@ export class CustomerService {
     });
   }
 
-  async viewOrder(useridDto: UserIdDto): Promise<Order> {
+  async viewOrder(id: number): Promise<Order> {
     try {
       const order = await this.prisma.order.findUnique({
         where: {
-          id: useridDto.id,
+          id: id,
         },
         include: {
           OrderItem: true,
+          ProductImage: true,
         },
       });
       return order;
