@@ -3,18 +3,25 @@ import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import api from "@/lib/api/api";
 
-interface OrderItem {
+interface Order {
   id: number;
-  name: string;
-  price: number;
-  ProductImage: { image_url: string }[];
+  status: string;
+  delivery_status: string;
+  payment_method: string;
+  payment_status: string;
+  cancelled: boolean;
   vendor_id: number;
-  quantity: number;
   total: number;
+  productimage: { image_url: string; id: number };
+  OrderItem: {
+    product_name: string;
+    quantity: number;
+    product_price: number;
+  }[];
 }
 
 export default function OrdersPage() {
-  const [orders, setOrders] = useState<OrderItem[]>([]);
+  const [orders, setOrders] = useState<Order[]>([]);
   const [localId, setLocalId] = useState("");
 
   useEffect(() => {
@@ -27,7 +34,7 @@ export default function OrdersPage() {
   useEffect(() => {
     const fetchOrders = async () => {
       try {
-        const response = await api.get<OrderItem[]>(
+        const response = await api.get<Order[]>(
           `/customer/view-order/${localId}`
         );
         console.log(response.data);
@@ -57,39 +64,45 @@ export default function OrdersPage() {
                   <th>Status</th>
                 </tr>
               </thead>
-              <tbody>
-                {orders && orders.map((order, index) => (
-                  <tr key={order.id}>
-                    <td>{index + 1}</td>
-                    <td>
-                      <div className="flex items-center gap-3">
-                        <div className="avatar">
-                          <div className=" h-[150px] w-[150px]">
-                            <Image
-                              width={800}
-                              height={800}
-                              src={order.ProductImage[0]?.image_url || ""}
-                              alt="product"
-                            />
+              {orders.map((order) => (
+                <tbody>
+                  {order.OrderItem.map((item) => (
+                    <tr key={order.id}>
+                      <td>
+                        <div className="flex items-center gap-3">
+                          <div className="avatar">
+                            <div className=" h-[150px] w-[150px]">
+                              <Image
+                                key={order.productimage.image_url}
+                                width={800}
+                                height={800}
+                                src={order.productimage.image_url}
+                                alt="product"
+                              />
+                            </div>
+                          </div>
+                          <div>
+                            {order.OrderItem.map((item) => (
+                              <div className="font-bold">
+                                {item.product_name}
+                              </div>
+                            ))}
                           </div>
                         </div>
-                        <div>
-                          <div className="font-bold">{order.name}</div>
-                        </div>
-                      </div>
-                    </td>
-                    <td>{order.price}</td>
-                    <td>{order.quantity}</td>
-                    <td>{order.total}</td>
-                    <td>
-                      <select>
-                        <option>Delivered</option>
-                        <option>Pending</option>
-                      </select>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
+                      </td>
+                      <td>{item.product_price}</td>
+                      <td>{item.quantity}</td>
+                      <td>{item.product_price * item.quantity}</td>
+                      <td>
+                        <select>
+                          <option>Delivered</option>
+                          <option>Pending</option>
+                        </select>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              ))}
               <tfoot>
                 <tr>
                   <td></td>
@@ -98,7 +111,9 @@ export default function OrdersPage() {
                   <td>
                     <b>TOTAL :</b>
                   </td>
-                  <td>{orders && orders.reduce((acc, order) => acc + order.total, 0)}</td>
+                  <td>
+                    {orders.reduce((acc, order) => acc + +order.total, 0)}
+                  </td>
                   <td></td>
                 </tr>
               </tfoot>

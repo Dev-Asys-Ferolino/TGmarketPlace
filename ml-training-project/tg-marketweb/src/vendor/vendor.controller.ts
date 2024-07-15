@@ -15,7 +15,7 @@ import { RemoveProductDto } from './dto/remove-product.dto';
 import { EditProductDto } from './dto/edit-product.dto';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
-import { Product } from '@prisma/client';
+import { Order, Product } from '@prisma/client';
 
 @Controller('vendor')
 export class VendorController {
@@ -26,7 +26,7 @@ export class VendorController {
     FileInterceptor('image', {
       storage: diskStorage({
         destination:
-          'C://Users//Desu19017174//Documents//GitHub//TGmarketPlace//tgmarketplace/public/uploads/images',
+          'C://Users//Fero20248225//Documents//GitHub//TGmarketPlace//tgmarketplace/public/uploads/images',
         filename: (req, file, callback) => {
           const ext = file.mimetype.split('/')[1];
           const filename = `${file.originalname}`;
@@ -61,5 +61,10 @@ export class VendorController {
   async getVendorProducts(@Param('email') email: string) {
     const products = await this.vendorService.getVendorProducts(email);
     return products;
+  }
+
+  @Get('view-order-as-vendor/:id')
+  async viewOrderasvendor(@Param('id') id: number): Promise<Order[]> {
+    return await this.vendorService.viewOrderasvendor(id);
   }
 }
