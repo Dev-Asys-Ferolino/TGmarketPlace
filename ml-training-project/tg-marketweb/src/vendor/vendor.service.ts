@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { PrismaClient, Product, User, Vendor } from '@prisma/client';
+import { Order, PrismaClient, Product, User, Vendor } from '@prisma/client';
 import { UsersService } from 'src/users/users.service';
 import { CreateVendorDto } from './dto/create-vendor.dto';
 import { AddProductDto } from './dto/add-product.dto';
@@ -71,6 +71,7 @@ export class VendorService {
       const product = await this.prisma.product.create({
         data: {
           price: +addProductDto.price,
+
           name: addProductDto.name,
           description: addProductDto.description,
           stock: +addProductDto.stock,
@@ -196,6 +197,29 @@ export class VendorService {
           payment_status: 'paid',
         },
       });
+      return order;
+    } catch (error) {
+      throw new Error(error);
+    }
+  }
+
+  async viewOrderasvendor(id: number): Promise<Order[]> {
+    try {
+      const vendor = await this.prisma.vendor.findFirst({
+        where: {
+          user_id: id,
+        },
+      });
+      const order = await this.prisma.order.findMany({
+        where: {
+          vendor_id: vendor.id,
+        },
+        include: {
+          OrderItem: true,
+          productimage: true,
+        },
+      });
+
       return order;
     } catch (error) {
       throw new Error(error);

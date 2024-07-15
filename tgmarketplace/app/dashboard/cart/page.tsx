@@ -48,7 +48,6 @@ export default function CartPage() {
     }
   }, [localId]);
 
-
   const handleCheckboxChange = (itemId: number) => {
     setSelectedCheckbox((prevSelected) => {
       if (prevSelected.includes(itemId)) {
@@ -88,6 +87,7 @@ export default function CartPage() {
     const allItemIds = cartItems.map((item) => item.id);
     setSelectedCheckbox(allItemIds);
     setCartItemsChecked(true);
+    setSelectedItems(cartItems);
   };
 
   const handleDeselectAll = () => {

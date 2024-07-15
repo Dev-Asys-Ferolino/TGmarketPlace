@@ -166,13 +166,18 @@ export class CustomerService {
       where: {
         id: item.product_id,
       },
+      include: {
+        ProductImage: true,
+      },
     });
+
     if (product.stock < item.quantity) {
       throw new Error('Out of stock');
     }
     await this.prisma.order.create({
       data: {
         user_id: user.id,
+        productimage_id: product.ProductImage[0].id,
         vendor_id: vendor.vendor_id,
         total: item.total,
         status: 'pending',
@@ -182,6 +187,8 @@ export class CustomerService {
         OrderItem: {
           create: [
             {
+              product_price: product.price,
+              product_name: product.name,
               product_id: item.product_id,
               quantity: item.quantity,
               total: item.total,
@@ -218,19 +225,23 @@ export class CustomerService {
     });
   }
 
-  async viewOrder(id: number): Promise<Order> {
+  async viewOrder(id: number): Promise<Order[]> {
     try {
-      console.log(id);
-      const order = await this.prisma.order.findUnique({
+      const user = await this.prisma.user.findUnique({
         where: {
           id: id,
         },
         include: {
-          OrderItem: true,
-          ProductImage: true,
+          Order: {
+            include: {
+              OrderItem: true,
+              productimage: true,
+            },
+          },
         },
       });
-      console.log(order);
+
+      const order = user.Order;
       return order;
     } catch (error) {
       throw new Error(error);
