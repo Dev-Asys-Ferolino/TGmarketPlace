@@ -226,9 +226,9 @@ export default function AddProductsPage() {
                 <input
                   type="file"
                   hidden
-                  disabled={!!editingProduct} // Disable file input when editing
+                  disabled={!!editingProduct} 
                   onChange={({ target }) => {
-                    if (target.files && !editingProduct) { // Prevent file selection when editing
+                    if (target.files && !editingProduct) { 
                       const file = target.files[0];
                       setSelectedImage(URL.createObjectURL(file));
                       setSelectedFile(file);

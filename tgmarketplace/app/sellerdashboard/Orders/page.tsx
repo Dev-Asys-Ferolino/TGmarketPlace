@@ -1,7 +1,6 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import Image from "next/image";
-import { sampleImage } from "@/images";
 import api from "@/lib/api/api";
 
 interface OrderItem {
@@ -17,6 +16,8 @@ interface OrderItem {
   vendor_id: number;
   quantity: number;
   total: number;
+  delivery_status: string;
+  payment_status: string;
 }
 
 export default function OrdersPage() {
@@ -47,6 +48,36 @@ export default function OrdersPage() {
     }
   }, [localId]);
 
+  const handleDeliveryStatusChange = async (orderId: number, status: string) => {
+    try {
+      await api.put(`/vendor/updateOrders/${orderId}`, {
+        delivery_status: status,
+      });
+      setOrders((prevOrders) =>
+        prevOrders.map((order) =>
+          order.id === orderId ? { ...order, delivery_status: status } : order
+        )
+      );
+    } catch (error) {
+      console.error("Error updating delivery status:", error);
+    }
+  };
+
+  const handlePaymentStatusChange = async (orderId: number, status: string) => {
+    try {
+      await api.put(`/vendor/updateOrders/${orderId}`, {
+        payment_status: status,
+      });
+      setOrders((prevOrders) =>
+        prevOrders.map((order) =>
+          order.id === orderId ? { ...order, payment_status: status } : order
+        )
+      );
+    } catch (error) {
+      console.error("Error updating payment status:", error);
+    }
+  };
+
   return (
     <div>
       <div className="flex w-full flex-col lg:flex-row mt-10 justify-center">
@@ -55,19 +86,20 @@ export default function OrdersPage() {
             <table className="table">
               <thead>
                 <tr>
-                  <th></th>
+                  <th><input type="checkbox" className="checkbox" /></th>
                   <th>Order/Product</th>
                   <th>Price</th>
                   <th>Quantity</th>
                   <th>Total</th>
-                  <th>Status</th>
+                  <th>Delivery Status</th>
+                  <th>Payment Status</th>
                 </tr>
               </thead>
-              {orders.map((order, index) => (
-                <tbody>
-                  {order.OrderItem.map((item) => (
-                    <tr key={order.id}>
-                      <td>{index + 1}</td>
+              {orders.map((order,) => (
+                <tbody key={order.id}>
+                  {order.OrderItem.map((item, itemIndex) => (
+                    <tr key={itemIndex}>
+                      <td><input type="checkbox" className="checkbox" /></td>
                       <td>
                         <div className="flex items-center gap-3">
                           <div className="avatar">
@@ -88,17 +120,14 @@ export default function OrdersPage() {
                       <td>{item.product_price}</td>
                       <td>{item.quantity}</td>
                       <td>{order.total}</td>
-                      <td>
-                        <select>
-                          <option>Delivered</option>
-                          <option>Pending</option>
-                        </select>
-                      </td>
+                      <td>{order.delivery_status.toUpperCase()}</td>
+                      <td>{order.payment_status.toUpperCase()}</td>
                     </tr>
                   ))}
                 </tbody>
               ))}
-              <tfoot>
+              {orders.map((order,) => (
+              <tfoot className="border-t-2 border-black">
                 <tr>
                   <td></td>
                   <td></td>
@@ -107,12 +136,30 @@ export default function OrdersPage() {
                     <b>TOTAL :</b>
                   </td>
                   <td>
-                    {orders &&
-                      orders.reduce((acc, order) => acc + +order.total, 0)}
+                    {orders.reduce((acc, order) => acc + +order.total, 0)}
                   </td>
-                  <td></td>
+                  <td>
+                        <button                           
+                          value={order.delivery_status}
+                          className="bg-red-500 text-white px-4 py-2 rounded-lg"
+                          onClick={() => handleDeliveryStatusChange(order.id, order.delivery_status)}
+                          >
+                            Delivered
+                        </button>
+                  </td>
+                  <td>
+                      <button 
+                        
+                        className="bg-red-500 text-white px-4 py-2 rounded-lg"
+                        onClick={() => handlePaymentStatusChange(order.id, order.payment_status)} 
+                        value={order.payment_status}
+                        
+                        >
+                          Update Payments
+                      </button></td>
                 </tr>
               </tfoot>
+              ))}
             </table>
           </div>
         </div>
