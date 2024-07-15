@@ -15,6 +15,7 @@ import { VerifyCodeDto } from './dto/verify-code.dto';
 
 import { text } from 'stream/consumers';
 import { UserIdDto } from './dto/userid-dto';
+import { last } from 'rxjs';
 
 @Injectable()
 export class UsersService {
@@ -280,7 +281,7 @@ export class UsersService {
           ProductImage: true,
         },
         orderBy: {
-          createdAt: 'desc',
+          createdAt: 'asc',
         },
       });
       return products;
