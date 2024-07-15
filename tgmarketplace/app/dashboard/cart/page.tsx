@@ -48,19 +48,6 @@ export default function CartPage() {
     }
   }, [localId]);
 
-  // const handleQuantityChange = async (itemId: number, quantity: number) => {
-  //   try {
-  //     await api.put(`/customer/update-cart-item`, {
-  //       itemId,
-  //       quantity,
-  //     });
-
-  //     const response = await api.get<CartItem[]>(`/customer/get-cart/${localId}`);
-  //     setCartItems(response.data);
-  //   } catch (error) {
-  //     console.error("Error updating cart item:", error);
-  //   }
-  // };
 
   const handleCheckboxChange = (itemId: number) => {
     setSelectedCheckbox((prevSelected) => {
@@ -191,13 +178,6 @@ export default function CartPage() {
                   <td>
                     <span className="ml-5">{item.quantity}</span>
                   </td>
-                  {/* <td>
-                    <input
-                      className=" w-[90px] h-[30px] text-center"
-                      value={item.quantity}
-                      onChange={(e) => handleQuantityChange(item.id, parseInt(e.target.value))}
-                    />
-                  </td> */}
                   <td>
                     <div className="ml-[-160px]">
                       {item.total}

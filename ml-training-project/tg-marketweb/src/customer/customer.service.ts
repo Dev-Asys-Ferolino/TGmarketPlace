@@ -220,6 +220,7 @@ export class CustomerService {
 
   async viewOrder(id: number): Promise<Order> {
     try {
+      console.log(id);
       const order = await this.prisma.order.findUnique({
         where: {
           id: id,
@@ -229,6 +230,7 @@ export class CustomerService {
           ProductImage: true,
         },
       });
+      console.log(order);
       return order;
     } catch (error) {
       throw new Error(error);
