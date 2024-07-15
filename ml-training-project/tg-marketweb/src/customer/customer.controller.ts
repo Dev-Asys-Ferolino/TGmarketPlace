@@ -23,7 +23,12 @@ export class CustomerController {
   }
   @Get('get-cart/:id')
   async getCart(@Param('id') id: number) {
-    return await this.customerService.getCart(id);
+    try {
+      const cart = await this.customerService.getCart(id);
+      return cart;
+    } catch (error) {
+      throw new Error(error);
+    }
   }
   @Post('view-cart')
   async viewCart(@Body() id: number) {

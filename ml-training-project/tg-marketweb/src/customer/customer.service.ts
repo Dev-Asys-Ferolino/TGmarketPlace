@@ -23,6 +23,10 @@ export class CustomerService {
           id: productId,
         },
       });
+      console.log(product.stock);
+      if (product.stock < quantity) {
+        throw new Error('Out of stock');
+      }
       await this.prisma.cart.create({
         data: {
           vendor_id: product.vendor_id,
@@ -240,7 +244,6 @@ export class CustomerService {
           },
         },
       });
-
       const order = user.Order;
       return order;
     } catch (error) {
