@@ -270,4 +270,28 @@ export class CustomerService {
       throw new Error(error);
     }
   }
+
+  async getUnpaidOrders(id: number): Promise<Order[]> {
+    try {
+      const user = await this.prisma.user.findUnique({
+        where: {
+          id: id,
+        },
+      });
+      const orders = await this.prisma.order.findMany({
+        where: {
+          user_id: user.id,
+          status: 'pending',
+          payment_status: 'pending',
+        },
+        include: {
+          OrderItem: true,
+          productimage: true,
+        },
+      });
+      return orders;
+    } catch (error) {
+      throw new Error(error);
+    }
+  }
 }

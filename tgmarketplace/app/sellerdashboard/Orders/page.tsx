@@ -23,6 +23,10 @@ interface OrderItem {
 export default function OrdersPage() {
   const [orders, setOrders] = useState<OrderItem[]>([]);
   const [localId, setLocalId] = useState("");
+  const [orderItems, setOrderItems] = useState<OrderItem[]>([]);
+  const [selectedCheckbox, setSelectedCheckbox] = useState<number[]>([]);
+  const [orderItemsChecked, setOrderItemsChecked] = useState<boolean>(false);
+  const [selectedItems, setSelectedItems] = useState<OrderItem[]>([]);
 
   useEffect(() => {
     if (typeof window !== "undefined") {
@@ -48,7 +52,43 @@ export default function OrdersPage() {
     }
   }, [localId]);
 
-  const handleDeliveryStatusChange = async (orderId: number, status: string) => {
+  const handleCheckboxChange = (itemId: number) => {
+    setSelectedCheckbox((prevSelected) => {
+      if (prevSelected.includes(itemId)) {
+        return prevSelected.filter((id) => id !== itemId);
+      } else {
+        return [...prevSelected, itemId];
+      }
+    });
+
+    setSelectedItems((prevSelectedItems) => {
+      const selected = orders.find((item) => item.id === itemId);
+      if (selected) {
+        if (prevSelectedItems.some((item) => item.id === itemId)) {
+          return prevSelectedItems.filter((item) => item.id !== itemId);
+        } else {
+          return [...prevSelectedItems, selected];
+        }
+      }
+      return prevSelectedItems;
+    });
+  };
+
+  const handleSelectAll = () => {
+    const allItemIds = orders.map((item) => item.id);
+    setSelectedCheckbox(allItemIds);
+    setOrderItemsChecked(true);
+    setSelectedItems(orders);
+  };
+
+  const handleDeselectAll = () => {
+    setSelectedCheckbox([]);
+    setOrderItemsChecked(false);
+  };
+  const handleDeliveryStatusChange = async (
+    orderId: number,
+    status: string
+  ) => {
     try {
       await api.put(`/vendor/updateOrders/${orderId}`, {
         delivery_status: status,
@@ -86,7 +126,15 @@ export default function OrdersPage() {
             <table className="table">
               <thead>
                 <tr>
-                  <th><input type="checkbox" className="checkbox" /></th>
+                  <th>
+                    <input
+                      type="checkbox"
+                      onChange={
+                        orderItemsChecked ? handleDeselectAll : handleSelectAll
+                      }
+                      className="checkbox"
+                    />
+                  </th>
                   <th>Order/Product</th>
                   <th>Price</th>
                   <th>Quantity</th>
@@ -95,11 +143,18 @@ export default function OrdersPage() {
                   <th>Payment Status</th>
                 </tr>
               </thead>
-              {orders.map((order,) => (
+              {orders.map((order) => (
                 <tbody key={order.id}>
                   {order.OrderItem.map((item, itemIndex) => (
                     <tr key={itemIndex}>
-                      <td><input type="checkbox" className="checkbox" /></td>
+                      <td>
+                        <input
+                          type="checkbox"
+                          checked={selectedCheckbox.includes(order.id)}
+                          onChange={() => handleCheckboxChange(order.id)}
+                          className="checkbox"
+                        />
+                      </td>
                       <td>
                         <div className="flex items-center gap-3">
                           <div className="avatar">
@@ -126,39 +181,48 @@ export default function OrdersPage() {
                   ))}
                 </tbody>
               ))}
-              {orders.map((order,) => (
-              <tfoot className="border-t-2 border-black">
-                <tr>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td>
-                    <b>TOTAL :</b>
-                  </td>
-                  <td>
-                    {orders.reduce((acc, order) => acc + +order.total, 0)}
-                  </td>
-                  <td>
-                        <button                           
-                          value={order.delivery_status}
-                          className="bg-red-500 text-white px-4 py-2 rounded-lg"
-                          onClick={() => handleDeliveryStatusChange(order.id, order.delivery_status)}
-                          >
-                            Delivered
-                        </button>
-                  </td>
-                  <td>
-                      <button 
-                        
+              {orders.map((order) => (
+                <tfoot className="border-t-2 border-black">
+                  <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>
+                      <b>TOTAL :</b>
+                    </td>
+                    <td>
+                      {orders.reduce((acc, order) => acc + +order.total, 0)}
+                    </td>
+                    <td>
+                      <button
+                        value={order.delivery_status}
                         className="bg-red-500 text-white px-4 py-2 rounded-lg"
-                        onClick={() => handlePaymentStatusChange(order.id, order.payment_status)} 
+                        onClick={() =>
+                          handleDeliveryStatusChange(
+                            order.id,
+                            order.delivery_status
+                          )
+                        }
+                      >
+                        Delivered
+                      </button>
+                    </td>
+                    <td>
+                      <button
+                        className="bg-red-500 text-white px-4 py-2 rounded-lg"
+                        onClick={() =>
+                          handlePaymentStatusChange(
+                            order.id,
+                            order.payment_status
+                          )
+                        }
                         value={order.payment_status}
-                        
-                        >
-                          Update Payments
-                      </button></td>
-                </tr>
-              </tfoot>
+                      >
+                        Update Payments
+                      </button>
+                    </td>
+                  </tr>
+                </tfoot>
               ))}
             </table>
           </div>

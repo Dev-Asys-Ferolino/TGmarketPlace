@@ -26,7 +26,7 @@ export class VendorController {
     FileInterceptor('image', {
       storage: diskStorage({
         destination:
-          'C://Users//Fero20248225//Documents//GitHub//TGmarketPlace//tgmarketplace/public/uploads/images',
+          'C://Users//Desu19017174//Documents//GitHub//TGmarketPlace//tgmarketplace/public/uploads/images',
         filename: (req, file, callback) => {
           const ext = file.mimetype.split('/')[1];
           const filename = `${file.originalname}`;
@@ -66,5 +66,10 @@ export class VendorController {
   @Get('view-order-as-vendor/:id')
   async viewOrderasvendor(@Param('id') id: number): Promise<Order[]> {
     return await this.vendorService.viewOrderasvendor(id);
+  }
+
+  @Get('get-unpaid-orders/:email')
+  async getUnpaidOrders(@Param('email') email: string): Promise<Order[]> {
+    return await this.vendorService.getUnpaidOrders(email);
   }
 }
