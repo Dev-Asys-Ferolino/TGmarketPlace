@@ -23,7 +23,12 @@ export class CustomerController {
   }
   @Get('get-cart/:id')
   async getCart(@Param('id') id: number) {
-    return await this.customerService.getCart(id);
+    try {
+      const cart = await this.customerService.getCart(id);
+      return cart;
+    } catch (error) {
+      throw new Error(error);
+    }
   }
   @Post('view-cart')
   async viewCart(@Body() id: number) {
@@ -43,5 +48,15 @@ export class CustomerController {
   @Get('view-order/:id')
   async viewOrder(@Param('id') id: number) {
     return await this.customerService.viewOrder(id);
+  }
+
+  @Get('get-total-unpaid-orders/:id')
+  async getTotalUnpaidOrders(@Param('id') id: number) {
+    return await this.customerService.getTotalUnpaidOrders(id);
+  }
+
+  @Get('get-unpaid-orders/:id')
+  async getUnpaidOrders(@Param('id') id: number) {
+    return await this.customerService.getUnpaidOrders(id);
   }
 }

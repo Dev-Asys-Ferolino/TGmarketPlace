@@ -23,6 +23,10 @@ export class CustomerService {
           id: productId,
         },
       });
+      console.log(product.stock);
+      if (product.stock < quantity) {
+        throw new Error('Out of stock');
+      }
       await this.prisma.cart.create({
         data: {
           vendor_id: product.vendor_id,
@@ -240,7 +244,6 @@ export class CustomerService {
           },
         },
       });
-
       const order = user.Order;
       return order;
     } catch (error) {
@@ -262,6 +265,31 @@ export class CustomerService {
           payment_status: 'pending',
         },
       });
+      return orders;
+    } catch (error) {
+      throw new Error(error);
+    }
+  }
+
+  async getUnpaidOrders(id: number): Promise<Order[]> {
+    try {
+      const user = await this.prisma.user.findUnique({
+        where: {
+          id: id,
+        },
+      });
+      const orders = await this.prisma.order.findMany({
+        where: {
+          user_id: user.id,
+          status: 'pending',
+          payment_status: 'pending',
+        },
+        include: {
+          OrderItem: true,
+          productimage: true,
+        },
+      });
+
       return orders;
     } catch (error) {
       throw new Error(error);

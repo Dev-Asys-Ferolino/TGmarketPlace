@@ -181,19 +181,24 @@ export class VendorService {
     }
   }
 
-  async updateOrders(email: string, orderId: number) {
+  async updateOrders(id: number, orderId: number) {
     try {
-      const vendor = await this.getVendorDetails(email);
-      if (!vendor) {
-        throw new Error('User is not a vendor');
-      }
+      const user = await this.prisma.user.findUnique({
+        where: {
+          id: id,
+        },
+        include: {
+          Vendor: true,
+          Order: true,
+        },
+      });
+
       const order = await this.prisma.order.update({
         where: {
-          id: orderId,
+          id: user.Order[0].id,
         },
         data: {
-          vendor_id: vendor.id,
-          status: 'Delivered',
+          delivery_status: 'Delivered',
           payment_status: 'paid',
         },
       });
@@ -217,6 +222,34 @@ export class VendorService {
         include: {
           OrderItem: true,
           productimage: true,
+        },
+      });
+
+      return order;
+    } catch (error) {
+      throw new Error(error);
+    }
+  }
+
+  async getUnpaidOrders(email: string): Promise<Order[]> {
+    try {
+      const vendor = await this.getVendorDetails(email);
+      if (!vendor) {
+        throw new Error('User is not a vendor');
+      }
+      const order = await this.prisma.order.findMany({
+        where: {
+          vendor_id: vendor.id,
+          payment_status: 'pending',
+        },
+        include: {
+          OrderItem: true,
+          productimage: true,
+          user: {
+            select: {
+              name: true,
+            },
+          },
         },
       });
 

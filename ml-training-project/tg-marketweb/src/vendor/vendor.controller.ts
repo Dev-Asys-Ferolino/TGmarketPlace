@@ -67,4 +67,14 @@ export class VendorController {
   async viewOrderasvendor(@Param('id') id: number): Promise<Order[]> {
     return await this.vendorService.viewOrderasvendor(id);
   }
+
+  @Get('get-unpaid-orders/:email')
+  async getUnpaidOrders(@Param('email') email: string): Promise<Order[]> {
+    return await this.vendorService.getUnpaidOrders(email);
+  }
+
+  // @Put('update-order/:id')
+  // async updateOrder(@Param('id') id: number, @Body() updateOrderDto: UpdateOrderDto) {
+  //   return await this.vendorService.updateOrders(id, updateOrderDto);
+  // }
 }
