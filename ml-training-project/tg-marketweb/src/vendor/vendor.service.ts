@@ -199,6 +199,7 @@ export class VendorService {
       if (updateOrderDto.orderItems.length === 0) {
         throw new Error('Please select at least one item');
       }
+      console.log(updateOrderDto.orderItems);
 
       for (let i = 0; i < updateOrderDto.orderItems.length; i++) {
         const item = updateOrderDto.orderItems[i];

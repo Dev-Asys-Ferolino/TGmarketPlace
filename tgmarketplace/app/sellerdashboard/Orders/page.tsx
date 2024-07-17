@@ -304,9 +304,16 @@ export default function OrdersPage() {
   };
   const handleDeliveryStatusChange = async (selectedItems: OrderItem[]) => {
     try {
-      await api.put(`/vendor/update-delivered-orders/${localId}`, {
-        orderItems: selectedItems,
-      });
+      const response = await api.put(
+        `/vendor/update-delivered-orders/${localId}`,
+        {
+          orderItems: selectedItems,
+        }
+      );
+      response.status === 201
+        ? window.alert("Payment Status Updated")
+        : console.log("Error updating payment status");
+      window.location.reload();
     } catch (error) {
       console.error("Error updating delivery status:", error);
     }
@@ -314,7 +321,7 @@ export default function OrdersPage() {
 
   const handlePaymentStatusChange = async (selectedItems: OrderItem[]) => {
     try {
-      const response = await api.post(`/vendor/update-paid-orders/${localId}`, {
+      const response = await api.put(`/vendor/update-paid-orders/${localId}`, {
         orderItems: selectedItems,
       });
       response.status === 201
@@ -415,7 +422,7 @@ export default function OrdersPage() {
                   <td>
                     <button
                       className="bg-red-500 text-white px-4 py-2 rounded-lg ml-2"
-                      onClick={handleDeliveryStatusChange}
+                      onClick={() => handleDeliveryStatusChange(selectedItems)}
                     >
                       Delivered
                     </button>
@@ -423,7 +430,7 @@ export default function OrdersPage() {
                   <td>
                     <button
                       className="bg-red-500 text-white px-4 py-2 rounded-lg ml-[-15px]"
-                      onClick={handlePaymentStatusChange}
+                      onClick={() => handlePaymentStatusChange(selectedItems)}
                     >
                       Update Payments
                     </button>
