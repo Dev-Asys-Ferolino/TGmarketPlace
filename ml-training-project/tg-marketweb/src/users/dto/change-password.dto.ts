@@ -4,6 +4,7 @@ import {
   MinLength,
   MaxLength,
   Matches,
+  IsEmail,
 } from 'class-validator';
 export class ChangePasswordDto {
   @IsString()
@@ -24,5 +25,6 @@ export class ChangePasswordDto {
   })
   newPassword: string;
 
+  @IsEmail()
   email: string;
 }

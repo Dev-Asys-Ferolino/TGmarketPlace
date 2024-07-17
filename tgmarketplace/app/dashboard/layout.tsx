@@ -1,17 +1,19 @@
 "use client";
 import React, { PropsWithChildren, useEffect, useState } from "react";
 import Image from "next/image";
-import { captureImage, hahaImage, logoutImage, picImage} from "@/images";
+import { captureImage, hahaImage, logoutImage, picImage } from "@/images";
 import Link from "next/link";
 import api from "@/lib/api/api";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 
 export default function DashboardLayout({ children }: PropsWithChildren) {
   const [id, setId] = useState("");
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [isSeller, setIsSeller] = useState(false);
-  const [searchQuery, setSearchQuery] = useState(""); // State for search input
+  const [searchQuery, setSearchQuery] = useState(""); 
+  const router = useRouter();
+  const pathname = usePathname();
 
   useEffect(() => {
     // Access localStorage only on the client-side
@@ -41,8 +43,6 @@ export default function DashboardLayout({ children }: PropsWithChildren) {
     fetchSellers();
   }, [id]);
 
-  const router = useRouter();
-
   const handleLogout = async () => {
     await api.post("/auth/logout", { id: id });
     console.log("logout" + id);
@@ -51,7 +51,6 @@ export default function DashboardLayout({ children }: PropsWithChildren) {
 
   const handleSearchSubmit = (e: { key: string; }) => {
     if (e.key === "Enter") {
-      
       router.push(`/dashboard/products`);
     }
   };
@@ -67,24 +66,24 @@ export default function DashboardLayout({ children }: PropsWithChildren) {
         <div className="space-x-[50px] mr-[300px]">
           <div>
             <Link href="/dashboard" legacyBehavior>
-              <a className="btn border-red-400 bg-white flex-1 w-[8rem]">Home</a>
+              <a className={`btn border-red-400 flex-1 w-[8rem] ${pathname === '/dashboard' ? 'bg-black text-white' : 'bg-white'}`}>Home</a>
             </Link>
           </div>
           <div>
             <Link href="/dashboard/products" legacyBehavior>
-              <a className="btn border-red-400 bg-white flex-1 w-[8rem]">
+              <a className={`btn border-red-400 flex-1 w-[8rem] ${pathname === '/dashboard/products' ? 'bg-black text-white': 'bg-white'}`}>
                 Products
               </a>
             </Link>
           </div>
           <div>
             <Link href="/dashboard/orders" legacyBehavior>
-              <a className="btn border-red-400 bg-white flex-1 w-[8rem]">Orders</a>
+              <a className={`btn border-red-400 flex-1 w-[8rem] ${pathname === '/dashboard/orders' ? 'bg-black text-white' : 'bg-white'}`}>Orders</a>
             </Link>
           </div>
           <div>
             <Link href="/dashboard/credits" legacyBehavior>
-              <a className="btn border-red-400 bg-white flex-1 w-[8rem]">
+              <a className={`btn border-red-400 flex-1 w-[8rem] ${pathname === '/dashboard/credits' ? 'bg-black text-white' : 'bg-white'}`}>
                 Credits
               </a>
             </Link>
@@ -100,11 +99,11 @@ export default function DashboardLayout({ children }: PropsWithChildren) {
               onKeyDown={handleSearchSubmit}
             />
           </div>
-            <div
-              tabIndex={0}
-              role="button"
-              className="btn btn-ghost bg-transparent hover-none btn-circle avatar mr-2 pt-1"
-            >
+          <div
+            tabIndex={0}
+            role="button"
+            className="btn btn-ghost bg-transparent hover-none btn-circle avatar mr-2 pt-1"
+          >
             <Link href="/dashboard/cart" legacyBehavior>
               <div className="w-[50px] rounded-full">
                 <Image width={800} height={800} alt="cart" src={picImage} />
@@ -162,7 +161,7 @@ export default function DashboardLayout({ children }: PropsWithChildren) {
                 )}
                 <li>
                   <button className="btn bg-red-400 flex-1 w-[6rem]">
-                    <Link href="/sellerform" legacyBehavior>
+                    <Link href="/changepassword" legacyBehavior>
                       <a className="text-[13px] text-white">Change Password</a>
                     </Link>
                   </button>

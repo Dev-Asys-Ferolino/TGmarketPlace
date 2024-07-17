@@ -1,9 +1,56 @@
+'use client';
 import { sampleImage } from "@/images";
 import Link from "next/link";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Image from "next/image";
+import api from "@/lib/api/api";
+
+interface Orders {
+  id: number;
+  status: string;
+  delivery_status: string;
+  payment_method: string;
+  payment_status: string;
+  cancelled: boolean;
+  vendor_id: number;
+  total: number;
+  productimage: { image_url: string; id: number };
+  OrderItem: {
+    product_name: string;
+    quantity: number;
+    product_price: number;
+  }[];
+}
+
 
 export default function CreditsPage() {
+
+  const [orders, setOrders] = useState<Orders[]>([]);
+  const [localId, setLocalId] = useState("");
+  // const [userId, setUserId] = useState("");
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const userId = localStorage.getItem("id");
+      setLocalId(userId ? userId : "");
+    }
+  }, []);
+
+  useEffect(() => {
+    const fetchOrders = async () => {
+      try {
+        const response = await api.get<Orders[]>(`/customer/get-unpaid-orders/${localId}`);
+        setOrders(response.data);
+        console.log(response.data);
+      } catch (error) {
+        console.error("Error fetching products:", error);
+      }
+    };
+    if (localId) {
+      fetchOrders();
+    }
+  }, [localId]);
+
   return (
     <div className="flex h-auto align-middle justify-center mt-10">
       <div className="card bg-base-100 w-full max-w-[70%] shrink-0 items-center">
@@ -12,47 +59,85 @@ export default function CreditsPage() {
             <table className="table">
               {/* head */}
               <thead>
-                <tr>
-                  <th></th>
-                  <th> Product Name</th>
-                  <th> Price</th>
-                  <th> Quantity</th>
-                  <th> Total Price:</th>
-                </tr>
+             {/* <th></th> */}
+                  <th>Order/Product</th>
+                  <th>Price</th>
+                  <th>Quantity</th>
+                  <th>Total</th>
+                  <th><span className="ml-4">Delivery Status</span></th>
+                  <th>Payment Status</th>
               </thead>
-              <tbody>
-                {/* row 1 */}
-                <tr>
-                  <th>1</th>
-                  <td>
-                    <div className="flex items-center gap-3">
-                      <div className="avatar">
-                        <div className="h-[150px] w-[150px]">
-                          <Image
-                            width={800}
-                            height={800}
-                            src={sampleImage}
-                            alt="product"
-                          />
+              {orders.map((order) => (
+                <tbody key={order.id}>
+                  <tr>
+                    <td>
+                      <div className="flex items-center gap-3">
+                        <div className="avatar">
+                          <div className="h-[150px] w-[150px]">
+                            <Image
+                            key={order.productimage.image_url}
+                              width={800}
+                              height={800}
+                              src={order.productimage.image_url}
+                              alt="product"
+                            />
+                          </div>
                         </div>
+                          <div>
+                            {order.OrderItem.map((item) => (
+                              <div className="font-bold">
+                                {item.product_name}
+                              </div>
+                            ))}
+                          </div>
                       </div>
+                    </td>
+                    <td>                          
                       <div>
-                        <div className="font-bold ml-5">Softdrinks</div>
+                        {order.OrderItem.map((item) => (
+                          <div className="font-bold">
+                            {item.product_price}
+                          </div>
+                        ))}
                       </div>
-                    </div>
-                  </td>
-                  <td>30.00</td>
-                  <td>3</td>
-                  <td>90.00</td>
-                </tr>
-              </tbody>
+                    </td>
+                    <td>
+                      <div>
+                        {order.OrderItem.map((item) => (
+                          <div className="font-bold">
+                            {item.quantity}
+                          </div>
+                        ))}
+                      </div>
+                    </td>
+                    <td>
+                      <div>
+                        {order.OrderItem.map((item) => (
+                          <div className="font-bold">
+                            {item.product_price * item.quantity}
+                          </div>
+                        ))}
+                      </div>
+                    </td>
+                    <td>
+                      <span className="ml-8">  
+                        {order.delivery_status.toUpperCase()}
+                      </span>
+                    </td>
+                    <td>
+                      <span className="ml-5">
+                        {order.payment_status.toUpperCase()}
+                      </span>
+                    </td>
+                  </tr>
+                </tbody>
+              ))}
               <tfoot className="border-t-2 border-black">
                 <tr>
                   <th></th>
-                  <td></td>
                   <td>Grand Total:</td>
                   <td>PHP</td>
-                  <td>300.00</td>
+                  <td><span className="text-black">{orders.reduce((acc, order) => acc + +order.total, 0)}</span></td>
                   <th></th>
                 </tr>
               </tfoot>

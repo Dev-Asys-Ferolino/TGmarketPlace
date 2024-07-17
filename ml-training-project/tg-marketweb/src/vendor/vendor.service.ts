@@ -290,6 +290,11 @@ export class VendorService {
         include: {
           OrderItem: true,
           productimage: true,
+          user: {
+            select: {
+              name: true,
+            },
+          },
         },
       });
 
