@@ -54,9 +54,4 @@ export class UsersController {
   async getAllProducts(@Param('id') id: number) {
     return await this.usersService.getAllProducts(id);
   }
-
-  @Get('get-total-unpaid-orders/:id')
-  async getTotalUnpaidOrders(@Param('id') id: number) {
-    return await this.customerService.getTotalUnpaidOrders(id);
-  }
 }

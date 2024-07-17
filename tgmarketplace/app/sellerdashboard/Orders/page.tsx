@@ -85,34 +85,26 @@ export default function OrdersPage() {
     setSelectedCheckbox([]);
     setOrderItemsChecked(false);
   };
-  const handleDeliveryStatusChange = async (
-    orderId: number,
-    status: string
-  ) => {
+  const handleDeliveryStatusChange = async (selectedItems: OrderItem[]) => {
     try {
-      await api.put(`/vendor/updateOrders/${orderId}`, {
-        delivery_status: status,
+      await api.put(`/vendor/update-delivered-orders/${localId}`, {
+        orderItems: selectedItems,
       });
-      setOrders((prevOrders) =>
-        prevOrders.map((order) =>
-          order.id === orderId ? { ...order, delivery_status: status } : order
-        )
-      );
     } catch (error) {
       console.error("Error updating delivery status:", error);
     }
   };
 
-  const handlePaymentStatusChange = async (orderId: number, status: string) => {
+  const handlePaymentStatusChange = async (selectedItems: OrderItem[]) => {
     try {
-      await api.put(`/vendor/updateOrders/${orderId}`, {
-        payment_status: status,
+      const response = await api.post(`/vendor/update-paid-orders/${localId}`, {
+        orderItems: selectedItems,
       });
-      setOrders((prevOrders) =>
-        prevOrders.map((order) =>
-          order.id === orderId ? { ...order, payment_status: status } : order
-        )
-      );
+      response.status === 201
+        ? window.alert("Payment Status Updated")
+        : console.log("Error updating payment status");
+      window.location.reload();
+      console.log(response);
     } catch (error) {
       console.error("Error updating payment status:", error);
     }
@@ -198,10 +190,7 @@ export default function OrdersPage() {
                         value={order.delivery_status}
                         className="bg-red-500 text-white px-4 py-2 rounded-lg"
                         onClick={() =>
-                          handleDeliveryStatusChange(
-                            order.id,
-                            order.delivery_status
-                          )
+                          handleDeliveryStatusChange(selectedItems)
                         }
                       >
                         Delivered
@@ -210,12 +199,7 @@ export default function OrdersPage() {
                     <td>
                       <button
                         className="bg-red-500 text-white px-4 py-2 rounded-lg"
-                        onClick={() =>
-                          handlePaymentStatusChange(
-                            order.id,
-                            order.payment_status
-                          )
-                        }
+                        onClick={() => handlePaymentStatusChange(selectedItems)}
                         value={order.payment_status}
                       >
                         Update Payments
