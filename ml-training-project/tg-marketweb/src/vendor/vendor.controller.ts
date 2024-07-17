@@ -26,7 +26,7 @@ export class VendorController {
     FileInterceptor('image', {
       storage: diskStorage({
         destination:
-          'C://Users//Desu19017174//Documents//GitHub//TGmarketPlace//tgmarketplace/public/uploads/images',
+          'C://Users//Fero20248225//Documents//GitHub//TGmarketPlace//tgmarketplace/public/uploads/images',
         filename: (req, file, callback) => {
           const ext = file.mimetype.split('/')[1];
           const filename = `${file.originalname}`;
@@ -72,4 +72,9 @@ export class VendorController {
   async getUnpaidOrders(@Param('email') email: string): Promise<Order[]> {
     return await this.vendorService.getUnpaidOrders(email);
   }
+
+  // @Put('update-order/:id')
+  // async updateOrder(@Param('id') id: number, @Body() updateOrderDto: UpdateOrderDto) {
+  //   return await this.vendorService.updateOrders(id, updateOrderDto);
+  // }
 }

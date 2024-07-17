@@ -49,4 +49,14 @@ export class CustomerController {
   async viewOrder(@Param('id') id: number) {
     return await this.customerService.viewOrder(id);
   }
+
+  @Get('get-total-unpaid-orders/:id')
+  async getTotalUnpaidOrders(@Param('id') id: number) {
+    return await this.customerService.getTotalUnpaidOrders(id);
+  }
+
+  @Get('get-unpaid-orders/:id')
+  async getUnpaidOrders(@Param('id') id: number) {
+    return await this.customerService.getUnpaidOrders(id);
+  }
 }

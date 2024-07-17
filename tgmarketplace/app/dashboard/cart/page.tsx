@@ -16,6 +16,7 @@ interface CartItem {
 }
 
 export default function CartPage() {
+  const [uploading, setUploading] = useState(false);
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
   const [localId, setLocalId] = useState("");
   const [selectedCheckbox, setSelectedCheckbox] = useState<number[]>([]);
@@ -70,17 +71,20 @@ export default function CartPage() {
     });
   };
   const handleCheckout = async (selectedItems: CartItem[]) => {
+    setUploading(true);
     try {
       console.log("Selected Items:", selectedItems);
       const response = await api.post(`/customer/checkout-order/${localId}`, {
-        selectItems: selectedItems,
+      selectItems: selectedItems,
       });
       console.log(response);
+      
       window.alert("Order Placed Successfully");
       window.location.reload();
     } catch (error) {
       console.error("Error placing order:", error);
     }
+    setUploading
   };
 
   const handleSelectAll = () => {
@@ -206,8 +210,10 @@ export default function CartPage() {
                   <button
                     className="btn ml-10 bg-red-400 text-white"
                     onClick={() => handleCheckout(selectedItems)}
+                    disabled={uploading}
+                    style={{ opacity: uploading ? 0.5 : 1 }}
                   >
-                    Checkout <br />
+                    {uploading ? "Processing..." : "Checkout"} <br />
                     <span>({selectedCheckbox.length})</span>
                   </button>
                 </th>
