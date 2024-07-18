@@ -77,7 +77,7 @@ export default function DashboardPage() {
   return (
     <div>
       <div className="hero-content text-neutral-content text-center">
-        <div className="w-[900px] h-[250px] rounded-[20px] border-red-200 border-2 mt-10 ml-[600px] shadow-2xl">
+        <div className="w-[900px] h-[250px] rounded-[20px] border-base-300 border-2 mt-10 ml-[600px] shadow-2xl">
           <h1 className="mb-5 text-5xl font-bold mt-10 text-black">
             What's New?
           </h1>
@@ -95,7 +95,7 @@ export default function DashboardPage() {
         {products.map((product) => (
           <div
             key={product.id}
-            className="dashboardcard bg-base-100 w-96 shadow-xl border-2 border-red-200 rounded-box flex flex-col items-center gap-4 p-4 ml-[2px] "
+            className="dashboardcard bg-base-100 w-96 shadow-xl border-2 border-base rounded-box flex flex-col items-center gap-4 p-4 ml-[2px] "
           >
             <figure className="w-full h-64 flex items-center justify-center">
               {product.ProductImage.map((image) => (
