@@ -340,7 +340,7 @@ export default function OrdersPage() {
         <div className="card h-auto w-[60%]">
           <div className="overflow-x-auto">
             <table className="table">
-              <thead>
+              <thead className="*:text-center">
                 <tr>
                   <th>
                     <input
@@ -365,7 +365,7 @@ export default function OrdersPage() {
               {orders.map((order) => (
                 <tbody key={order.id}>
                   {order.OrderItem.map((item, itemIndex) => (
-                    <tr key={itemIndex}>
+                    <tr key={itemIndex} className="*:text-center">
                       <td>
                         <input
                           type="checkbox"
@@ -408,7 +408,7 @@ export default function OrdersPage() {
                   ))}
                 </tbody>
               ))}
-              <tfoot className="border-t-2 border-black">
+              <tfoot className="border-t-2 border-black *:text-center">
                 <tr>
                   <td></td>
                   <td></td>

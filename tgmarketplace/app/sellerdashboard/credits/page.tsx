@@ -67,7 +67,7 @@ export default function CreditsPage() {
           <div className="overflow-x-auto card h-auto w-[1000px]">
             <table className="table">
               
-              <thead>
+              <thead className="*:text-center">
                   <th></th>
                   <th>Order/Product</th>
                   <th>Price</th>
@@ -78,7 +78,7 @@ export default function CreditsPage() {
                   <th>Payment Status</th> */}
               </thead>
               {orders.map((order,index) => (
-                <tbody key={order.id}>
+                <tbody key={order.id} className="*:text-center">
                   <tr>
                     <td>{index + 1 +'.'}</td>
                     
@@ -132,24 +132,15 @@ export default function CreditsPage() {
                       </div>
                     </td>
                     <td> {order.user.name}</td>
-                    {/* <td>
-                      <span className="ml-8">  
-                        {order.delivery_status.toUpperCase()}
-                      </span>
-                    </td>
-                    <td>
-                      <span className="ml-5">
-                        {order.payment_status.toUpperCase()}
-                      </span>
-                    </td> */}
                   </tr>
                 </tbody>
               ))}
-              <tfoot className="border-t-2 border-black">
+              <tfoot className="border-t-2 border-black *:text-center">
                 <tr>
                   <th></th>
+                  <th></th>
+                  <th></th>
                   <td>Grand Total:</td>
-                  <td>PHP</td>
                   <td><span className="text-black">{orders.reduce((acc, order) => acc + +order.total, 0)}</span></td>
                   <th></th>
                 </tr>

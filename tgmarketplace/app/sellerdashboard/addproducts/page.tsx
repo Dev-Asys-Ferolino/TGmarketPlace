@@ -160,7 +160,7 @@ export default function AddProductsPage() {
         <div className="w-full lg:w-2/3">
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 ml-[-150px] mt-5">
             {paginatedProducts.map((product) => (
-              <div key={product.id} className="dashboardcard bg-base-900 w-full shadow-xl backdrop-blur-lg border-2 border-red-200 rounded-box">
+              <div key={product.id} className="dashboardcard bg-base-900 w-full shadow-xl backdrop-blur-lg border-2 border-base rounded-box ">
                 <figure className="px-10 pt-10">
                   {product.ProductImage.map((image) => (
                     <Image
@@ -220,7 +220,7 @@ export default function AddProductsPage() {
           <div className="text-red-500 text-[30px] ml-[120px]">
             <b><i>{editingProduct ? "EDIT PRODUCT" : "ADD YOUR PRODUCTS"}</i></b>
           </div>
-          <div className="dashboardcard bg-base-100 w-full max-w-[24rem] shadow-xl border-2 border-red-200 rounded-box mt-10 ml-[130px]">
+          <div className="dashboardcard bg-base-100 w-full max-w-[24rem] shadow-xl border-2 border-base rounded-box mt-10 ml-[130px]">
             <div className="max-w-4xl mx-auto p-6 space-y-6">
               <label>
                 <input
@@ -300,7 +300,7 @@ export default function AddProductsPage() {
                 onClick={editingProduct ? handleUpdate.bind(null, +productId, +price, +stock, description, name, selectedImage) : handleUpload}
                 disabled={uploading}
                 style={{ opacity: uploading ? 0.5 : 1 }}
-                className="btn btn-outline bg-black flex-1 w-[13rem] mb-2 mt-4 text-white"
+                className="btn btn-outline bg-red-500 flex-1 w-[13rem] mb-2 mt-4 text-white"
               >
                 {uploading ? "Uploading..." : editingProduct ? "Update Product" : "Add Product"}
               </button>
