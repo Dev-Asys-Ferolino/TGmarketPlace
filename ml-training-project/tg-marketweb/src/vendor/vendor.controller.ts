@@ -16,6 +16,7 @@ import { EditProductDto } from './dto/edit-product.dto';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
 import { Order, Product } from '@prisma/client';
+import { UpdateOrderDto } from './dto/update-order.dto';
 
 @Controller('vendor')
 export class VendorController {
@@ -73,8 +74,19 @@ export class VendorController {
     return await this.vendorService.getUnpaidOrders(email);
   }
 
-  // @Put('update-order/:id')
-  // async updateOrder(@Param('id') id: number, @Body() updateOrderDto: UpdateOrderDto) {
-  //   return await this.vendorService.updateOrders(id, updateOrderDto);
-  // }
+  @Put('update-paid-orders/:id')
+  async updatePaidOrders(
+    @Param('id') id: number,
+    @Body() updateOrderDto: UpdateOrderDto,
+  ) {
+    return await this.vendorService.updatePaidOrders(id, updateOrderDto);
+  }
+
+  @Put('update-delivered-orders/:id')
+  async updateDeliveredOrders(
+    @Param('id') id: number,
+    @Body() updateOrderDto: UpdateOrderDto,
+  ) {
+    return await this.vendorService.updateDeliveredOrders(id, updateOrderDto);
+  }
 }

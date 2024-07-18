@@ -51,66 +51,58 @@ export default function OrdersPage() {
   return (
     <div>
       <div className="flex w-full flex-col lg:flex-row mt-10 justify-center">
-        <div className="card h-auto w-[60%]">
-          <div className="overflow-x-auto">
+        <div className="card h-auto w-[50%]">
+          <div >
             <table className="table">
-              <thead>
+              <thead className=" *:text-center">
                 <tr>
-                  <th></th>
-                  <th>Order/Product</th>
-                  <th>Price</th>
-                  <th>Quantity</th>
-                  <th>Total</th>
-                  <th><span className="ml-4">Delivery Status</span></th>
-                  <th>Payment Status</th>
+        
+                  <th><span className="">Order/Product</span></th>
+                  <th ><span className="">Price</span></th>
+                  <th ><span className="">Quantity</span></th>
+                  <th ><span className="">Total</span></th>
+                  <th ><span className="">Delivery Status</span></th>
+                  <th ><span className="">Payment Status</span></th>
                 </tr>
               </thead>
-              {orders.map((order,index) => (
-                <tbody>
-                  {order.OrderItem.map((item) => (
-                    <tr key={order.id}>
-                      <td>{index + 1}</td>
-                      <td>
-                        <div className="flex items-center gap-3">
-                          <div className="avatar">
-                            <div className=" h-[150px] w-[150px]">
-                              <Image
-                                key={order.productimage.image_url}
-                                width={800}
-                                height={800}
-                                src={order.productimage.image_url}
-                                alt="product"
-                              />
-                            </div>
-                          </div>
-                          <div>
-                            {order.OrderItem.map((item) => (
+              <tbody className="max-h-[60vh] overflow-y-auto  w-full ">
+                {orders.map((order, index) => (
+                  <React.Fragment key={order.id}>
+                    {order.OrderItem.map((item) => (
+                      <tr key={item.product_name} className="*:text-center">
+                     
+                        <td className="flex items-center gap-3 w-fit">
+                          {index + 1 + '.'}
+                              <div className="h-[100px] w-[100px]">
+                                <Image
+                                  width={100}
+                                  height={100}
+                                  src={order.productimage.image_url}
+                                  alt="product"
+                                />
+                              </div>
                               <div className="font-bold">
                                 {item.product_name}
                               </div>
-                            ))}
-                          </div>
-                        </div>
-                      </td>
-                      <td>{item.product_price}</td>
-                      <td>{item.quantity}</td>
-                      <td>{item.product_price * item.quantity}</td>
-                      <td><span className="ml-8">  
-                        {order.delivery_status.toUpperCase()}</span>
-                      </td>
-                      <td><span className="ml-5">{order.payment_status.toUpperCase()}</span></td>
-                    </tr>
-                  ))}
-                </tbody>
-              ))}
-              <tfoot className="border-t-2 border-black">
-                <tr>
-                  <td></td>
-                  <td></td>
-                  <td><b className="text-black">TOTAL :</b></td>
-                  <td><span className="text-black">{orders.reduce((acc, order) => acc + +order.total, 0)}</span></td>
-                  <td></td>
-                  <td></td>
+                        </td>
+                        <td className=""><span className="">{item.product_price}</span></td>
+                        <td className=""><span className="">{item.quantity}</span></td>
+                        <td className=""><span className="">{item.product_price * item.quantity}</span></td>
+                        <td className=""><span className="">{order.delivery_status.toUpperCase()}</span></td>
+                        <td className=""><span className="">{order.payment_status.toUpperCase()}</span></td>
+                      </tr>
+                    ))}
+                  </React.Fragment>
+                ))}
+              </tbody>
+              <tfoot className=" border-t-2 border-black *:text-center ">
+                <tr className="">
+                  <td className="w-1/12"></td>
+                  <td className="w-3/12"></td>
+                  <td className="w-2/12"><b className="text-black">TOTAL :</b></td>
+                  <td className="w-2/12"><span className="text-black">{orders.reduce((acc, order) => acc + +order.total, 0)}</span></td>
+                  <td className="w-3/12"></td>
+                  <td className="w-3/12"></td>
                 </tr>
               </tfoot>
             </table>

@@ -3,7 +3,7 @@ import { CustomerService } from './customer.service';
 import { AddToCartDto } from './dto/add-to-cart.dto';
 import { RemoveFromCartDto } from './dto/remove-to-cart.dto';
 import { CheckOutOrderDto } from './dto/check-out-order.dto';
-import { Cart, User } from '@prisma/client';
+import { Cart, Order, User } from '@prisma/client';
 import { UserIdDto } from 'src/users/dto/userid-dto';
 
 @Controller('customer')
@@ -50,13 +50,8 @@ export class CustomerController {
     return await this.customerService.viewOrder(id);
   }
 
-  @Get('get-total-unpaid-orders/:id')
-  async getTotalUnpaidOrders(@Param('id') id: number) {
-    return await this.customerService.getTotalUnpaidOrders(id);
-  }
-
   @Get('get-unpaid-orders/:id')
-  async getUnpaidOrders(@Param('id') id: number) {
+  async getUnpaidOrders(@Param('id') id: number): Promise<Order[]> {
     return await this.customerService.getUnpaidOrders(id);
   }
 }

@@ -172,7 +172,7 @@
 //                   ))}
 //                 </tbody>
 //               ))}
-              
+
 //                 <tfoot className="border-t-2 border-black">
 //                   <tr>
 //                     <td></td>
@@ -180,7 +180,7 @@
 //                     <td></td>
 //                     <td>
 //                       <b>TOTAL :</b>
-//                     </td>                   
+//                     </td>
 //                     <td>
 //                       {orders.reduce((acc, order) => acc + +order.total, 0)}
 //                     </td>
@@ -188,8 +188,6 @@
 //                       <button
 //                         className="bg-red-500 text-white px-4 py-2 rounded-lg ml-2"
 //                         onClick={() =>
-
-
 
 //                           handleDeliveryStatusChange(selectedItems )
 //                         }
@@ -219,7 +217,6 @@
 //     </div>
 //   );
 // }
-
 
 "use client";
 import React, { useEffect, useState } from "react";
@@ -305,42 +302,33 @@ export default function OrdersPage() {
     setSelectedCheckbox([]);
     setSelectedItems([]);
   };
-
-  const handleDeliveryStatusChange = async () => {
+  const handleDeliveryStatusChange = async (selectedItems: OrderItem[]) => {
     try {
-      await api.put(`/vendor/updateOrders/${localId}`, {
-        selectedItems: selectedItems.map((item) => ({
-          ...item,
-          delivery_status: "Delivered",
-        })),
-      });
-      setOrders((prevOrders) =>
-        prevOrders.map((order) =>
-          selectedCheckbox.includes(order.id)
-            ? { ...order, delivery_status: "Delivered" }
-            : order
-        )
+      const response = await api.put(
+        `/vendor/update-delivered-orders/${localId}`,
+        {
+          orderItems: selectedItems,
+        }
       );
+      response.status === 201
+        ? window.alert("Payment Status Updated")
+        : console.log("Error updating payment status");
+      window.location.reload();
     } catch (error) {
       console.error("Error updating delivery status:", error);
     }
   };
 
-  const handlePaymentStatusChange = async () => {
+  const handlePaymentStatusChange = async (selectedItems: OrderItem[]) => {
     try {
-      await api.put(`/vendor/updateOrders/${localId}`, {
-        selectedItems: selectedItems.map((item) => ({
-          ...item,
-          payment_status: "Paid",
-        })),
+      const response = await api.put(`/vendor/update-paid-orders/${localId}`, {
+        orderItems: selectedItems,
       });
-      setOrders((prevOrders) =>
-        prevOrders.map((order) =>
-          selectedCheckbox.includes(order.id)
-            ? { ...order, payment_status: "Paid" }
-            : order
-        )
-      );
+      response.status === 201
+        ? window.alert("Payment Status Updated")
+        : console.log("Error updating payment status");
+      window.location.reload();
+      console.log(response);
     } catch (error) {
       console.error("Error updating payment status:", error);
     }
@@ -352,7 +340,7 @@ export default function OrdersPage() {
         <div className="card h-auto w-[60%]">
           <div className="overflow-x-auto">
             <table className="table">
-              <thead>
+              <thead className="*:text-center">
                 <tr>
                   <th>
                     <input
@@ -377,7 +365,7 @@ export default function OrdersPage() {
               {orders.map((order) => (
                 <tbody key={order.id}>
                   {order.OrderItem.map((item, itemIndex) => (
-                    <tr key={itemIndex}>
+                    <tr key={itemIndex} className="*:text-center">
                       <td>
                         <input
                           type="checkbox"
@@ -420,7 +408,7 @@ export default function OrdersPage() {
                   ))}
                 </tbody>
               ))}
-              <tfoot className="border-t-2 border-black">
+              <tfoot className="border-t-2 border-black *:text-center">
                 <tr>
                   <td></td>
                   <td></td>
@@ -434,7 +422,7 @@ export default function OrdersPage() {
                   <td>
                     <button
                       className="bg-red-500 text-white px-4 py-2 rounded-lg ml-2"
-                      onClick={handleDeliveryStatusChange}
+                      onClick={() => handleDeliveryStatusChange(selectedItems)}
                     >
                       Delivered
                     </button>
@@ -442,7 +430,7 @@ export default function OrdersPage() {
                   <td>
                     <button
                       className="bg-red-500 text-white px-4 py-2 rounded-lg ml-[-15px]"
-                      onClick={handlePaymentStatusChange}
+                      onClick={() => handlePaymentStatusChange(selectedItems)}
                     >
                       Update Payments
                     </button>
@@ -456,4 +444,3 @@ export default function OrdersPage() {
     </div>
   );
 }
-

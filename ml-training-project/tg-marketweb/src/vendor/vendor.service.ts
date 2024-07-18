@@ -7,6 +7,7 @@ import { RemoveProductDto } from './dto/remove-product.dto';
 import { EditProductDto } from './dto/edit-product.dto';
 import { join } from 'path';
 import fs from 'fs/promises';
+import { UpdateOrderDto } from './dto/update-order.dto';
 @Injectable()
 export class VendorService {
   constructor(private prisma: PrismaClient) {}
@@ -181,7 +182,10 @@ export class VendorService {
     }
   }
 
-  async updateOrders(id: number, orderId: number) {
+  async updatePaidOrders(
+    id: number,
+    updateOrderDto: UpdateOrderDto,
+  ): Promise<any> {
     try {
       const user = await this.prisma.user.findUnique({
         where: {
@@ -189,20 +193,62 @@ export class VendorService {
         },
         include: {
           Vendor: true,
-          Order: true,
         },
       });
 
-      const order = await this.prisma.order.update({
+      if (updateOrderDto.orderItems.length === 0) {
+        throw new Error('Please select at least one item');
+      }
+      console.log(updateOrderDto.orderItems);
+
+      for (let i = 0; i < updateOrderDto.orderItems.length; i++) {
+        const item = updateOrderDto.orderItems[i];
+        await this.prisma.order.update({
+          where: {
+            id: item.id,
+          },
+          data: {
+            payment_status: 'Paid',
+          },
+        });
+      }
+
+      return 'Order paid successfully';
+    } catch (error) {
+      throw new Error(error);
+    }
+  }
+  async updateDeliveredOrders(
+    id: number,
+    updateOrderDto: UpdateOrderDto,
+  ): Promise<any> {
+    try {
+      const user = await this.prisma.user.findUnique({
         where: {
-          id: user.Order[0].id,
+          id: id,
         },
-        data: {
-          delivery_status: 'Delivered',
-          payment_status: 'paid',
+        include: {
+          Vendor: true,
         },
       });
-      return order;
+
+      if (updateOrderDto.orderItems.length === 0) {
+        throw new Error('Please select at least one item');
+      }
+
+      for (let i = 0; i < updateOrderDto.orderItems.length; i++) {
+        const item = updateOrderDto.orderItems[i];
+        await this.prisma.order.update({
+          where: {
+            id: item.id,
+          },
+          data: {
+            delivery_status: 'Delivered',
+          },
+        });
+      }
+
+      return 'Order delivered successfully';
     } catch (error) {
       throw new Error(error);
     }

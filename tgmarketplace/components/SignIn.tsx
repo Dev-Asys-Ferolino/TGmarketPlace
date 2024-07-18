@@ -279,7 +279,7 @@ export default function SignIn() {
       {isResetPasswordModalOpen && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
           <div className="bg-white p-8 rounded shadow-lg">
-            <h2 className="text-xl font-semibold mb-4">Reset Password</h2>
+            <h2 className="text-xl font-semibold mb-4">Reset Password</h2>aw
             <input
               type="email"
               className="bg-gray-50 border border-black rounded-lg block w-full p-2.5 mb-4"
