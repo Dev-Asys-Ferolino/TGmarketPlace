@@ -11,7 +11,7 @@ export default function DashboardLayout({ children }: PropsWithChildren) {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [isSeller, setIsSeller] = useState(false);
-  const [searchQuery, setSearchQuery] = useState(""); 
+  const [searchQuery, setSearchQuery] = useState("");
   const router = useRouter();
   const pathname = usePathname();
 
@@ -49,9 +49,9 @@ export default function DashboardLayout({ children }: PropsWithChildren) {
     router.push("/");
   };
 
-  const handleSearchSubmit = (e: { key: string; }) => {
+  const handleSearchSubmit = (e: { key: string }) => {
     if (e.key === "Enter") {
-      router.push(`/dashboard/products`);
+      router.push(`/dashboard/products?search=${searchQuery}`);
     }
   };
 
@@ -66,24 +66,50 @@ export default function DashboardLayout({ children }: PropsWithChildren) {
         <div className="space-x-[50px] mr-[300px]">
           <div>
             <Link href="/dashboard" legacyBehavior>
-              <a className={`btn border-red-400 flex-1 w-[8rem] ${pathname === '/dashboard' ? 'bg-black text-white' : 'bg-white'}`}>Home</a>
+              <a
+                className={`btn border-red-400 flex-1 w-[8rem] ${
+                  pathname === "/dashboard" ? "bg-black text-white" : "bg-white"
+                }`}
+              >
+                Home
+              </a>
             </Link>
           </div>
           <div>
             <Link href="/dashboard/products" legacyBehavior>
-              <a className={`btn border-red-400 flex-1 w-[8rem] ${pathname === '/dashboard/products' ? 'bg-black text-white': 'bg-white'}`}>
+              <a
+                className={`btn border-red-400 flex-1 w-[8rem] ${
+                  pathname === "/dashboard/products"
+                    ? "bg-black text-white"
+                    : "bg-white"
+                }`}
+              >
                 Products
               </a>
             </Link>
           </div>
           <div>
             <Link href="/dashboard/orders" legacyBehavior>
-              <a className={`btn border-red-400 flex-1 w-[8rem] ${pathname === '/dashboard/orders' ? 'bg-black text-white' : 'bg-white'}`}>Orders</a>
+              <a
+                className={`btn border-red-400 flex-1 w-[8rem] ${
+                  pathname === "/dashboard/orders"
+                    ? "bg-black text-white"
+                    : "bg-white"
+                }`}
+              >
+                Orders
+              </a>
             </Link>
           </div>
           <div>
             <Link href="/dashboard/credits" legacyBehavior>
-              <a className={`btn border-red-400 flex-1 w-[8rem] ${pathname === '/dashboard/credits' ? 'bg-black text-white' : 'bg-white'}`}>
+              <a
+                className={`btn border-red-400 flex-1 w-[8rem] ${
+                  pathname === "/dashboard/credits"
+                    ? "bg-black text-white"
+                    : "bg-white"
+                }`}
+              >
                 Credits
               </a>
             </Link>
@@ -96,6 +122,8 @@ export default function DashboardLayout({ children }: PropsWithChildren) {
               type="text"
               placeholder="Search Products"
               className="input w-24 md:w-auto border-red-400"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
               onKeyDown={handleSearchSubmit}
             />
           </div>
@@ -117,12 +145,7 @@ export default function DashboardLayout({ children }: PropsWithChildren) {
               className="btn btn-ghost btn-circle avatar"
             >
               <div className="w-10 rounded-full">
-                <Image
-                  alt="profile"
-                  width={800}
-                  height={800}
-                  src={hahaImage}
-                />
+                <Image alt="profile" width={800} height={800} src={hahaImage} />
               </div>
             </div>
             <ul
@@ -191,4 +214,3 @@ export default function DashboardLayout({ children }: PropsWithChildren) {
     </main>
   );
 }
-

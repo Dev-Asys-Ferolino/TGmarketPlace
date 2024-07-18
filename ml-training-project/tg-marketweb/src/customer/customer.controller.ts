@@ -3,7 +3,7 @@ import { CustomerService } from './customer.service';
 import { AddToCartDto } from './dto/add-to-cart.dto';
 import { RemoveFromCartDto } from './dto/remove-to-cart.dto';
 import { CheckOutOrderDto } from './dto/check-out-order.dto';
-import { Cart, Order, User } from '@prisma/client';
+import { Cart, Order, Product, User } from '@prisma/client';
 import { UserIdDto } from 'src/users/dto/userid-dto';
 
 @Controller('customer')
@@ -53,5 +53,10 @@ export class CustomerController {
   @Get('get-unpaid-orders/:id')
   async getUnpaidOrders(@Param('id') id: number): Promise<Order[]> {
     return await this.customerService.getUnpaidOrders(id);
+  }
+
+  @Get('search-product/:search')
+  async searchProduct(@Param('search') search: string): Promise<Product[]> {
+    return await this.customerService.searchProduct(search);
   }
 }
