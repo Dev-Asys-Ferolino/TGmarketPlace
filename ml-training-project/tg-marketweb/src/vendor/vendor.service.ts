@@ -269,6 +269,26 @@ export class VendorService {
           OrderItem: true,
           productimage: true,
         },
+        orderBy: [
+          {
+            payment_status: 'asc',
+          },
+          {
+            createdAt: 'desc',
+          },
+        ],
+      });
+      order.sort((a, b) => {
+        if (a.payment_status === 'pending' && b.payment_status !== 'pending') {
+          return -1; // a comes before b
+        } else if (
+          a.payment_status !== 'pending' &&
+          b.payment_status === 'pending'
+        ) {
+          return 1; // b comes before a
+        } else {
+          return 0; // no change in order
+        }
       });
 
       return order;

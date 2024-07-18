@@ -293,9 +293,25 @@ export default function OrdersPage() {
   };
 
   const handleSelectAll = () => {
-    const allItemIds = orders.map((item) => item.id);
+    const allItemIds = orders
+      .filter(
+        (order) =>
+          !(
+            order.delivery_status === "Delivered" &&
+            order.payment_status === "Paid"
+          )
+      )
+      .map((item) => item.id);
     setSelectedCheckbox(allItemIds);
-    setSelectedItems(orders);
+    setSelectedItems(
+      orders.filter(
+        (order) =>
+          !(
+            order.delivery_status === "Delivered" &&
+            order.payment_status === "Paid"
+          )
+      )
+    );
   };
 
   const handleDeselectAll = () => {
@@ -311,8 +327,8 @@ export default function OrdersPage() {
         }
       );
       response.status === 201
-        ? window.alert("Payment Status Updated")
-        : console.log("Error updating payment status");
+        ? window.alert("Delivery Status Updated")
+        : console.log("Error updating delivery status");
       window.location.reload();
     } catch (error) {
       console.error("Error updating delivery status:", error);
@@ -350,7 +366,10 @@ export default function OrdersPage() {
                           ? handleDeselectAll
                           : handleSelectAll
                       }
-                      checked={selectedCheckbox.length === orders.length}
+                      checked={
+                        selectedCheckbox.length === orders.length &&
+                        orders.length > 0
+                      }
                       className="checkbox"
                     />
                   </th>
@@ -372,6 +391,10 @@ export default function OrdersPage() {
                           checked={selectedCheckbox.includes(order.id)}
                           onChange={() => handleCheckboxChange(order.id)}
                           className="checkbox"
+                          disabled={
+                            order.delivery_status === "Delivered" &&
+                            order.payment_status === "Paid"
+                          }
                         />
                       </td>
                       <td>

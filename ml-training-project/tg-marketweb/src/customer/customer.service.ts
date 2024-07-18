@@ -245,6 +245,19 @@ export class CustomerService {
         },
       });
       const order = user.Order;
+
+      order.sort((a, b) => {
+        if (a.payment_status === 'pending' && b.payment_status !== 'pending') {
+          return -1; // a comes before b
+        } else if (
+          a.payment_status !== 'pending' &&
+          b.payment_status === 'pending'
+        ) {
+          return 1; // b comes before a
+        } else {
+          return 0; // no change in order
+        }
+      });
       return order;
     } catch (error) {
       throw new Error(error);
@@ -269,8 +282,31 @@ export class CustomerService {
           productimage: true,
         },
       });
-
       return orders;
+    } catch (error) {
+      throw new Error(error);
+    }
+  }
+
+  async searchProduct(search: string): Promise<Product[]> {
+    try {
+      const products = await this.prisma.product.findMany({
+        where: {
+          OR: [
+            {
+              name: {
+                contains: search,
+              },
+            },
+            {
+              description: {
+                contains: search,
+              },
+            },
+          ],
+        },
+      });
+      return products;
     } catch (error) {
       throw new Error(error);
     }
