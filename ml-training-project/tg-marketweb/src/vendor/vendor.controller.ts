@@ -27,7 +27,7 @@ export class VendorController {
     FileInterceptor('image', {
       storage: diskStorage({
         destination:
-          'C://Users//Fero20248225//Documents//GitHub//TGmarketPlace//tgmarketplace/public/uploads/images',
+          'C://Users//Desu19017174//Documents//GitHub//TGmarketPlace//tgmarketplace/public/uploads/images',
         filename: (req, file, callback) => {
           const ext = file.mimetype.split('/')[1];
           const filename = `${file.originalname}`;
@@ -40,13 +40,24 @@ export class VendorController {
     @Body() addProductDto: AddProductDto,
     @UploadedFile() image: Express.Multer.File,
   ): Promise<Product> {
-    return await this.vendorService.addProduct(addProductDto, image);
+    try {
+      console.log(addProductDto);
+      const product = await this.vendorService.addProduct(addProductDto, image);
+      return product;
+    } catch (error) {
+      throw new Error(error);
+    }
   }
 
   @Delete('remove-product')
   async removeProduct(@Body() removeProductDto: RemoveProductDto) {
-    console.log(removeProductDto);
-    return await this.vendorService.removeProduct(removeProductDto);
+    try {
+      console.log(removeProductDto);
+      const product = await this.vendorService.removeProduct(removeProductDto);
+      return product;
+    } catch (error) {
+      throw new Error(error);
+    }
   }
 
   @Put('edit-product/:id')
@@ -55,23 +66,42 @@ export class VendorController {
     @Body() editProductDto: EditProductDto,
   ) {
     console.log(editProductDto);
-    return await this.vendorService.editProduct(id, editProductDto);
+    try {
+      const product = await this.vendorService.editProduct(id, editProductDto);
+      return product;
+    } catch (error) {
+      throw new Error(error);
+    }
   }
 
   @Get('get-vendor-products/:email')
   async getVendorProducts(@Param('email') email: string) {
-    const products = await this.vendorService.getVendorProducts(email);
-    return products;
+    try {
+      const products = await this.vendorService.getVendorProducts(email);
+      return products;
+    } catch (error) {
+      throw new Error(error);
+    }
   }
 
   @Get('view-order-as-vendor/:id')
   async viewOrderasvendor(@Param('id') id: number): Promise<Order[]> {
-    return await this.vendorService.viewOrderasvendor(id);
+    try {
+      const order = await this.vendorService.viewOrderasvendor(id);
+      return order;
+    } catch (error) {
+      throw new Error(error);
+    }
   }
 
   @Get('get-unpaid-orders/:email')
   async getUnpaidOrders(@Param('email') email: string): Promise<Order[]> {
-    return await this.vendorService.getUnpaidOrders(email);
+    try {
+      const orders = await this.vendorService.getUnpaidOrders(email);
+      return orders;
+    } catch (error) {
+      throw new Error(error);
+    }
   }
 
   @Put('update-paid-orders/:id')
@@ -79,7 +109,15 @@ export class VendorController {
     @Param('id') id: number,
     @Body() updateOrderDto: UpdateOrderDto,
   ) {
-    return await this.vendorService.updatePaidOrders(id, updateOrderDto);
+    try {
+      const order = await this.vendorService.updatePaidOrders(
+        id,
+        updateOrderDto,
+      );
+      return order;
+    } catch (error) {
+      throw new Error(error);
+    }
   }
 
   @Put('update-delivered-orders/:id')
@@ -87,6 +125,14 @@ export class VendorController {
     @Param('id') id: number,
     @Body() updateOrderDto: UpdateOrderDto,
   ) {
-    return await this.vendorService.updateDeliveredOrders(id, updateOrderDto);
+    try {
+      const order = await this.vendorService.updateDeliveredOrders(
+        id,
+        updateOrderDto,
+      );
+      return order;
+    } catch (error) {
+      throw new Error(error);
+    }
   }
 }

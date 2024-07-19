@@ -19,42 +19,80 @@ export class AuthController {
 
   @Post('register')
   async register(@Body() createUserDto: CreateUserDto) {
-    return await this.usersService.createuser(createUserDto);
+    try {
+      const user = await this.usersService.createuser(createUserDto);
+      return user;
+    } catch (error) {
+      throw new Error(error);
+    }
   }
 
   @Post('login')
   async login(@Body() LoginDto: LoginDto) {
-    const user = await this.authService.login(LoginDto);
-    return user;
+    try {
+      const user = await this.authService.login(LoginDto);
+      return user;
+    } catch (error) {
+      throw new Error(error);
+    }
   }
 
   @Post('change-password')
   async changePassword(@Body() changePasswordDto: ChangePasswordDto) {
-    return await this.usersService.changePassword(changePasswordDto);
+    try {
+      const user = await this.usersService.changePassword(changePasswordDto);
+      return user;
+    } catch (error) {
+      throw new Error(error);
+    }
   }
 
   @Get('get-token')
   async getToken(@Body() userId: number, @Body() email: string) {
-    return await this.usersService.getToken(userId, email);
+    try {
+      const token = await this.usersService.getToken(userId, email);
+      return token;
+    } catch (error) {
+      throw new Error(error);
+    }
   }
 
   @Post('forgot-password')
   async forgotPassword(@Body() forgotPasswordDto: ForgotPasswordDto) {
-    return await this.usersService.forgotPassword(forgotPasswordDto);
+    try {
+      const status = await this.usersService.forgotPassword(forgotPasswordDto);
+      return status;
+    } catch (error) {
+      throw new Error(error);
+    }
   }
 
   @Post('reset-password')
   async resetPassword(@Body() resetPasswordDto: ResetPasswordDto) {
-    return await this.usersService.resetPassword(resetPasswordDto);
+    try {
+      const status = await this.usersService.resetPassword(resetPasswordDto);
+      return status;
+    } catch (error) {
+      throw new Error(error);
+    }
   }
 
   @Post('verify-reset-code')
   async verifyResetCode(@Body() verifyCodeDto: VerifyCodeDto) {
-    const status = await this.usersService.verifyResetCode(verifyCodeDto);
-    return status;
+    try {
+      const status = await this.usersService.verifyResetCode(verifyCodeDto);
+      return status;
+    } catch (error) {
+      throw new Error(error);
+    }
   }
   @Post('logout')
   async logout(@Body() userId: number) {
-    return await this.authService.logout(userId);
+    try {
+      const status = await this.authService.logout(userId);
+      return status;
+    } catch (error) {
+      throw new Error(error);
+    }
   }
 }

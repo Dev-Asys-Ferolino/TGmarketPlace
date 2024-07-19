@@ -110,6 +110,15 @@ export class VendorService {
       if (!vendor) {
         throw new Error('User is not a vendor');
       }
+      const hasOrder = await this.prisma.order.findFirst({
+        where: {
+          vendor_id: vendor.id,
+        },
+      });
+
+      if (hasOrder) {
+        throw new Error('Cannot delete product with an associated order');
+      }
       const product = await this.prisma.productImage.deleteMany({
         where: {
           product_id: removeProductDto.id,
@@ -279,7 +288,7 @@ export class VendorService {
             payment_status: 'asc',
           },
           {
-            createdAt: 'desc',
+            createdAt: 'asc',
           },
         ],
       });

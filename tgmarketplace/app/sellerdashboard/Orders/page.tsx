@@ -13,9 +13,9 @@ interface OrderItem {
     quantity: number;
     product_price: number;
   }[];
-  user:{
+  user: {
     name: string;
-  }
+  };
   vendor_id: number;
   quantity: number;
   total: number;
@@ -103,14 +103,21 @@ export default function OrdersPage() {
   };
   const handleDeliveryStatusChange = async (selectedItems: OrderItem[]) => {
     try {
+      if (selectedItems.length === 0) {
+        window.alert(
+          "Please select an item first before updating delivery status"
+        );
+        return;
+      }
       const response = await api.put(
         `/vendor/update-delivered-orders/${localId}`,
         {
           orderItems: selectedItems,
         }
       );
- 
-      window.alert("Delivered Successfully");
+      response.status === 200
+        ? window.alert("Delivered Successfully")
+        : console.log("Error updating payment status");
       window.location.reload();
     } catch (error) {
       console.error("Error updating delivery status:", error);
@@ -119,10 +126,16 @@ export default function OrdersPage() {
 
   const handlePaymentStatusChange = async (selectedItems: OrderItem[]) => {
     try {
+      if (selectedItems.length === 0) {
+        window.alert(
+          "Please select an item first before updating payment status"
+        );
+        return;
+      }
       const response = await api.put(`/vendor/update-paid-orders/${localId}`, {
         orderItems: selectedItems,
       });
-      response.status === 201
+      response.status === 200
         ? window.alert("Payment Status Updated")
         : console.log("Error updating payment status");
       window.location.reload();
@@ -165,7 +178,7 @@ export default function OrdersPage() {
                 </tr>
               </thead>
               {orders.map((order) => (
-                <tbody key={order.id}  >
+                <tbody key={order.id}>
                   {order.OrderItem.map((item, itemIndex) => (
                     <tr key={itemIndex} className="*:text-center">
                       <td>
@@ -179,38 +192,40 @@ export default function OrdersPage() {
                             order.payment_status === "Paid"
                           }
                         />
-                        </td>
-                        <td>
-                          <div className="flex items-center gap-3">
-                            <div className="avatar">
-                              <div className=" h-[150px] w-[150px]">
-                                <Image
-                                  width={800}
-                                  height={800}
-                                  src={order.productimage.image_url || ""}
-                                  alt="product"
-                                />
-                              </div>
-                            </div>
-                            <div>
-                              <div className="font-bold">{item.product_name}</div>
+                      </td>
+                      <td>
+                        <div className="flex items-center gap-3">
+                          <div className="avatar">
+                            <div className=" h-[150px] w-[150px]">
+                              <Image
+                                width={800}
+                                height={800}
+                                src={order.productimage.image_url || ""}
+                                alt="product"
+                              />
                             </div>
                           </div>
-                        </td>
-                        <td>{item.product_price}</td>
-                        <td>{item.quantity}</td>
-                        <td>{order.total}</td>
-                        <td>
-                          <span className="text-red-500 ml-4">
-                            {order.delivery_status.toUpperCase()}
-                          </span>
-                        </td>
-                        <td>
-                          <span className="text-red-500 ml-4">
-                            {order.payment_status.toUpperCase()}
-                          </span>
-                        </td>
-                        <td><span className="ml-4">{order.user.name}</span></td>
+                          <div>
+                            <div className="font-bold">{item.product_name}</div>
+                          </div>
+                        </div>
+                      </td>
+                      <td>{item.product_price}</td>
+                      <td>{item.quantity}</td>
+                      <td>{order.total}</td>
+                      <td>
+                        <span className="text-red-500 ml-4">
+                          {order.delivery_status.toUpperCase()}
+                        </span>
+                      </td>
+                      <td>
+                        <span className="text-red-500 ml-4">
+                          {order.payment_status.toUpperCase()}
+                        </span>
+                      </td>
+                      <td>
+                        <span className="ml-4">{order.user.name}</span>
+                      </td>
                     </tr>
                   ))}
                 </tbody>

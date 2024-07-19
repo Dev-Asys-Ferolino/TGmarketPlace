@@ -1,4 +1,3 @@
-
 "use client";
 import React, { useEffect, useState } from "react";
 import Image from "next/image";
@@ -34,7 +33,9 @@ export default function AddProductsPage() {
   const router = useRouter();
   const [editingProduct, setEditingProduct] = useState<Product | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
-  const [validationErrors, setValidationErrors] = useState<{ [key: string]: string }>({}); // State for validation errors
+  const [validationErrors, setValidationErrors] = useState<{
+    [key: string]: string;
+  }>({}); // State for validation errors
 
   useEffect(() => {
     if (typeof window !== "undefined") {
@@ -48,7 +49,9 @@ export default function AddProductsPage() {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const response = await api.get<Product[]>(`/vendor/get-vendor-products/${localEmail}`);
+        const response = await api.get<Product[]>(
+          `/vendor/get-vendor-products/${localEmail}`
+        );
         setProducts(response.data);
       } catch (error) {
         console.error("Error fetching products:", error);
@@ -61,12 +64,17 @@ export default function AddProductsPage() {
 
   const handleDelete = async (id: number) => {
     try {
-      await api.delete("/vendor/remove-product", {
+      const response = await api.delete("/vendor/remove-product", {
         data: { email: localEmail, id: id },
       });
       setProducts(products.filter((product) => product.id !== id));
+      if (response.status === 201) {
+        window.alert("Product deleted successfully");
+      } else {
+        window.alert("Error deleting product");
+      }
     } catch (error) {
-      console.error("Error deleting product:", error);
+      window.alert("Error deleting product");
     }
   };
 
@@ -92,7 +100,14 @@ export default function AddProductsPage() {
     return Object.keys(errors).length === 0;
   };
 
-  const handleUpdate = async (id: number, price: number, stock: number, description: string, name: string, image: string) => {
+  const handleUpdate = async (
+    id: number,
+    price: number,
+    stock: number,
+    description: string,
+    name: string,
+    image: string
+  ) => {
     // Validate form before updating
     if (!validateForm()) return;
     setUploading(true);
@@ -152,7 +167,10 @@ export default function AddProductsPage() {
   };
 
   const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
-  const paginatedProducts = products.slice(startIndex, startIndex + ITEMS_PER_PAGE);
+  const paginatedProducts = products.slice(
+    startIndex,
+    startIndex + ITEMS_PER_PAGE
+  );
 
   return (
     <div className="container mx-auto mt-1">
@@ -160,7 +178,10 @@ export default function AddProductsPage() {
         <div className="w-full lg:w-2/3">
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 ml-[-150px] mt-5">
             {paginatedProducts.map((product) => (
-              <div key={product.id} className="dashboardcard bg-base-900 w-full shadow-xl backdrop-blur-lg border-2 border-base rounded-box ">
+              <div
+                key={product.id}
+                className="dashboardcard bg-base-900 w-full shadow-xl backdrop-blur-lg border-2 border-base rounded-box "
+              >
                 <figure className="px-10 pt-10">
                   {product.ProductImage.map((image) => (
                     <Image
@@ -174,10 +195,21 @@ export default function AddProductsPage() {
                   ))}
                 </figure>
                 <div className="dashboardcard-body items-center text-center">
-                  <h2 className="dashboardcard-title mt-4"><b>{product.name}</b></h2>
-                  <p className="text-red-500 mt-2"><span className="text-black">Price: </span>{product.price}</p>
-                  <p className="text-red-500 mt-2"><span className="text-black">Availability: </span>{product.stock}</p>
-                  <p className="text-red-500 mt-2"><span className="text-black">Description: </span>{product.description}</p>
+                  <h2 className="dashboardcard-title mt-4">
+                    <b>{product.name}</b>
+                  </h2>
+                  <p className="text-red-500 mt-2">
+                    <span className="text-black">Price: </span>
+                    {product.price}
+                  </p>
+                  <p className="text-red-500 mt-2">
+                    <span className="text-black">Availability: </span>
+                    {product.stock}
+                  </p>
+                  <p className="text-red-500 mt-2">
+                    <span className="text-black">Description: </span>
+                    {product.description}
+                  </p>
                   <div className="dashboardcard-actions">
                     <button
                       className="btn btn-outline bg-white flex-1 w-[8rem] mb-2 mt-4"
@@ -208,7 +240,9 @@ export default function AddProductsPage() {
               <button
                 className="join-item btn  border-red-400 text-white bg-red-400"
                 onClick={handleNextPage}
-                disabled={currentPage === Math.ceil(products.length / ITEMS_PER_PAGE)}
+                disabled={
+                  currentPage === Math.ceil(products.length / ITEMS_PER_PAGE)
+                }
               >
                 Next
               </button>
@@ -218,7 +252,9 @@ export default function AddProductsPage() {
         <div className="divider lg:divider-horizontal"></div>
         <div className="w-full lg:w-1/3 flex flex-col items-center mr-[-250px] mt-10">
           <div className="text-red-500 text-[30px] ml-[120px]">
-            <b><i>{editingProduct ? "EDIT PRODUCT" : "ADD YOUR PRODUCTS"}</i></b>
+            <b>
+              <i>{editingProduct ? "EDIT PRODUCT" : "ADD YOUR PRODUCTS"}</i>
+            </b>
           </div>
           <div className="dashboardcard bg-base-100 w-full max-w-[24rem] shadow-xl border-2 border-base rounded-box mt-10 ml-[130px]">
             <div className="max-w-4xl mx-auto p-6 space-y-6">
@@ -226,9 +262,9 @@ export default function AddProductsPage() {
                 <input
                   type="file"
                   hidden
-                  disabled={!!editingProduct} 
+                  disabled={!!editingProduct}
                   onChange={({ target }) => {
-                    if (target.files && !editingProduct) { 
+                    if (target.files && !editingProduct) {
                       const file = target.files[0];
                       setSelectedImage(URL.createObjectURL(file));
                       setSelectedFile(file);
@@ -297,12 +333,28 @@ export default function AddProductsPage() {
                 ></textarea>
               </h2>
               <button
-                onClick={editingProduct ? handleUpdate.bind(null, +productId, +price, +stock, description, name, selectedImage) : handleUpload}
+                onClick={
+                  editingProduct
+                    ? handleUpdate.bind(
+                        null,
+                        +productId,
+                        +price,
+                        +stock,
+                        description,
+                        name,
+                        selectedImage
+                      )
+                    : handleUpload
+                }
                 disabled={uploading}
                 style={{ opacity: uploading ? 0.5 : 1 }}
                 className="btn btn-outline bg-red-500 flex-1 w-[13rem] mb-2 mt-4 text-white"
               >
-                {uploading ? "Uploading..." : editingProduct ? "Update Product" : "Add Product"}
+                {uploading
+                  ? "Uploading..."
+                  : editingProduct
+                  ? "Update Product"
+                  : "Add Product"}
               </button>
             </div>
           </div>

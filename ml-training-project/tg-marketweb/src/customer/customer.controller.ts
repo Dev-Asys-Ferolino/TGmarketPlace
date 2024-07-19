@@ -19,7 +19,12 @@ export class CustomerController {
     @Body()
     removeFromCartDto: RemoveFromCartDto,
   ) {
-    return await this.customerService.removeFromCart(removeFromCartDto);
+    try {
+      const cart = await this.customerService.removeFromCart(removeFromCartDto);
+      return cart;
+    } catch (error) {
+      throw new Error(error);
+    }
   }
   @Get('get-cart/:id')
   async getCart(@Param('id') id: number) {
@@ -32,31 +37,61 @@ export class CustomerController {
   }
   @Post('view-cart')
   async viewCart(@Body() id: number) {
-    return await this.customerService.viewCart(id);
+    try {
+      const cart = await this.customerService.viewCart(id);
+      return cart;
+    } catch (error) {
+      throw new Error(error);
+    }
   }
   @Get('get-cart-by-id/:id')
   async getCartById(@Param('id') id: number) {
-    return await this.customerService.getCartById(id);
+    try {
+      const cart = await this.customerService.getCartById(id);
+      return cart;
+    } catch (error) {
+      throw new Error(error);
+    }
   }
   @Post('checkout-order/:id')
   async checkoutOrder(
     @Param('id') id: number,
     @Body() checkoutOrder: CheckOutOrderDto,
   ) {
-    return await this.customerService.checkoutOrder(id, checkoutOrder);
+    try {
+      const order = await this.customerService.checkoutOrder(id, checkoutOrder);
+      return order;
+    } catch (error) {
+      throw new Error(error);
+    }
   }
   @Get('view-order/:id')
   async viewOrder(@Param('id') id: number) {
-    return await this.customerService.viewOrder(id);
+    try {
+      const order = await this.customerService.viewOrder(id);
+      return order;
+    } catch (error) {
+      throw new Error(error);
+    }
   }
 
   @Get('get-unpaid-orders/:id')
   async getUnpaidOrders(@Param('id') id: number): Promise<Order[]> {
-    return await this.customerService.getUnpaidOrders(id);
+    try {
+      const orders = await this.customerService.getUnpaidOrders(id);
+      return orders;
+    } catch (error) {
+      throw new Error(error);
+    }
   }
 
   @Get('search-product/:search')
   async searchProduct(@Param('search') search: string): Promise<Product[]> {
-    return await this.customerService.searchProduct(search);
+    try {
+      const products = await this.customerService.searchProduct(search);
+      return products;
+    } catch (error) {
+      throw new Error(error);
+    }
   }
 }

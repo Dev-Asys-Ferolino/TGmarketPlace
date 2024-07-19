@@ -52,7 +52,10 @@ export default function ProductsPage() {
   const handleAddtoCart = async (id: number, price: number) => {
     try {
       const quantity = quantities[id];
-      console.log(quantity);
+      if (!quantity || +quantity === 0) {
+        window.alert("Please input valid quantity");
+        return;
+      }
       const response = await api.post("/customer/add-to-cart", {
         email: localEmail,
         productId: id,
