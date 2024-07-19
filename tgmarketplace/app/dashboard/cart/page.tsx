@@ -73,12 +73,16 @@ export default function CartPage() {
   const handleCheckout = async (selectedItems: CartItem[]) => {
     setUploading(true);
     try {
+      if (selectedItems.length === 0) {
+        window.alert("Please select an item in the cart first");
+        window.location.reload();
+      }
       console.log("Selected Items:", selectedItems);
       const response = await api.post(`/customer/checkout-order/${localId}`, {
-      selectItems: selectedItems,
+        selectItems: selectedItems,
       });
       console.log(response);
-      
+
       window.alert("Order Placed Successfully");
       window.location.reload();
     } catch (error) {
@@ -128,7 +132,7 @@ export default function CartPage() {
       <div className="card bg-base-100 w-full max-w-[70%] shrink-0 flex flex-col justify-center">
         <div className="overflow-x-auto ml-[1px]">
           <table className="table">
-            <thead  className="*:text-center">
+            <thead className="*:text-center">
               <tr>
                 <th>
                   <input
@@ -139,7 +143,9 @@ export default function CartPage() {
                     className="checkbox"
                   />
                 </th>
-                <th><span className="ml-[-150px]">Product Images</span></th>
+                <th>
+                  <span className="ml-[-150px]">Product Images</span>
+                </th>
                 <th>
                   <span className="ml-10">Product Name</span>
                 </th>
@@ -191,7 +197,7 @@ export default function CartPage() {
                         <button
                           className="btn btn-m ml-[40px] bg-red-400 text-white w-[5rem]"
                           onClick={() => handleDeleteCartItem(item.id)}
-                          disabled={uploading} 
+                          disabled={uploading}
                           style={{ opacity: uploading ? 0.5 : 1 }}
                         >
                           {uploading ? "Deleting..." : "Delete"}
