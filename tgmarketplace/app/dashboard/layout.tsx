@@ -49,9 +49,9 @@ export default function DashboardLayout({ children }: PropsWithChildren) {
     router.push("/");
   };
 
-  const handleSearchSubmit = (e: { key: string }) => {
-    if (e.key === "Enter") {
-      router.push(`/dashboard/products?search=${searchQuery}`);
+  const handleSearchSubmit = (e: { key: string; }) => {
+    if (e.key === "Enter") {   
+      router.push(`/dashboard/products`);
     }
   };
 

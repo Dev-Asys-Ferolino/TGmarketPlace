@@ -60,8 +60,8 @@ export default function ProductsPage() {
         price: +price,
       });
 
-      console.log(quantities);
       window.alert("Product Added to Cart");
+      window.location.reload();
       console.log(response);
     } catch (error) {
       console.error("Error in adding to cart:", error);
@@ -104,7 +104,7 @@ export default function ProductsPage() {
         {products.map((product) => (
           <div
             key={product.id}
-            className="dashboardcard bg-base-100 w-96 shadow-xl border-2 border-red-200 rounded-box flex flex-col items-center gap-4 p-4 ml-[2px] "
+            className="dashboardcard bg-base-100 w-96 shadow-xl border-2 border-base rounded-box flex flex-col items-center gap-4 p-4 ml-[2px] "
           >
             <figure className="w-full h-64 flex items-center justify-center">
               {product.ProductImage.map((image) => (
