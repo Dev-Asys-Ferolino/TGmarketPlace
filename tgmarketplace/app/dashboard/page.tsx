@@ -52,6 +52,10 @@ export default function DashboardPage() {
     try {
       const quantity = quantities[id];
       console.log(quantity);
+      if (!quantity || +quantity === 0) {
+        window.alert("Please input valid quantity");
+        return;
+      }
       const response = await api.post("/customer/add-to-cart", {
         email: localEmail,
         productId: id,
@@ -60,8 +64,8 @@ export default function DashboardPage() {
       });
 
       console.log(quantities);
-      window.alert("Product Added to Cart");
       console.log(response);
+      window.alert("Product Added to Cart");
     } catch (error) {
       console.error("Error in adding to cart:", error);
     }

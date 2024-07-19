@@ -40,18 +40,31 @@ export class UsersController {
 
   @Post('register-vendor')
   async registerVendor(@Body() CreateVendorDto: CreateVendorDto) {
-    const vendor = await this.vendorService.createVendor(CreateVendorDto);
-    return vendor;
+    try {
+      const vendor = await this.vendorService.createVendor(CreateVendorDto);
+      return vendor;
+    } catch (error) {
+      throw new Error(error);
+    }
   }
 
   @Get('check-vendor/:id')
   async checkVendor(@Param('id') id: number) {
-    const user = await this.usersService.getUserifVendor(id);
-    return user;
+    try {
+      const user = await this.usersService.getUserifVendor(id);
+      return user;
+    } catch (error) {
+      throw new Error(error);
+    }
   }
 
   @Get('get-all-products/:id')
   async getAllProducts(@Param('id') id: number) {
-    return await this.usersService.getAllProducts(id);
+    try {
+      const products = await this.usersService.getAllProducts(id);
+      return products;
+    } catch (error) {
+      throw new Error(error);
+    }
   }
 }
