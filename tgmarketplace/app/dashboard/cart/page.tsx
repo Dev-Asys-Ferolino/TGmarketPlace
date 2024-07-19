@@ -84,7 +84,7 @@ export default function CartPage() {
     } catch (error) {
       console.error("Error placing order:", error);
     }
-    setUploading
+    setUploading(false);
   };
 
   const handleSelectAll = () => {
@@ -100,6 +100,7 @@ export default function CartPage() {
   };
 
   const handleDeleteCartItem = async (itemId: number) => {
+    setUploading(true);
     try {
       const response = await api.delete(`/customer/remove-from-cart`, {
         data: {
@@ -112,6 +113,7 @@ export default function CartPage() {
     } catch (error) {
       console.error("Error deleting cart item:", error);
     }
+    setUploading(false);
   };
 
   const computeTotal = () => {
@@ -189,8 +191,10 @@ export default function CartPage() {
                         <button
                           className="btn btn-m ml-[80px] bg-red-400 text-white w-[5rem]"
                           onClick={() => handleDeleteCartItem(item.id)}
+                          disabled={uploading} 
+                          style={{ opacity: uploading ? 0.5 : 1 }}
                         >
-                          Delete
+                          {uploading ? "Deleting..." : "Delete"}
                         </button>
                       </span>
                     </div>

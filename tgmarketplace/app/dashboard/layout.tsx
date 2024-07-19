@@ -50,7 +50,7 @@ export default function DashboardLayout({ children }: PropsWithChildren) {
   };
 
   const handleSearchSubmit = (e: { key: string; }) => {
-    if (e.key === "Enter") {
+    if (e.key === "Enter") {   
       router.push(`/dashboard/products`);
     }
   };

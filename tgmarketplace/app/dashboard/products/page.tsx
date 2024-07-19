@@ -59,8 +59,8 @@ export default function ProductsPage() {
         price: +price,
       });
 
-      console.log(quantities);
       window.alert("Product Added to Cart");
+      window.location.reload();
       console.log(response);
     } catch (error) {
       console.error("Error in adding to cart:", error);
