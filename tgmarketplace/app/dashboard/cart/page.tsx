@@ -128,7 +128,7 @@ export default function CartPage() {
       <div className="card bg-base-100 w-full max-w-[70%] shrink-0 flex flex-col justify-center">
         <div className="overflow-x-auto ml-[1px]">
           <table className="table">
-            <thead className="*:text-center">
+            <thead  className="*:text-center">
               <tr>
                 <th>
                   <input
@@ -139,7 +139,7 @@ export default function CartPage() {
                     className="checkbox"
                   />
                 </th>
-                <th>Product Images</th>
+                <th><span className="ml-[-150px]">Product Images</span></th>
                 <th>
                   <span className="ml-10">Product Name</span>
                 </th>
@@ -164,7 +164,7 @@ export default function CartPage() {
                     />
                   </td>
                   <td>
-                    <div className="flex items-center gap-3">
+                    <div className="flex items-center">
                       <div className="avatar">
                         <div className="mask mask-squircle h-[150px] w-[150px]">
                           <Image
@@ -210,7 +210,7 @@ export default function CartPage() {
                 <th></th>
                 <th className="text-black">Overall Total:</th>
                 <th className="text-black text-center">
-                  <span className=" ml-[-60px]">Php: </span>
+                  <span className=" ml-[-60px]"> </span>
                   {computeTotal()}
                   <button
                     className="btn ml-6 bg-red-400 text-white"
