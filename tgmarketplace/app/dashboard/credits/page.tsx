@@ -137,7 +137,8 @@ export default function CreditsPage() {
                 <tr>
                   <th></th>
                   <th></th>
-                  <td>Grand Total:</td>
+                  <th></th>
+                  <td><b className="text-black">Grand Total:</b></td>
                   <td><span className="text-black">{orders.reduce((acc, order) => acc + +order.total, 0)}</span></td>
                   <th></th>
                 </tr>
