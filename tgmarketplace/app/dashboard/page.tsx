@@ -68,10 +68,15 @@ export default function DashboardPage() {
   };
 
   const handleQuantityChange = (productId: number, value: number) => {
-    setQuantities((prevQuantities) => ({
-      ...prevQuantities,
-      [productId]: value,
-    }));
+    const product = products.find((p) => p.id === productId);
+
+    if (product) {
+      const maxQuantity = Math.min(value, product.stock);
+      setQuantities((prevQuantities) => ({
+        ...prevQuantities,
+        [productId]: maxQuantity,
+      }));
+    }
   };
 
   return (

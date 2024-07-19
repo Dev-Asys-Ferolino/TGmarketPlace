@@ -67,11 +67,23 @@ export default function ProductsPage() {
     }
   };
 
+  // const handleQuantityChange = (productId: number, value: number) => {
+  //   setQuantities((prevQuantities) => ({
+  //     ...prevQuantities,
+  //     [productId]: value,
+  //   }));
+  // };
+
   const handleQuantityChange = (productId: number, value: number) => {
-    setQuantities((prevQuantities) => ({
-      ...prevQuantities,
-      [productId]: value,
-    }));
+    const product = products.find((p) => p.id === productId);
+
+    if (product) {
+      const maxQuantity = Math.min(value, product.stock);
+      setQuantities((prevQuantities) => ({
+        ...prevQuantities,
+        [productId]: maxQuantity,
+      }));
+    }
   };
 
   return (
@@ -120,7 +132,15 @@ export default function ProductsPage() {
                 >
                   Add To Cart
                 </button>
-                <input type="number" placeholder="Want ?" className="text-center text-red-500 border-black border-[1px] rounded-md w-[100px] h-[47px] ml-2" value={quantities[product.id]} onChange={(e) => handleQuantityChange(product.id, parseInt(e.target.value))} />
+                <input
+                  type="number"
+                  placeholder="Want ?"
+                  className="text-center text-red-500 border-black border-[1px] rounded-md w-[100px] h-[47px] ml-2"
+                  value={quantities[product.id]}
+                  onChange={(e) =>
+                    handleQuantityChange(product.id, parseInt(e.target.value))
+                  }
+                />
               </div>
             </div>
           </div>

@@ -290,6 +290,7 @@ export class CustomerService {
 
   async searchProduct(search: string): Promise<Product[]> {
     try {
+      console.log(search);
       const products = await this.prisma.product.findMany({
         where: {
           OR: [
@@ -305,7 +306,11 @@ export class CustomerService {
             },
           ],
         },
+        include: {
+          ProductImage: true,
+        },
       });
+      console.log(products);
       return products;
     } catch (error) {
       throw new Error(error);
