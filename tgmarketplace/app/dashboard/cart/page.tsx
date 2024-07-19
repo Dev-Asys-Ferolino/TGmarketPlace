@@ -125,10 +125,10 @@ export default function CartPage() {
 
   return (
     <div className="flex h-auto align-middle justify-center mt-10">
-      <div className="card bg-base-100 w-full max-w-[60%] shrink-0 flex flex-col justify-center">
+      <div className="card bg-base-100 w-full max-w-[70%] shrink-0 flex flex-col justify-center">
         <div className="overflow-x-auto ml-[1px]">
           <table className="table">
-            <thead>
+            <thead  className="*:text-center">
               <tr>
                 <th>
                   <input
@@ -139,7 +139,7 @@ export default function CartPage() {
                     className="checkbox"
                   />
                 </th>
-                <th>Product Images</th>
+                <th><span className="ml-[-150px]">Product Images</span></th>
                 <th>
                   <span className="ml-10">Product Name</span>
                 </th>
@@ -152,7 +152,7 @@ export default function CartPage() {
                 </th>
               </tr>
             </thead>
-            <tbody>
+            <tbody className="*:text-center">
               {cartItems.map((item) => (
                 <tr key={item.id}>
                   <td>
@@ -164,7 +164,7 @@ export default function CartPage() {
                     />
                   </td>
                   <td>
-                    <div className="flex items-center gap-3">
+                    <div className="flex items-center">
                       <div className="avatar">
                         <div className="mask mask-squircle h-[150px] w-[150px]">
                           <Image
@@ -185,11 +185,11 @@ export default function CartPage() {
                     <span className="ml-5">{item.quantity}</span>
                   </td>
                   <td>
-                    <div className="ml-[-160px]">
+                    <div className="ml-[-100px]">
                       {item.total}
                       <span>
                         <button
-                          className="btn btn-m ml-[80px] bg-red-400 text-white w-[5rem]"
+                          className="btn btn-m ml-[40px] bg-red-400 text-white w-[5rem]"
                           onClick={() => handleDeleteCartItem(item.id)}
                           disabled={uploading} 
                           style={{ opacity: uploading ? 0.5 : 1 }}
@@ -207,12 +207,13 @@ export default function CartPage() {
                 <th></th>
                 <th></th>
                 <th></th>
+                <th></th>
                 <th className="text-black">Overall Total:</th>
-                <th className="text-black">
-                  <span className="ml-5">Php: </span>
+                <th className="text-black text-center">
+                  <span className=" ml-[-60px]"> </span>
                   {computeTotal()}
                   <button
-                    className="btn ml-10 bg-red-400 text-white"
+                    className="btn ml-6 bg-red-400 text-white"
                     onClick={() => handleCheckout(selectedItems)}
                     disabled={uploading}
                     style={{ opacity: uploading ? 0.5 : 1 }}
