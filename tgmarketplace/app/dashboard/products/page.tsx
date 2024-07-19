@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import Image from "next/image";
 // import { sampleImage } from "@/images";
 import api from "@/lib/api/api";
+import DashboardLayout from "@/app/dashboard/layout";
 
 interface Product {
   id: number;
@@ -64,6 +65,17 @@ export default function ProductsPage() {
       console.log(response);
     } catch (error) {
       console.error("Error in adding to cart:", error);
+    }
+  };
+
+  const searchProducts = async (query: string) => {
+    try {
+      const response = await api.get<Product[]>(
+        `/users/search-products/${query}`
+      );
+      setProducts(response.data);
+    } catch (error) {
+      console.error("Error fetching products:", error);
     }
   };
 

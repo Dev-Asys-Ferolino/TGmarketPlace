@@ -297,11 +297,13 @@ export class CustomerService {
             {
               name: {
                 contains: search,
+                mode: 'insensitive',
               },
             },
             {
               description: {
                 contains: search,
+                mode: 'insensitive',
               },
             },
           ],
